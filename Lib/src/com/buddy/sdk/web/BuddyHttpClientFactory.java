@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import com.loopj.android.http.AsyncHttpClient;
 
 public class BuddyHttpClientFactory {
-    private static String BuddyPlatformSDKHeaderValue = "Platform=Android;Version=1.0.0-beta.2";
+    private static String BuddyPlatformSDKHeaderValue = "Platform=Android;Version=0.1.0";
     
     private static AsyncHttpClient client = null;
 
