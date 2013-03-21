@@ -7,3 +7,7 @@
 	The BuddyClient constructor changed to require the Android application context.
 
 	Added a fix so that automatic device information recording is done when first user logs ing.  Also, that information will be associated with that user.  Previously, the automatic device information recording happened upon BuddyClient instantiation, and was not associated with any user.
+
+0.1.1
+
+	Added general fixes to saving and accessing user and app metadata.  Small fix to the VirtualAlbum.update() method.

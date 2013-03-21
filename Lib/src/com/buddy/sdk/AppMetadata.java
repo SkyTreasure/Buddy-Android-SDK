@@ -54,10 +54,11 @@ public class AppMetadata {
     protected BuddyClient client;
 
     public AppMetadata(BuddyClient client) {
-        if (client == null) throw new IllegalArgumentException("client can't be null.");
+        if (client == null)
+            throw new IllegalArgumentException("client can't be null.");
         this.client = client;
 
-        this.appMetadataModel = new AppMetadataModel(this.client);
+        this.appMetadataModel = new AppMetadataModel(this.client, this);
     }
 
     /**
@@ -99,9 +100,34 @@ public class AppMetadata {
      *            Is always treated as a wildcard.
      * @param callback The async callback to call on success or error.
      */
+    public void batchSum(String forKeys, OnCallback<ListResponse<MetadataSum>> callback) {
+        batchSum(forKeys, "-1", -1.0, -1.0, -1, "", null, callback);
+    }
+
+    /**
+     * Returns the sum of a set of metadata items that correspond to a certain
+     * key wildcard. Note that the values of these items need to be integers or
+     * floats, otherwise this method will fail.
+     * 
+     * @deprecated Please use either of the 2 other batchSum methods.
+     * 
+     * @param forKeys The key to use to filter the items that need to be summed.
+     *            Is always treated as a wildcard.
+     * @param withinDistance Optionally sum only items within a certain number
+     *            of meters from lat/long.
+     * @param latitude Optionally provide a latitude where the search can be
+     *            started from.
+     * @param longitude Optionally provide a longitude where the search can be
+     *            started from.
+     * @param updatedMinutesAgo Optionally sum only on items that have been
+     *            updated a number of minutes ago.
+     * @param callback The async callback to call on success or error.
+     */
+    @Deprecated
     public void batchSum(String forKeys, String withinDistance, double latitude, double longitude,
             int updatedMinutesAgo, OnCallback<ListResponse<MetadataSum>> callback) {
-        batchSum(forKeys, "-1", -1, -1, -1, "", null, callback);
+        batchSum(forKeys, withinDistance, latitude, longitude, updatedMinutesAgo, "", null,
+                callback);
     }
 
     /**
@@ -123,8 +149,8 @@ public class AppMetadata {
 
     /**
      * Get all the metadata items for this application. Note that this can be a
-     * very time-consuming method, try to retrieve specific items if possible or do a
-     * search.
+     * very time-consuming method, try to retrieve specific items if possible or
+     * do a search.
      * 
      * @param state An optional user defined object that will be passed to the
      *            callback.
@@ -203,8 +229,8 @@ public class AppMetadata {
             OnCallback<Response<Map<String, MetadataItem>>> callback) {
         if (this.appMetadataModel != null) {
             this.appMetadataModel.findData(searchDistanceMeters, latitude, longitude,
-                    numberOfResults, withKey, withValue, updatedMinutesAgo, valueMin, valueMax,
-                    searchAsFloat, sortAscending, disableCache, state, callback);
+                    numberOfResults, withKey, withValue, updatedMinutesAgo, (int) valueMin,
+                    (int) valueMax, searchAsFloat, sortAscending, disableCache, state, callback);
         }
     }
 
@@ -221,8 +247,8 @@ public class AppMetadata {
      */
     public void find(int searchDistanceMeters, double latitude, double longitude,
             OnCallback<Response<Map<String, MetadataItem>>> callback) {
-        find(searchDistanceMeters, latitude, longitude, 10, "", "", -1,
-                0, 100, false, false, false, null, callback);
+        find(searchDistanceMeters, latitude, longitude, 10, "", "", -1, 0, 100, false, false,
+                false, null, callback);
     }
 
     /**

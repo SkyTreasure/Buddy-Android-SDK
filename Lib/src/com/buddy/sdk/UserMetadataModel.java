@@ -38,18 +38,20 @@ import com.buddy.sdk.web.BuddyWebWrapper;
 
 class UserMetadataModel extends BaseDataModel {
     private String userToken;
+    private UserMetadata metadata;
 
-    UserMetadataModel(BuddyClient client, String userToken) {
+    UserMetadataModel(BuddyClient client, UserMetadata metadata, String userToken) {
         this.client = client;
         this.userToken = userToken;
+        this.metadata = metadata;
     }
 
     public void getAll(Object state, final OnCallback<Response<Map<String, MetadataItem>>> callback) {
-        
+
         BuddyWebWrapper.Metadata_UserMetadataValue_GetAll(this.client.getAppName(),
                 this.client.getAppPassword(), this.userToken, state, new OnResponseCallback() {
-        	
-    				@Override
+
+                    @Override
                     public void OnResponse(BuddyCallbackParams response, Object state) {
                         Response<Map<String, MetadataItem>> getResponse = new Response<Map<String, MetadataItem>>();
 
@@ -67,8 +69,9 @@ class UserMetadataModel extends BaseDataModel {
                                         Date lastUpdated = Utils
                                                 .convertDateString(resultData.lastUpdateDate);
 
-                                        MetadataItem item = new MetadataItem(resultData.metaValue,
-                                                resultData.metaKey, lat, lon, lastUpdated);
+                                        MetadataItem item = new MetadataItem(client, metadata,
+                                                null, userToken, resultData.metaKey,
+                                                resultData.metaValue, lat, lon, lastUpdated, null);
 
                                         map.put(resultData.metaKey, item);
                                     }
@@ -92,11 +95,11 @@ class UserMetadataModel extends BaseDataModel {
     }
 
     public void get(String key, Object state, final OnCallback<Response<MetadataItem>> callback) {
-        
+
         BuddyWebWrapper.Metadata_UserMetadataValue_Get(this.client.getAppName(),
                 this.client.getAppPassword(), this.userToken, key, state, new OnResponseCallback() {
-        	
-    				@Override
+
+                    @Override
                     public void OnResponse(BuddyCallbackParams response, Object state) {
                         Response<MetadataItem> getResponse = new Response<MetadataItem>();
 
@@ -115,8 +118,9 @@ class UserMetadataModel extends BaseDataModel {
                                     Date dateAdded = Utils
                                             .convertDateString(resultData.lastUpdateDate);
 
-                                    MetadataItem value = new MetadataItem(resultData.metaValue,
-                                            resultData.metaKey, lat, lon, dateAdded);
+                                    MetadataItem value = new MetadataItem(client, metadata, null,
+                                            userToken, resultData.metaKey, resultData.metaValue,
+                                            lat, lon, dateAdded, null);
 
                                     getResponse.setResult(value);
                                 } else {
@@ -138,12 +142,12 @@ class UserMetadataModel extends BaseDataModel {
 
     public void set(String key, String value, double latitude, double longitude, String appTag,
             Object state, final OnCallback<Response<Boolean>> callback) {
-        
+
         BuddyWebWrapper.Metadata_UserMetadataValue_Set(this.client.getAppName(),
                 this.client.getAppPassword(), this.userToken, key, value, (float) latitude,
                 (float) longitude, appTag, this.RESERVED, state, new OnResponseCallback() {
-        	
-    				@Override
+
+                    @Override
                     public void OnResponse(BuddyCallbackParams response, Object state) {
                         Response<Boolean> setResponse = getBooleanResponse(response);
                         callback.OnResponse(setResponse, state);
@@ -153,11 +157,11 @@ class UserMetadataModel extends BaseDataModel {
     }
 
     public void delete(String key, Object state, final OnCallback<Response<Boolean>> callback) {
-        
+
         BuddyWebWrapper.Metadata_UserMetadataValue_Delete(this.client.getAppName(),
                 this.client.getAppPassword(), this.userToken, key, state, new OnResponseCallback() {
-        	
-    				@Override
+
+                    @Override
                     public void OnResponse(BuddyCallbackParams response, Object state) {
                         Response<Boolean> deleteResponse = getBooleanResponse(response);
                         callback.OnResponse(deleteResponse, state);
@@ -167,11 +171,11 @@ class UserMetadataModel extends BaseDataModel {
     }
 
     public void deleteAll(Object state, final OnCallback<Response<Boolean>> callback) {
-        
+
         BuddyWebWrapper.Metadata_UserMetadataValue_DeleteAll(this.client.getAppName(),
                 this.client.getAppPassword(), this.userToken, state, new OnResponseCallback() {
-        	
-    				@Override
+
+                    @Override
                     public void OnResponse(BuddyCallbackParams response, Object state) {
                         Response<Boolean> deleteResponse = getBooleanResponse(response);
                         callback.OnResponse(deleteResponse, state);
@@ -184,14 +188,14 @@ class UserMetadataModel extends BaseDataModel {
             Integer numberOfResults, String withKey, String withValue, Integer updatedMinutesAgo,
             boolean searchAsFloat, boolean sortAscending, boolean disableCache, Object state,
             final OnCallback<Response<Map<String, MetadataItem>>> callback) {
-        
+
         BuddyWebWrapper.Metadata_UserMetadataValue_Search(this.client.getAppName(),
                 this.client.getAppPassword(), this.userToken, searchDistanceMeters,
                 (float) latitude, (float) longitude, numberOfResults, withKey, withValue,
                 String.valueOf(updatedMinutesAgo), searchAsFloat ? 1 : 0, sortAscending ? 1 : 0,
                 disableCache ? "1" : "0", state, new OnResponseCallback() {
-        	
-    				@Override
+
+                    @Override
                     public void OnResponse(BuddyCallbackParams response, Object state) {
                         Response<Map<String, MetadataItem>> searchResponse = new Response<Map<String, MetadataItem>>();
 
@@ -206,21 +210,8 @@ class UserMetadataModel extends BaseDataModel {
                                         double lat = Utils.parseDouble(resultData.metaLatitude);
                                         double lon = Utils.parseDouble(resultData.metaLongitude);
 
-                                        Date lastUpdated = Utils
-                                                .convertDateString(resultData.lastUpdateDate);
-
-                                        double distKM = Utils
-                                                .parseDouble(resultData.distanceInKilometers);
-                                        double distM = Utils
-                                                .parseDouble(resultData.distanceInMeters);
-                                        double distMi = Utils
-                                                .parseDouble(resultData.distanceInMiles);
-                                        double distY = Utils
-                                                .parseDouble(resultData.distanceInYards);
-
-                                        MetadataItem item = new MetadataItem(resultData.metaValue,
-                                                resultData.metaKey, userToken, lat, lon,
-                                                lastUpdated, distKM, distM, distMi, distY);
+                                        MetadataItem item = new MetadataItem(client, metadata,
+                                                null, userToken, resultData, lat, lon);
 
                                         map.put(resultData.metaKey, item);
                                     }
@@ -246,13 +237,13 @@ class UserMetadataModel extends BaseDataModel {
     public void sum(final String forKeys, int withinDistance, double latitude, double longitude,
             int updatedMinutesAgo, String withAppTag, Object state,
             final OnCallback<Response<MetadataSum>> callback) {
-        
+
         BuddyWebWrapper.Metadata_UserMetadataValue_Sum(this.client.getAppName(),
                 this.client.getAppPassword(), this.userToken, forKeys, withinDistance,
                 (float) latitude, (float) longitude, String.valueOf(updatedMinutesAgo), withAppTag,
                 this.RESERVED, state, new OnResponseCallback() {
-        	
-    				@Override
+
+                    @Override
                     public void OnResponse(BuddyCallbackParams response, Object state) {
                         Response<MetadataSum> sumResponse = new Response<MetadataSum>();
 
@@ -295,13 +286,19 @@ class UserMetadataModel extends BaseDataModel {
     public void batchSum(String forKeys, String withinDistance, double latitude, double longitude,
             int updatedMinutesAgo, String withAppTag, Object state,
             final OnCallback<ListResponse<MetadataSum>> callback) {
-        
+
+        if (withinDistance.equals("-1")) {
+            for (int i = 0; i < forKeys.split(";").length - 1; i++) {
+                withinDistance += ";-1";
+            }
+        }
+
         BuddyWebWrapper.Metadata_UserMetadataValue_BatchSum(this.client.getAppName(),
                 this.client.getAppPassword(), this.userToken, forKeys, withinDistance,
                 (float) latitude, (float) longitude, String.valueOf(updatedMinutesAgo), withAppTag,
                 this.RESERVED, state, new OnResponseCallback() {
-        	
-    				@Override
+
+                    @Override
                     public void OnResponse(BuddyCallbackParams response, Object state) {
                         ListResponse<MetadataSum> listResponse = new ListResponse<MetadataSum>();
 

@@ -16,6 +16,7 @@
 
 package com.buddy.sdk.utils;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,7 +43,7 @@ public class Utils {
 
     public static int parseInt(String str, Boolean throwException) throws Exception {
         int result = 0;
-        if (str != null) {
+        if (!Utils.isNullOrEmpty(str)) {
             str = str.trim();
             try {
                 result = Integer.parseInt(str);
@@ -57,7 +58,7 @@ public class Utils {
 
     public static double parseDouble(String str) {
         double result = 0;
-        if (str != null) {
+        if (!Utils.isNullOrEmpty(str)) {
             str = str.trim();
             try {
                 result = Double.parseDouble(str);
@@ -68,16 +69,32 @@ public class Utils {
         return result;
     }
 
+    public static BigDecimal parseDecimal(String str) {
+        BigDecimal result = null;
+        if (!Utils.isNullOrEmpty(str)) {
+            str = str.trim();
+            try {
+                result = new BigDecimal(str);
+            } catch (NullPointerException npe) {
+            } catch (NumberFormatException nfe) {
+            }
+        }
+        return result;
+    }
+
     public static String convertStringDate(Date date, String format) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.getDefault());
 
-        String dateString;
-        try {
-            dateString = dateFormat.format(date);
-        } catch (Exception e) {
-            Log.d(TAG, "ConvertStringDate - Exception - " + e.getMessage());
-
-            return null;
+        String dateString = "";
+        
+        if(date != null) {            
+            try {
+                dateString = dateFormat.format(date);
+            } catch (Exception e) {
+                Log.d(TAG, "ConvertStringDate - Exception - " + e.getMessage());
+    
+                return "";
+            }
         }
 
         return dateString;
@@ -105,7 +122,7 @@ public class Utils {
 
     public static Date convertDateString(String dateString, String format, Boolean throwException) throws Exception {
         Date date = null;
-        if (dateString != null) {
+        if (!Utils.isNullOrEmpty(dateString)) {
             SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.getDefault());
 
             try {
@@ -140,7 +157,7 @@ public class Utils {
 
     public static boolean isNumeric(String str) {
         boolean result = true;
-        if (str != null) {
+        if (!Utils.isNullOrEmpty(str)) {
             str = str.trim();
             try {
                 Integer.parseInt(str);

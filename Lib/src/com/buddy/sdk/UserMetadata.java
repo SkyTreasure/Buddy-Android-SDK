@@ -62,7 +62,7 @@ public class UserMetadata {
         this.client = client;
         this.token = token;
 
-        this.userMetadataModel = new UserMetadataModel(this.client, this.token);
+        this.userMetadataModel = new UserMetadataModel(this.client, this, this.token);
     }
 
     /**
@@ -201,8 +201,8 @@ public class UserMetadata {
             OnCallback<Response<Map<String, MetadataItem>>> callback) {
         if (this.userMetadataModel != null) {
             this.userMetadataModel.find(searchDistanceMeters, latitude, longitude, numberOfResults,
-                    withKey, withValue, updatedMinutesAgo, searchAsFloat,
-                    sortAscending, disableCache, state, callback);
+                    withKey, withValue, updatedMinutesAgo, searchAsFloat, sortAscending,
+                    disableCache, state, callback);
         }
     }
 
@@ -219,8 +219,8 @@ public class UserMetadata {
      */
     public void find(int searchDistanceMeters, double latitude, double longitude,
             OnCallback<Response<Map<String, MetadataItem>>> callback) {
-        find(searchDistanceMeters, latitude, longitude, 10, "", "", -1, false, false, 
-                false, null, callback);
+        find(searchDistanceMeters, latitude, longitude, 10, "", "", -1, false, false, false, null,
+                callback);
     }
 
     /**

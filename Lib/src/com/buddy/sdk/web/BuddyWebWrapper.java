@@ -792,7 +792,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
         params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
         params.add(new BasicNameValuePair("UserToken", UserToken));
-        params.add(new BasicNameValuePair("VirtualPhotoAlbumID", String
+        params.add(new BasicNameValuePair("VirtualAlbumID", String
                 .valueOf(VirtualPhotoAlbumID)));
         params.add(new BasicNameValuePair("NewAlbumName", NewAlbumName));
         params.add(new BasicNameValuePair("NewAppTag", NewAppTag));
@@ -1769,8 +1769,8 @@ public class BuddyWebWrapper {
     public static void Game_Player_SearchPlayers(String BuddyApplicationName,
             String BuddyApplicationPassword, String UserTokenOrID, Integer SearchDistance,
             Float SearchLatitude, Float SearchLongitude, Integer RecordLimit, String SearchBoard,
-            Integer TimeFilter, Integer MinimumScore, String ApplicationTag, String PlayerRank, String RESERVED,
-            Object state, final OnResponseCallback callback) {
+            Integer TimeFilter, Integer MinimumScore, String ApplicationTag, String PlayerRank,
+            String RESERVED, Object state, final OnResponseCallback callback) {
         List<NameValuePair> params = new LinkedList<NameValuePair>();
         params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
         params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
@@ -1872,7 +1872,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("DeviceType", DeviceType));
         params.add(new BasicNameValuePair("MethodName", MethodName));
         params.add(new BasicNameValuePair("StackTrace", StackTrace));
-        params.add(new BasicNameValuePair("Metadata", Metadata));
+        params.add(new BasicNameValuePair("MetaData", Metadata));
         params.add(new BasicNameValuePair("Latitude", String.valueOf(Latitude)));
         params.add(new BasicNameValuePair("Longitude", String.valueOf(Longitude)));
 
@@ -1893,7 +1893,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("Longitude", String.valueOf(Longitude)));
         params.add(new BasicNameValuePair("AppName", AppName));
         params.add(new BasicNameValuePair("AppVersion", AppVersion));
-        params.add(new BasicNameValuePair("Metadata", Metadata));
+        params.add(new BasicNameValuePair("MetaData", Metadata));
 
         MakeRequest("Analytics_DeviceInformation_Add", params, state, callback);
     }
@@ -1955,7 +1955,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("ApplicationTag", ApplicationTag));
         params.add(new BasicNameValuePair("RESERVED", RESERVED));
 
-        MakeRequest("Metadata_UserMetadataValue_BatchSum", params, state, callback);
+        MakeRequest("MetaData_UserMetaDataValue_BatchSum", params, state, callback);
     }
 
     public static void Metadata_UserMetadataValue_Delete(String BuddyApplicationName,
@@ -1967,7 +1967,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("UserToken", UserToken));
         params.add(new BasicNameValuePair("MetaKey", MetaKey));
 
-        MakeRequest("Metadata_UserMetadataValue_Delete", params, state, callback);
+        MakeRequest("MetaData_UserMetaDataValue_Delete", params, state, callback);
     }
 
     public static void Metadata_UserMetadataValue_DeleteAll(String BuddyApplicationName,
@@ -1978,7 +1978,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
         params.add(new BasicNameValuePair("UserToken", UserToken));
 
-        MakeRequest("Metadata_UserMetadataValue_DeleteAll", params, state, callback);
+        MakeRequest("MetaData_UserMetaDataValue_DeleteAll", params, state, callback);
     }
 
     public static void Metadata_UserMetadataValue_Get(String BuddyApplicationName,
@@ -1990,7 +1990,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("UserToken", UserToken));
         params.add(new BasicNameValuePair("MetaKey", MetaKey));
 
-        MakeRequest("Metadata_UserMetadataValue_Get", params, state, callback);
+        MakeRequest("MetaData_UserMetaDataValue_Get", params, state, callback);
     }
 
     public static void Metadata_UserMetadataValue_GetAll(String BuddyApplicationName,
@@ -2001,7 +2001,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
         params.add(new BasicNameValuePair("UserToken", UserToken));
 
-        MakeRequest("Metadata_UserMetadataValue_GetAll", params, state, callback);
+        MakeRequest("MetaData_UserMetaDataValue_GetAll", params, state, callback);
     }
 
     public static void Metadata_UserMetadataValue_Search(String BuddyApplicationName,
@@ -2025,7 +2025,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("SortDirection", String.valueOf(SortDirection)));
         params.add(new BasicNameValuePair("DisableCache", DisableCache));
 
-        MakeRequest("Metadata_UserMetadataValue_Search", params, state, callback);
+        MakeRequest("MetaData_UserMetaDataValue_Search", params, state, callback);
     }
 
     public static void Metadata_UserMetadataValue_Set(String BuddyApplicationName,
@@ -2043,7 +2043,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("ApplicationTag", ApplicationTag));
         params.add(new BasicNameValuePair("RESERVED", RESERVED));
 
-        MakeRequest("Metadata_UserMetadataValue_Set", params, state, callback);
+        MakeRequest("MetaData_UserMetaDataValue_Set", params, state, callback);
     }
 
     public static void Metadata_UserMetadataValue_Sum(String BuddyApplicationName,
@@ -2062,7 +2062,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("ApplicationTag", ApplicationTag));
         params.add(new BasicNameValuePair("RESERVED", RESERVED));
 
-        MakeRequest("Metadata_UserMetadataValue_Sum", params, state, callback);
+        MakeRequest("MetaData_UserMetaDataValue_Sum", params, state, callback);
     }
 
     public static void Metadata_ApplicationMetadataCounter_Decrement(String BuddyApplicationName,
@@ -2079,7 +2079,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("ApplicationTag", ApplicationTag));
         params.add(new BasicNameValuePair("RESERVED", RESERVED));
 
-        MakeRequest("Metadata_ApplicationMetadataCounter_Decrement", params, state, callback);
+        MakeRequest("MetaData_ApplicationMetaDataCounter_Decrement", params, state, callback);
     }
 
     public static void Metadata_ApplicationMetadataCounter_Increment(String BuddyApplicationName,
@@ -2096,7 +2096,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("ApplicationTag", ApplicationTag));
         params.add(new BasicNameValuePair("RESERVED", RESERVED));
 
-        MakeRequest("Metadata_ApplicationMetadataCounter_Increment", params, state, callback);
+        MakeRequest("MetaData_ApplicationMetaDataCounter_Increment", params, state, callback);
     }
 
     public static void Metadata_ApplicationMetadataValue_BatchSum(String BuddyApplicationName,
@@ -2115,7 +2115,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("ApplicationTag", ApplicationTag));
         params.add(new BasicNameValuePair("RESERVED", RESERVED));
 
-        MakeRequest("Metadata_ApplicationMetadataValue_BatchSum", params, state, callback);
+        MakeRequest("MetaData_ApplicationMetaDataValue_BatchSum", params, state, callback);
     }
 
     public static void Metadata_ApplicationMetadataValue_Delete(String BuddyApplicationName,
@@ -2126,7 +2126,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
         params.add(new BasicNameValuePair("SocketMetaKey", SocketMetaKey));
 
-        MakeRequest("Metadata_ApplicationMetadataValue_Delete", params, state, callback);
+        MakeRequest("MetaData_ApplicationMetaDataValue_Delete", params, state, callback);
     }
 
     public static void Metadata_ApplicationMetadataValue_DeleteAll(String BuddyApplicationName,
@@ -2135,7 +2135,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
         params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
 
-        MakeRequest("Metadata_ApplicationMetadataValue_DeleteAll", params, state, callback);
+        MakeRequest("MetaData_ApplicationMetaDataValue_DeleteAll", params, state, callback);
     }
 
     public static void Metadata_ApplicationMetadataValue_Get(String BuddyApplicationName,
@@ -2146,7 +2146,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
         params.add(new BasicNameValuePair("SocketMetaKey", SocketMetaKey));
 
-        MakeRequest("Metadata_ApplicationMetadataValue_Get", params, state, callback);
+        MakeRequest("MetaData_ApplicationMetaDataValue_Get", params, state, callback);
     }
 
     public static void Metadata_ApplicationMetadataValue_GetAll(String BuddyApplicationName,
@@ -2155,7 +2155,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
         params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
 
-        MakeRequest("Metadata_ApplicationMetadataValue_GetAll", params, state, callback);
+        MakeRequest("MetaData_ApplicationMetaDataValue_GetAll", params, state, callback);
     }
 
     public static void Metadata_ApplicationMetadataValue_SearchData(String BuddyApplicationName,
@@ -2180,7 +2180,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("SortResultsDirection", SortResultsDirection));
         params.add(new BasicNameValuePair("DisableCache", DisableCache));
 
-        MakeRequest("Metadata_ApplicationMetadataValue_SearchData", params, state, callback);
+        MakeRequest("MetaData_ApplicationMetaDataValue_SearchData", params, state, callback);
     }
 
     public static void Metadata_ApplicationMetadataValue_SearchNearby(String BuddyApplicationName,
@@ -2205,7 +2205,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("SortResultsDirection", SortResultsDirection));
         params.add(new BasicNameValuePair("DisableCache", DisableCache));
 
-        MakeRequest("Metadata_ApplicationMetadataValue_SearchNearby", params, state, callback);
+        MakeRequest("MetaData_ApplicationMetaDataValue_SearchNearby", params, state, callback);
     }
 
     public static void Metadata_ApplicationMetadataValue_Set(String BuddyApplicationName,
@@ -2222,7 +2222,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("ApplicationTag", ApplicationTag));
         params.add(new BasicNameValuePair("RESERVED", RESERVED));
 
-        MakeRequest("Metadata_ApplicationMetadataValue_Set", params, state, callback);
+        MakeRequest("MetaData_ApplicationMetaDataValue_Set", params, state, callback);
     }
 
     public static void Metadata_ApplicationMetadataValue_Sum(String BuddyApplicationName,
@@ -2240,7 +2240,7 @@ public class BuddyWebWrapper {
         params.add(new BasicNameValuePair("ApplicationTag", ApplicationTag));
         params.add(new BasicNameValuePair("RESERVED", RESERVED));
 
-        MakeRequest("Metadata_ApplicationMetadataValue_Sum", params, state, callback);
+        MakeRequest("MetaData_ApplicationMetaDataValue_Sum", params, state, callback);
     }
 
     public static void Service_DateTime_Get(String BuddyApplicationName,

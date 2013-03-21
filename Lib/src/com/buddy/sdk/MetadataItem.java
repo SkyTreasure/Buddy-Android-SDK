@@ -68,27 +68,6 @@ public class MetadataItem implements Comparable<MetadataItem> {
     private UserMetadata owner;
     private AppMetadata ownerApp;
 
-    MetadataItem(String value, String key, String token, double lat, double lon, Date lastUpdated,
-            double distanceKM, double distanceM, double distanceMi, double distanceY) {
-        this.value = value;
-        this.key = key;
-        this.latitude = lat;
-        this.longitude = lon;
-        this.lastUpdate = lastUpdated;
-        this.distanceInKilometers = distanceKM;
-        this.distanceInMeters = distanceM;
-        this.distanceInMiles = distanceMi;
-        this.distanceInYards = distanceY;
-    }
-
-    MetadataItem(String value, String key, double lat, double lon, Date lastUpdated) {
-        this.value = value;
-        this.key = key;
-        this.latitude = lat;
-        this.longitude = lon;
-        this.lastUpdate = lastUpdated;
-    }
-
     MetadataItem(BuddyClient client, UserMetadata owner, AppMetadata ownerApp, String token,
             MetadataSearchData data, double originLatitude, double originLongitude) {
         this(client, owner, ownerApp, token, data.metaKey, data.metaValue, Utils
@@ -243,7 +222,9 @@ public class MetadataItem implements Comparable<MetadataItem> {
 
     @Override
     public int compareTo(MetadataItem other) {
-        if (other.key == this.key && other.value == this.value) return 0;
-        else return this.key.compareTo(other.key);
+        if (other.key == this.key && other.value == this.value)
+            return 0;
+        else
+            return this.key.compareTo(other.key);
     }
 }

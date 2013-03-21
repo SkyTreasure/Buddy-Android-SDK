@@ -206,7 +206,7 @@ ul
  </tr>
  <tr>
   <td style='padding:0in 0in 0in 0in'>
-  <h2><a name="_Toc349132059">Buddy Android SDK</a> – 0.1</h2>
+  <h2><a name="_Toc349132059">Buddy Android SDK</a> – 0.1.1</h2>
   </td>
  </tr>
 </table>
@@ -285,13 +285,13 @@ maximum connections per route will block on the additional requests until the
 earlier requests complete.</p>
 
 <p class=MsoNormal>The Buddy SDK uses up to two connections per Buddy route.
-The AppDev is free to modify the maximum total connections limit, by using the
+The app dev is free to modify the maximum total connections limit, by using the
 overloaded constructor in the AsyncHttpClient, but the SDK will not make use of
 a higher per&#8209;route connection limit, as per the HTTP protocol definition
 (<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html"><span
 style='font-size:12.0pt;line-height:115%'>http://www.w3.org/Protocols/rfc2616/rfc2616-sec8.html</span></a>).
 The SDK manages any multi-part web requests within the SDK (for example,
-uploading a single photo). The AppDev is responsible for any multi-part
+uploading a single photo). The app dev is responsible for any multi-part
 requests wrapping the SDK (e.g. adding multiple photos to an album).</p>
 
 <p class=MsoNormal>The SDK will not retry failed requests. All failures will be
@@ -300,7 +300,8 @@ reported as part of the response callback.</p>
 <h2><a name="_Toc349132061">Configuration Management</a></h2>
 
 <p class=MsoNormal><span style='font-size:12.0pt;line-height:115%'>The SDK allows
-the AppDev to configure the following transport-level options</span>:</p>
+the </span>app dev <span style='font-size:12.0pt;line-height:115%'>to configure
+the following transport-level options</span>:</p>
 
 <p class=MsoListParagraphCxSpFirst style='text-indent:-.25in'><span
 style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -327,14 +328,13 @@ the default value of 8192.</p>
 <h2><a name="_Toc349132062"></a><a name="_Toc340068176">Exception Management</a></h2>
 
 <p class=MsoNormal>Generically, exceptions or errors within the Buddy SDK will
-not be thrown to the AppDev, but will be returned as part of the exception
+not be thrown to the app dev, but will be returned as part of the exception
 object in the results callback. The Android SDK defines three exception objects
 and one error object:</p>
 
 <p class=MsoListParagraphCxSpFirst style='text-indent:-.25in'><span
 style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</span></span>Buddy Service Exception (parameter / request parsing / handling
-error)</p>
+</span></span>Buddy Service Exception (parameter / request parsing / handling error)</p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'><span
 style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -373,7 +373,7 @@ table below.</p>
   <td width=557 valign=top style='width:334.05pt;border:none;background:#D2EAF1;
   padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal style='line-height:normal'><span style='color:#31849B'>Invalid
-  parameter values or image files that cannot be loaded. The AppDev can decide
+  parameter values or image files that cannot be loaded. The app dev can decide
   how to take corrective action.</span></p>
   </td>
  </tr>
@@ -532,44 +532,44 @@ the ADT Eclipse plug-in installed.</p>
 
 <p class=MsoListParagraphCxSpFirst style='text-indent:-.25in'>1.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Download
-the SDK source code from https://github.com/BuddyPlatform/Android-SDK</p>
+the SDK source code from https://github.com/BuddyPlatform/Buddy-Android-SDK.</p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>2.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Open
 Eclipse and select the source code location in the <i>Select a workspace</i>
-dialog</p>
+dialog.</p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>3.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Select
-the <i>Workbench</i> option</p>
+the <i>Workbench</i> option.</p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>4.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Right
-click in the Package Explorer and select <i>Import</i></p>
+click in the Package Explorer and select <i>Import.</i></p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>5.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Select
 <i>General -&gt; Existing Projects into Workspace</i> on the <i>Import</i>
-dialog</p>
+dialog.</p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>6.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Browse
-to the Android directory, in the <i>Select root directory</i> item</p>
+to the Android directory, in the <i>Select root directory</i> item.</p>
 
 <p class=MsoListParagraphCxSpLast style='text-indent:-.25in'>7.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Ensure
 all projects listed are selected and press <i>Finish</i>. The SDK source code is
-now loaded</p>
+now loaded.</p>
 
 <h3><a name="_Toc349132069">Run Unit Tests</a></h3>
 
 <p class=MsoNormal>To run the unit tests within the Buddy SDK Source Code in
-Eclipse</p>
+Eclipse:</p>
 
 <p class=MsoListParagraphCxSpFirst style='text-indent:-.25in'>1.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Ensure
-the following SDK code projects are loaded in Eclipse: <i>BuddySDK, BuddySDKTests,
-and BuddyUnitTestHarness</i></p>
+the following SDK code projects are loaded in Eclipse: <i>BuddySDK,
+BuddySDKTests, and BuddyUnitTestHarness</i></p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>2.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Ensure
@@ -608,15 +608,15 @@ the following commands in this order:</p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>5.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>ant
-clean debug –buildfile BuddySDK/build.xml</p>
+clean debug –buildfile Lib/build.xml</p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>6.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>ant
-clean debug -buildfile BuddyUnitTestHarness/build.xml</p>
+clean debug -buildfile Tests/BuddyUnitTestHarness/build.xml</p>
 
 <p class=MsoListParagraphCxSpMiddle style='text-indent:-.25in'>7.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>ant
-clean debug install test -buildfile BuddySDKTests/build.xml</p>
+clean debug install test -buildfile Lib/build.xml</p>
 
 <p class=MsoListParagraphCxSpLast style='text-indent:-.25in'>8.<span
 style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>The
@@ -624,13 +624,13 @@ test output will be shown in the command window</p>
 
 <h3><a name="_Toc349132070">Validation</a></h3>
 
-<p class=MsoNormal>When running Validation on the code (select all projects, right-click,
-select Validation), there may be warnings about XML grammar that are benign. To
-ignore these warnings, go to Preferences from the Window menu, and then navigate
-to XML -&gt; XML Files -&gt; Validation. In the Validating files section of the
-preferences panel on the right, choose Ignore in the drop down box for the No
-grammar specified preference. The file may need to be closed and reopened to
-make the warnings go away.</p>
+<p class=MsoNormal>When running Validation on the code (select all projects,
+right-click, select Validation), there may be warnings about XML grammar that
+are benign. To ignore these warnings, go to Preferences from the Window menu, and
+then navigate to XML -&gt; XML Files -&gt; Validation. In the Validating files
+section of the preferences panel on the right, choose Ignore in the drop down
+box for the No grammar specified preference. The file may need to be closed and
+reopened to make the warnings go away.</p>
 
 <p class=MsoNormal>&nbsp;</p>
 
