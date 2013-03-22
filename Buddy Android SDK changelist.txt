@@ -6,7 +6,7 @@
 
 	The BuddyClient constructor changed to require the Android application context.
 
-	Added a fix so that automatic device information recording is done when first user logs ing.  Also, that information will be associated with that user.  Previously, the automatic device information recording happened upon BuddyClient instantiation, and was not associated with any user.
+	Added a fix so that automatic device information recording is done when first user logs in.  Also, that information will be associated with that user.  Previously, the automatic device information recording happened upon BuddyClient instantiation, and was not associated with any user.
 
 0.1.1
 
