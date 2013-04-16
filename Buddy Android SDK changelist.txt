@@ -11,3 +11,7 @@
 0.1.1
 
 	Added general fixes to saving and accessing user and app metadata.  Small fix to the VirtualAlbum.update() method.
+	
+0.1.2
+
+	Added support for Buddy's Commerce and Startup APIs.  Added BuddyUserMetadata.batchSet & BuddyGameBoards.getLowScores methods.  Added the BuddyGamePlayer.rank property.  Small fixes to the BuddyAppMetadata.find & BuddyUserMetadata.find APIs.	
