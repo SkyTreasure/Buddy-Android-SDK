@@ -12,3 +12,10 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 
+Asynchronous networking support is provided by the Android Asynchronous Http Client,
+which is open source software, written by\copyright by James Smith.  It is available
+at http://loopj.com/android-async-http.
+
+JSON to Java conversion is provided by google-gson, a Java library to convert JSON
+to Java objects and vice-versa.  It is open source software, written by\copyright by
+Google Inc.  It is available at https://code.google.com/p/google-gson/.
