@@ -281,7 +281,7 @@ public class BuddyClient {
      */
     public void login(String token, Object state,
             final OnCallback<Response<AuthenticatedUser>> callback) {
-        this.userProfileGetFromtoken(token, state, callback);
+        this.userProfileGetFromToken(token, state, callback);
     }
 
     /**
@@ -460,7 +460,7 @@ public class BuddyClient {
         }
     }
 
-    private void userProfileGetFromtoken(String token, Object state,
+    private void userProfileGetFromToken(String token, Object state,
             final OnCallback<Response<AuthenticatedUser>> callback) {
         if (Utils.isNullOrEmpty(token))
             throw new IllegalArgumentException("token can't be null or empty.");

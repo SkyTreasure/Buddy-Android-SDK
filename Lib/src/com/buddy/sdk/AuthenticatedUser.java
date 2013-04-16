@@ -80,6 +80,8 @@ public class AuthenticatedUser extends User {
     private Places places;
     private UserMetadata metaData;
     private Friends friends;
+    private Commerce commerce;
+    private Startups startups;
 
     AuthenticatedUser(BuddyClient client, String userToken, UserDataResponse.UserData profile) {
         super(client, Integer.valueOf(profile.userID));
@@ -106,7 +108,9 @@ public class AuthenticatedUser extends User {
 
         this.metaData = new UserMetadata(this.client, this.userToken);
         this.gamePlayers = new GamePlayers(this.client, this);
-        this.friends = new Friends(client, this);
+        this.friends = new Friends(this.client, this);
+        this.commerce = new Commerce(this.client, this);
+        this.startups = new Startups(this.client, this);
 
         this.updateProfile(profile);
     }
@@ -196,6 +200,20 @@ public class AuthenticatedUser extends User {
      */
     public Friends getFriends() {
         return friends;
+    }
+
+    /**
+     * Gets an object that can be used for commerce for the user.
+     */
+    public Commerce getCommerce() {
+    	return commerce;
+    }
+    
+    /**
+     * Gets an object that can be used for search for startups around the user (startups, not other users).
+     */
+    public Startups getStartups() {
+    	return startups;
     }
 
     /**

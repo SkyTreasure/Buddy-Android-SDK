@@ -1669,6 +1669,20 @@ public class BuddyWebWrapper {
         MakeRequest("Game_Score_GetBoardHighScores", params, state, callback);
     }
 
+    public static void Game_Score_GetBoardLowScores(String BuddyApplicationName,
+            String BuddyApplicationPassword, String UserTokenOrID, String ScoreBoardName,
+            Integer RecordLimit, String RESERVED, Object state, final OnResponseCallback callback) {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
+        params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
+        params.add(new BasicNameValuePair("UserTokenOrID", UserTokenOrID));
+        params.add(new BasicNameValuePair("ScoreBoardName", ScoreBoardName));
+        params.add(new BasicNameValuePair("RecordLimit", String.valueOf(RecordLimit)));
+        params.add(new BasicNameValuePair("RESERVED", RESERVED));
+
+        MakeRequest("Game_Score_GetBoardLowScores", params, state, callback);
+    }
+
     public static void Game_Score_GetScoresForUser(String BuddyApplicationName,
             String BuddyApplicationPassword, String UserTokenOrID, Integer RecordLimit,
             String RESERVED, Object state, final OnResponseCallback callback) {
@@ -2065,6 +2079,24 @@ public class BuddyWebWrapper {
         MakeRequest("MetaData_UserMetaDataValue_Sum", params, state, callback);
     }
 
+    public static void Metadata_UserMetadataValue_BatchSet(String BuddyApplicationName,
+            String BuddyApplicationPassword, String UserToken, String MetaKeys, String Values,
+            double Latitude, double Longitude, String ApplicationTag, String RESERVED,
+            Object state, final OnResponseCallback callback) {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
+        params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
+        params.add(new BasicNameValuePair("UserToken", UserToken));
+        params.add(new BasicNameValuePair("UserMetaKeyCollection", MetaKeys));
+        params.add(new BasicNameValuePair("UserMetaValueCollection", Values));
+        params.add(new BasicNameValuePair("MetaLatitude", String.valueOf(Latitude)));
+        params.add(new BasicNameValuePair("MetaLongitude", String.valueOf(Longitude)));
+        params.add(new BasicNameValuePair("ApplicationTag", ApplicationTag));
+        params.add(new BasicNameValuePair("RESERVED", RESERVED));
+
+        MakeRequest("MetaData_UserMetaDataValue_BatchSet", params, state, callback);
+    }
+
     public static void Metadata_ApplicationMetadataCounter_Decrement(String BuddyApplicationName,
             String BuddyApplicationPassword, String SocketMetaKey, String DecrementValueAmount,
             Float MetaLatitude, Float MetaLongitude, String ApplicationTag, String RESERVED,
@@ -2307,4 +2339,125 @@ public class BuddyWebWrapper {
         MakeRequest("Application_Metrics_GetStats", params, state, callback);
     }
 
+    public static void Commerce_Receipt_Save(String BuddyApplicationName,
+            String BuddyApplicationPassword, String UserToken, String TotalCost,
+            Integer TotalQuantity, Integer StoreItemID, String StoreName, String ReceiptData,
+            String CustomTransactionID, String AppData, String RESERVED, Object state,
+            final OnResponseCallback callback) {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
+        params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
+        params.add(new BasicNameValuePair("UserToken", UserToken));
+        params.add(new BasicNameValuePair("TotalCost", TotalCost));
+        params.add(new BasicNameValuePair("TotalQuantity", String.valueOf(TotalQuantity)));
+        params.add(new BasicNameValuePair("StoreItemID", String.valueOf(StoreItemID)));
+        params.add(new BasicNameValuePair("StoreName", StoreName));
+        params.add(new BasicNameValuePair("ReceiptData", ReceiptData));
+        params.add(new BasicNameValuePair("CustomTransactionID", CustomTransactionID));
+        params.add(new BasicNameValuePair("AppData", AppData));
+        params.add(new BasicNameValuePair("RESERVED", RESERVED));
+
+        MakeRequest("Commerce_Receipt_Save", params, state, callback);
+    }
+
+    public static void Commerce_Receipt_GetForUserAndTransactionID(String BuddyApplicationName,
+            String BuddyApplicationPassword, String UserToken, String CustomTransactionID,
+            String RESERVED, Object state, final OnResponseCallback callback) {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
+        params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
+        params.add(new BasicNameValuePair("UserToken", UserToken));
+        params.add(new BasicNameValuePair("CustomTransactionID", CustomTransactionID));
+        params.add(new BasicNameValuePair("RESERVED", RESERVED));
+
+        MakeRequest("Commerce_Receipt_GetForUserAndTransactionID", params, state, callback);
+    }
+
+    public static void Commerce_Receipt_GetForUser(String BuddyApplicationName,
+            String BuddyApplicationPassword, String UserToken, String FromDateTime,
+            String RESERVED, Object state, final OnResponseCallback callback) {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
+        params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
+        params.add(new BasicNameValuePair("UserToken", UserToken));
+        params.add(new BasicNameValuePair("FromDateTime", FromDateTime));
+        params.add(new BasicNameValuePair("RESERVED", RESERVED));
+
+        MakeRequest("Commerce_Receipt_GetForUser", params, state, callback);
+    }
+
+    public static void Commerce_Store_GetAllItems(String BuddyApplicationName,
+            String BuddyApplicationPassword, String UserToken, String RESERVED, Object state,
+            final OnResponseCallback callback) {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
+        params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
+        params.add(new BasicNameValuePair("UserToken", UserToken));
+        params.add(new BasicNameValuePair("RESERVED", RESERVED));
+
+        MakeRequest("Commerce_Store_GetAllItems", params, state, callback);
+    }
+
+    public static void Commerce_Store_GetActiveItems(String BuddyApplicationName,
+            String BuddyApplicationPassword, String UserToken, String RESERVED, Object state,
+            final OnResponseCallback callback) {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
+        params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
+        params.add(new BasicNameValuePair("UserToken", UserToken));
+        params.add(new BasicNameValuePair("RESERVED", RESERVED));
+
+        MakeRequest("Commerce_Store_GetActiveItems", params, state, callback);
+    }
+
+    public static void Commerce_Store_GetFreeItems(String BuddyApplicationName,
+            String BuddyApplicationPassword, String UserToken, String RESERVED, Object state,
+            final OnResponseCallback callback) {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
+        params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
+        params.add(new BasicNameValuePair("UserToken", UserToken));
+        params.add(new BasicNameValuePair("RESERVED", RESERVED));
+
+        MakeRequest("Commerce_Store_GetFreeItems", params, state, callback);
+    }
+
+    public static void StartupData_Location_GetMetroList(String BuddyApplicationName,
+            String BuddyApplicationPassword, Object state, final OnResponseCallback callback) {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
+        params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
+
+        MakeRequest("StartupData_Location_GetMetroList", params, state, callback);
+    }
+
+    public static void StartupData_Location_GetFromMetroArea(String BuddyApplicationName,
+            String BuddyApplicationPassword, String UserToken, String MetroName, int RecordLimit,
+            Object state, final OnResponseCallback callback) {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
+        params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
+        params.add(new BasicNameValuePair("UserToken", UserToken));
+        params.add(new BasicNameValuePair("MetroName", MetroName));
+        params.add(new BasicNameValuePair("RecordLimit", String.valueOf(RecordLimit)));
+
+        MakeRequest("StartupData_Location_GetFromMetroArea", params, state, callback);
+    }
+
+    public static void StartupData_Location_Search(String BuddyApplicationName,
+            String BuddyApplicationPassword, String UserToken, int SearchDistance, double Latitude,
+            double Longitude, int RecordLimit, String SearchName, Object state,
+            final OnResponseCallback callback) {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("BuddyApplicationName", BuddyApplicationName));
+        params.add(new BasicNameValuePair("BuddyApplicationPassword", BuddyApplicationPassword));
+        params.add(new BasicNameValuePair("UserToken", UserToken));
+        params.add(new BasicNameValuePair("SearchDistance", String.valueOf(SearchDistance)));
+        params.add(new BasicNameValuePair("Latitude", String.valueOf(Latitude)));
+        params.add(new BasicNameValuePair("Longitude", String.valueOf(Longitude)));
+        params.add(new BasicNameValuePair("RecordLimit", String.valueOf(RecordLimit)));
+        params.add(new BasicNameValuePair("SearchName", SearchName));
+
+        MakeRequest("StartupData_Location_Search", params, state, callback);
+    }
 }

@@ -235,6 +235,7 @@ public class GameUnitTests extends BaseUnitTest {
 
                 GamePlayer player = response.getResult();
                 assertEquals("Test Player Board", player.getBoardName());
+                assertEquals("best", player.getRank());
             }
 
         });
@@ -254,6 +255,7 @@ public class GameUnitTests extends BaseUnitTest {
                         List<GamePlayer> list = response.getList();
                         GamePlayer player = list.get(0);
                         assertEquals("Test Player", player.getName());
+                        assertEquals("best", player.getRank());
                     }
 
                 });

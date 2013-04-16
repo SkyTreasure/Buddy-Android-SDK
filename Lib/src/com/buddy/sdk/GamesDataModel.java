@@ -96,6 +96,48 @@ class GamesDataModel extends BaseDataModel {
                 });
     }
 
+
+    public void getLowScores(String scoreBoardName, Integer recordLimit, Object state,
+            final OnCallback<ListResponse<GameScore>> callback) {
+        
+        BuddyWebWrapper.Game_Score_GetBoardLowScores(client.getAppName(), client.getAppPassword(),
+                tokenOrId, scoreBoardName, recordLimit, this.RESERVED, state,
+                new OnResponseCallback() {
+
+                    @Override
+                    public void OnResponse(BuddyCallbackParams response, Object state) {
+                        ListResponse<GameScore> listResponse = new ListResponse<GameScore>();
+
+                        if (response != null) {
+                            if (response.completed) {
+                                GameScoreDataResponse result = getJson(response.response,
+                                        GameScoreDataResponse.class);
+                                if (result != null) {
+                                    List<GameScore> scoreList = new ArrayList<GameScore>(
+                                            result.data.size());
+                                    for (GameScoreData data : result.data) {
+                                        GameScore gameScore = new GameScore(client, data);
+                                        scoreList.add(gameScore);
+                                    }
+                                    listResponse.setList(scoreList);
+                                } else {
+                                    listResponse.setThrowable(new BuddyServiceException(
+                                            response.response));
+                                }
+                            } else {
+                                listResponse.setThrowable(response.exception);
+                            }
+                        } else {
+                            listResponse.setThrowable(new ServiceUnknownErrorException());
+                        }
+
+                        callback.OnResponse(listResponse, state);
+
+                    }
+
+                });
+    }
+
     public void getAll(Integer recordLimit, Object state,
             final OnCallback<ListResponse<GameScore>> callback) {
         

@@ -147,4 +147,18 @@ public class UserMetadataUnitTests extends BaseUnitTest {
 
         });
     }
+    
+    public void testBatchSet() {
+        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+        BuddyHttpClientFactory.addDummyResponse(jsonResponse);
+
+        testAuthUser.getMetadata().batchSet(testKeyList, "-1;", 0.0, 0.0, "", null,
+                new OnCallback<Response<Boolean>>() {
+                    public void OnResponse(Response<Boolean> response, Object state) {
+                        assertNotNull(response);
+                        assertTrue(response.getResult());
+                    }
+
+                });
+    }
 }

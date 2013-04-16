@@ -92,6 +92,34 @@ public class GameBoards {
     }
     
     /**
+     * Gets a list of low scores for a specific game board.
+     * 
+     * @param boardName The board name can be a specific string or a 'LIKE'
+     *            pattern using %.
+     * @param recordLimit The maximum number of scores to return.
+     * @param state An optional user defined object that will be passed to the
+     *            callback.
+     * @param callback The callback to call when this method completes.
+     */
+    public void getLowScores(String boardName, Integer recordLimit, Object state,
+            final OnCallback<ListResponse<GameScore>> callback) {
+        if (this.gameDataModel != null) {
+            this.gameDataModel.getLowScores(boardName, recordLimit, state, callback);
+        }
+    }
+
+    /**
+     * Gets a list of low scores for a specific game board.
+     * 
+     * @param boardName The board name can be a specific string or a 'LIKE'
+     *            pattern using %.
+     * @param callback The callback to call when this method completes.
+     */
+    public void getLowScores(String boardName, final OnCallback<ListResponse<GameScore>> callback) {
+        getLowScores(boardName, 100, null, callback);
+    }
+    
+    /**
      * Search for game scores based on a number of different parameters.
      * @param user Optionally limit the search to a specific user. null if not limiting the search.
      * @param distanceInMeters Optionally specify a distance from a lat/long to search on. By default this is ignored.

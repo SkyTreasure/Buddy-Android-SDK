@@ -193,7 +193,7 @@ class UserMetadataModel extends BaseDataModel {
                 this.client.getAppPassword(), this.userToken, searchDistanceMeters,
                 (float) latitude, (float) longitude, numberOfResults, withKey, withValue,
                 String.valueOf(updatedMinutesAgo), searchAsFloat ? 1 : 0, sortAscending ? 1 : 0,
-                disableCache ? "1" : "0", state, new OnResponseCallback() {
+                disableCache ? "true" : "", state, new OnResponseCallback() {
 
                     @Override
                     public void OnResponse(BuddyCallbackParams response, Object state) {
@@ -332,6 +332,21 @@ class UserMetadataModel extends BaseDataModel {
                         }
 
                         callback.OnResponse(listResponse, state);
+                    }
+                });
+    }
+    
+    public void batchSet(String metaKeys, String values, double latitude, double longitude,
+            String withAppTag, Object state, final OnCallback<Response<Boolean>> callback) {
+
+        BuddyWebWrapper.Metadata_UserMetadataValue_BatchSet(this.client.getAppName(),
+                this.client.getAppPassword(), this.userToken, metaKeys, values, (float) latitude,
+                (float) longitude, withAppTag, this.RESERVED, state, new OnResponseCallback() {
+
+                    @Override
+                    public void OnResponse(BuddyCallbackParams response, Object state) {
+                        Response<Boolean> booleanResponse = getBooleanResponse(response);
+                        callback.OnResponse(booleanResponse, state);
                     }
                 });
     }

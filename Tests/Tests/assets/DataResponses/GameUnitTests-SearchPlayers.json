@@ -14,7 +14,8 @@
 			"distanceInMiles":"0",
 			"distanceInKilometers":"0",
 			"distanceInMeters":"0",
-			"distanceInYards":"0"
+			"distanceInYards":"0",
+			"playerRank":"best"
 		}
 	]
 }

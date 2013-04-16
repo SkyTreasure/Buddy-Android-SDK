@@ -63,5 +63,8 @@ public class GamePlayerDataResponse {
 
         @SerializedName("distanceInYards")
         public String distanceInYards;
-    }
+
+        @SerializedName("playerRank")
+        public String playerRank;
+   }
 }

@@ -312,4 +312,46 @@ public class UserMetadata {
     public void batchSum(String forKeys, OnCallback<ListResponse<MetadataSum>> callback) {
         batchSum(forKeys, "-1", -1.0, -1.0, -1, "", null, callback);
     }
+    
+    /**
+     * Set metadata item values for keys. You can additionally add a latitude
+     * and longitude coordinate to record the location from where these items
+     * were set, or tag all items with a custom tag. The item doesn't have to
+     * exist to be set, this method acts as an Add method in cases where the
+     * item doesn't exist.
+     * 
+     * @param keys The keys of the metadata items, can't be null or empty.
+     * @param values The values of the metadata items, can't be null or empty.
+     * @param latitude The optional latitude of the metadata items.
+     * @param longitude The optional longitude of the metadata items.
+     * @param appTag The optional application tag for these items.
+     * @param state An optional user defined object that will be passed to the
+     *            callback
+     * @param callback The async callback to call on success or error.
+     */
+    public void batchSet(String keys, String values, double latitude, double longitude,
+            String appTag, Object state, OnCallback<Response<Boolean>> callback) {
+        if (Utils.isNullOrEmpty(keys))
+            throw new IllegalArgumentException("keys can't be null or empty.");
+        if (Utils.isNullOrEmpty(values))
+            throw new IllegalArgumentException("values can't be null or empty.");
+
+        if (this.userMetadataModel != null) {
+            this.userMetadataModel.batchSet(keys, values, latitude, longitude, appTag, state,
+                    callback);
+        }
+    }
+
+    /**
+     * Set metadata item values for keys. The item doesn't have to
+     * exist to be set, this method acts as an Add method in cases where the
+     * item doesn't exist.
+     * 
+     * @param keys The keys of the metadata items, can't be null or empty.
+     * @param values The values of the metadata items, can't be null or empty.
+     * @param callback The async callback to call on success or error.
+     */
+    public void batchSet(String keys, String values, OnCallback<Response<Boolean>> callback) {
+        batchSet(keys, values, 0.0, 0.0, "", null, callback);
+    }
 }

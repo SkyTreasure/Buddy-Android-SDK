@@ -36,6 +36,7 @@ public class GamePlayer {
     private double distanceInMeters = 0;
     private double distanceInMiles = 0;
     private double distanceInYards = 0;
+    private String rank;
 
     GamePlayer(BuddyClient client, AuthenticatedUser user, GamePlayerData info) {
         if (client == null)
@@ -53,6 +54,7 @@ public class GamePlayer {
         this.latitude = Utils.parseDouble(info.playerLatitude);
         this.longitude = Utils.parseDouble(info.playerLongitude);
         this.name = info.playerName;
+        this.rank = info.playerRank;
 
         if (!Utils.isNullOrEmpty(info.distanceInKilometers)) {
             this.distanceInKilometers = Utils.parseDouble(info.distanceInKilometers);
@@ -147,5 +149,12 @@ public class GamePlayer {
      */
     public double getDistanceInYards() {
         return this.distanceInYards;
+    }
+
+    /**
+     * Gets the rank of the player.
+     */
+    public String getRank() {
+        return this.rank;
     }
 }
