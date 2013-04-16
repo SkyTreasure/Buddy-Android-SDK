@@ -61,7 +61,7 @@ public class BuddyHttpClientFactory {
         } else {
             client = new AsyncHttpClient();
             
-            client.addHeader("BuddyPlatformSDK", BuddyPlatformSDKHeaderValue);
+            client.addHeader("x-buddy-sdk", BuddyPlatformSDKHeaderValue);
         }
 
         return client;
