@@ -170,6 +170,17 @@ public class BaseUnitTest extends InstrumentationTestCase {
         }
     }
 
+    protected InputStream getStreamFromFile(String fileName){
+    	try{
+    		AssetManager m = getInstrumentation().getContext().getAssets();
+    		return m.open(fileName);
+    	}catch(Exception e){
+    		// TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+    	}
+    }
+    
     protected void createAuthenticatedUser() {
         String jsonValue = testToken;
         String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");

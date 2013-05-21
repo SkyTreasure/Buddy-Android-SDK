@@ -16,6 +16,8 @@
 
 package com.buddy.sdk;
 
+import java.io.InputStream;
+
 import com.buddy.sdk.exceptions.BuddyServiceException;
 import com.buddy.sdk.exceptions.ServiceUnknownErrorException;
 import com.buddy.sdk.responses.Response;
@@ -28,6 +30,23 @@ class BaseDataModel {
     protected final String RESERVED = "";
     protected BuddyClient client = null;
 
+    protected Response<InputStream> getStreamResponse(BuddyCallbackParams response){
+		Response<InputStream> streamResponse = new Response<InputStream>();
+		
+		if(response != null) {
+			if(response.completed){
+				streamResponse.setResult((InputStream)response.responseObj);
+			} else {
+				if (response.exception != null) {
+	                streamResponse.setThrowable(response.exception);
+	            }
+			}
+		} else {
+	        streamResponse.setThrowable(new ServiceUnknownErrorException());
+	    }
+		return streamResponse;
+	}    	    
+    
     protected Response<String> getStringResponse(BuddyCallbackParams response) {
         Response<String> stringResponse = new Response<String>();
         if (response != null) {
@@ -78,6 +97,8 @@ class BaseDataModel {
         try {
             result = gson.fromJson(response, classVal);
         } catch (JsonSyntaxException ex) {
+        	String rs = ex.getMessage();
+        	StackTraceElement[] stack = ex.getStackTrace();
         }
         return result;
     }

@@ -82,6 +82,7 @@ public class AuthenticatedUser extends User {
     private Friends friends;
     private Commerce commerce;
     private Startups startups;
+    private Blobs blobs;
 
     AuthenticatedUser(BuddyClient client, String userToken, UserDataResponse.UserData profile) {
         super(client, Integer.valueOf(profile.userID));
@@ -112,6 +113,8 @@ public class AuthenticatedUser extends User {
         this.commerce = new Commerce(this.client, this);
         this.startups = new Startups(this.client, this);
 
+        this.blobs = new Blobs(this.client, this);
+        
         this.updateProfile(profile);
     }
 
@@ -216,6 +219,15 @@ public class AuthenticatedUser extends User {
     	return startups;
     }
 
+        
+    /**
+     * Gets an object that can be used for Upload search and management of Blobs for the user.
+	 */
+    public Blobs getBlobs(){
+    	return blobs;
+    }
+        
+    
     /**
      * Gets the email of the user. Can be an empty string or null.
      */

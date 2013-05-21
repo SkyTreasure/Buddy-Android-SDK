@@ -16,6 +16,11 @@
 
 package com.buddy.sdk.web;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -29,6 +34,12 @@ public class BuddyHttpClientFactory {
 
     private static ArrayList<String> dummyOrderedResponses = new ArrayList<String>();
 
+    private static InputStream dummyWebResponse;
+	
+	public static void setDummyReponse(InputStream value){
+		dummyWebResponse = value;
+	}
+    
     public static void setUnitTestMode(Boolean value) {
         isUnitTestMode = value;
     }
@@ -65,6 +76,22 @@ public class BuddyHttpClientFactory {
         }
 
         return client;
+    }
+    
+    public static HttpURLConnection createHttpURLConnection(URL url){
+    	if(isUnitTestMode){
+    		TestHttpURLConnection conn = new TestHttpURLConnection(url);
+    		conn.setDummyResponse(dummyWebResponse);
+    		return conn;
+    	} else {
+    		try {
+				return (HttpURLConnection) url.openConnection();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    	return null;
     }
 
     /**

@@ -16,9 +16,17 @@
 
 package com.buddy.sdk.web;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -29,8 +37,12 @@ import android.util.Log;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.SimpleMultipartEntity;
 
+import com.buddy.sdk.AuthenticatedUser;
 import com.buddy.sdk.BuddyCallbackParams;
+import com.buddy.sdk.BuddyClient;
+import com.buddy.sdk.BuddyFile;
 import com.buddy.sdk.Callbacks.OnResponseCallback;
 import com.buddy.sdk.utils.Utils;
 
@@ -39,6 +51,122 @@ public class BuddyWebWrapper {
     private static String urlType = "https://";
     private static String endpointUrl = "webservice.buddyplatform.com/Service/v1/BuddyService.ashx";
 
+    private enum HttpRequestType{HttpGet, HttpPostUrlEncoded, HttpPostMultipartForm}
+    private static String BuildUrl(String apiCall, Map<String, Object> params){
+    	String url = urlType + endpointUrl + "?" + apiCall;
+    	
+    	Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
+    	while(it.hasNext())
+    	{
+    		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
+    		if(pair.getValue().getClass().equals(BuddyFile.class))
+    		{
+    			//Ignore
+    		}
+    		else{
+    			url.concat("&" + pair.getKey() + "=" + pair.getValue().toString());
+    		}
+    	}
+    	return url;
+    }
+    
+    public static void MakePostReturnStream(String apiCall, Map<String, Object> params, final OnResponseCallback callback) throws IOException{
+    	InputStream in = null;
+    	int response = -1;
+    	
+    	URL url = new URL(BuildUrl(apiCall, params));
+    	        
+		try {
+			HttpURLConnection hcn = BuddyHttpClientFactory.createHttpURLConnection(url);
+		    hcn.setAllowUserInteraction(false);
+		    hcn.setInstanceFollowRedirects(true);
+		    hcn.setRequestMethod("GET");
+		    hcn.connect();
+		
+		    response = hcn.getResponseCode();
+		    if (response == HttpURLConnection.HTTP_OK) { in = hcn.getInputStream(); }
+		}
+		catch (Exception ex) {
+			throw new IOException("Error connecting");            
+		}
+		BuddyCallbackParams callbackParams = new BuddyCallbackParams();  
+		callbackParams.responseObj = in;
+		    
+		callback.OnResponse(callbackParams, null); 
+    }
+    
+    public static void MakePostMultiRequest(String apiCall, Map<String, Object> params,
+    		final OnResponseCallback callback){
+    	
+    	SimpleMultipartEntity entity = new SimpleMultipartEntity();
+    	
+    	String url = BuildUrl(apiCall, params);
+    	
+    	Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
+    	while(it.hasNext())
+    	{
+    		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
+    		if(pair.getValue().getClass().equals(BuddyFile.class))
+    		{
+    			BuddyFile file = (BuddyFile)pair.getValue();
+    			entity.addPart(pair.getKey(), pair.getKey(), file.Data, file.ContentType, true);
+    		}
+    	}
+    	
+    	
+    	AsyncHttpClient client = BuddyHttpClientFactory.getHttpClient();
+    	client.post(null, url, entity, "multipart/form-data", new AsyncHttpResponseHandler(){
+    		@Override
+            public void onStart() {
+                Log.d(TAG, "onStart");
+            }
+
+            @Override
+            public void onSuccess(String success) {
+                Log.d(TAG + "-POST SUCCESS", success);
+                if (callback != null) {
+                    BuddyCallbackParams callbackParams = null;
+                    Exception exception = Utils.ProcessStandardErrors(success);
+                    if (exception == null) {
+                        callbackParams = new BuddyCallbackParams();
+                        callbackParams.response = success;
+                    } else {
+                        callbackParams = new BuddyCallbackParams(exception, success);
+                    }
+                    callback.OnResponse(callbackParams, null);
+                }
+                Log.d(TAG, "onSuccess");
+            }
+
+            @Override
+            public void onFailure(Throwable e, String response) {
+                if (callback != null) {
+                    BuddyCallbackParams callbackParams = new BuddyCallbackParams(e, response);
+                    callback.OnResponse(callbackParams, null);
+                }
+                Log.d(TAG, "onFailure");
+            }
+    	});
+    	
+    }
+    
+    public static void MakePostRequest(String apiCall, Map<String, Object> params, final OnResponseCallback callback)
+    {    	
+    	throw new UnsupportedOperationException();
+    }
+    
+    public static void MakeGetRequest(String apiCall, Map<String, Object> params, final OnResponseCallback callback){
+    	List<NameValuePair> pairs = new LinkedList<NameValuePair>();
+    	
+    	Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
+    	while(it.hasNext())
+    	{
+    		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
+    		pairs.add(new BasicNameValuePair(pair.getKey(), pair.getValue().toString()));
+    	}
+    	MakeRequest(apiCall, pairs, null, callback);
+    }
+    
     public static void MakePostRequest(String apiCall, List<NameValuePair> params,
             final Object state, final OnResponseCallback callback) {
         UrlEncodedFormEntity entity = null;
@@ -90,6 +218,20 @@ public class BuddyWebWrapper {
                 });
     }
 
+    public static void MakeRequest(String apiCall, Map<String, Object> params, HttpRequestType type, final OnResponseCallback callback){
+    	switch(type)
+    	{
+    		case HttpGet:
+    			MakeGetRequest(apiCall, params, callback);
+    			break;
+    		case HttpPostUrlEncoded:
+    			MakePostRequest(apiCall, params, callback);
+    			break;
+    		case HttpPostMultipartForm:
+    			MakePostMultiRequest(apiCall, params, callback);
+    	}
+    }
+    
     public static void MakeRequest(String apiCall, List<NameValuePair> params, final Object state,
             final OnResponseCallback callback) {
         RequestParams reqParams = new RequestParams();
@@ -2460,4 +2602,128 @@ public class BuddyWebWrapper {
 
         MakeRequest("StartupData_Location_Search", params, state, callback);
     }
+    
+    public static void Blobs_Blob_DeleteBlob(BuddyClient client, AuthenticatedUser user, long blobID, 
+    		final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("BlobID", blobID);
+    	
+    	MakeRequest("Blobs_Blob_DeleteBlob", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Blobs_Blob_AddBlob(BuddyClient client, AuthenticatedUser user, String friendlyName, String appTag, 
+    		double latitude, double longitude, BuddyFile blobData, final OnResponseCallback callback)
+    {
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("FriendlyName", friendlyName);
+    	params.put("AppTag", appTag);
+    	params.put("Latitude", latitude);
+    	params.put("Longitude", longitude);
+    	params.put("blobData", blobData);
+    	
+    	MakeRequest("Blobs_Blob_AddBlob", params, HttpRequestType.HttpPostMultipartForm, callback);
+    }
+    
+    public static void Blobs_Blob_GetBlobInfo(BuddyClient client, AuthenticatedUser user, long blobID,
+    		final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("BlobID", blobID);
+    	
+    	MakeRequest("Blobs_Blob_GetBlobInfo", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Blobs_Blob_SearchBlobs(BuddyClient client, AuthenticatedUser user, String friendlyName, 
+    		String mimeType, String appTag, int searchDistance, double searchLatitude, double searchLongitude, int timeFilter,
+    		int recordLimit, final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("FriendlyName", friendlyName);
+    	params.put("MimeType", mimeType);
+    	params.put("AppTag", appTag);
+    	params.put("SearchDistance", searchDistance);
+    	params.put("SearchLatitude", searchLatitude);
+    	params.put("SearchLongitude", searchLongitude);
+    	params.put("TimeFilter", timeFilter);
+    	params.put("RecordLimit", recordLimit);
+    	
+    	MakeRequest("Blobs_Blob_SearchBlobs", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Blobs_Blob_SearchMyBlobs(BuddyClient client, AuthenticatedUser user, String friendlyName, 
+    		String mimeType, String appTag, int searchDistance, double searchLatitude, double searchLongitude, int timeFilter,
+    		int recordLimit, final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("FriendlyName", friendlyName);
+    	params.put("MimeType", mimeType);
+    	params.put("AppTag", appTag);
+    	params.put("SearchDistance", searchDistance);
+    	params.put("SearchLatitude", searchLatitude);
+    	params.put("SearchLongitude", searchLongitude);
+    	params.put("TimeFilter", timeFilter);
+    	params.put("RecordLimit", recordLimit);
+    	
+    	MakeRequest("Blobs_Blob_SearchMyBlobs", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Blobs_Blob_GetList(BuddyClient client, AuthenticatedUser user, long userID, int recordLimit,
+    		final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("UserID", userID);
+    	params.put("RecordLimit", recordLimit);
+    	
+    	MakeRequest("Blobs_Blob_GetList", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Blobs_Blob_GetMyList(BuddyClient client, AuthenticatedUser user, int recordLimit,
+    		final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("RecordLimit", recordLimit);
+    	
+    	MakeRequest("Blobs_Blob_GetMyList", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Blobs_Blob_EditInfo(BuddyClient client, AuthenticatedUser user, long blobID , String friendlyName, String appTag,
+    		final OnResponseCallback callback)
+    {
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	
+    	addAuth(params, client, user);
+    	params.put("BlobID", blobID);
+    	params.put("FriendlyName", friendlyName);
+    	params.put("AppTag", appTag);
+    	
+    	MakeRequest("Blobs_Blob_EditInfo", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Blobs_Blob_GetBlob(BuddyClient client, AuthenticatedUser user, long blobID, final OnResponseCallback callback)
+    {
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	
+    	addAuth(params, client, user);
+    	params.put("BlobID", blobID);
+    	
+    	try {
+			MakePostReturnStream("Blobs_Blob_GetBlob", params, callback);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    private static void addAuth(Map<String, Object> params, BuddyClient client, AuthenticatedUser user){
+    	params.put("BuddyApplicationName", client.getAppName());
+    	params.put("BuddyApplicationPassword", client.getAppPassword());
+    	addToken(params, user);
+    }
+    
+    private static void addToken(Map<String, Object> params, AuthenticatedUser user){
+    	params.put("UserToken", user.getToken());    	
+    }
+    
 }
