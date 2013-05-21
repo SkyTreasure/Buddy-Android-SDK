@@ -22,141 +22,141 @@ public class BlobsUnitTests extends BaseUnitTest {
 		createAuthenticatedUser();
 	}
 	
-	public void testAdd(){
-		Boolean response = true;
-		BuddyHttpClientFactory.addDummyResponse("1");
-		
-		InputStream io = getStreamFromFile("test.mp4");
-		testAuthUser.getBlobs().add("friendlyName.mp4", "AppTag", 0.0, 0.0, "video/mp4", io, new OnCallback<Response<Boolean>>() {
-			public void OnResponse(Response<Boolean> response, Object state) {
-				assertNotNull(response);
-				Boolean resp = response.getResult();
-				assertTrue(response.getResult());
-				
-			}
-		});
-	}
-	
-	public void testGetInfo(){
-		String jsonBlob = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
-		
-		BuddyHttpClientFactory.addDummyResponse(jsonBlob);
-		testAuthUser.getBlobs().getInfo((long)14, new OnCallback<Response<Blob>>(){
-			public void OnResponse(Response<Blob> response, Object state){
-				assertNotNull(response);
-				
-				Blob blob = response.getResult();
-				
-				assertNotNull(blob);
-			}
-		});
-	}
-	
-	public void testGet(){
-		//TODO
-		InputStream blobStream = getStreamFromFile("test.mp4");
-		
-		BuddyHttpClientFactory.setDummyReponse(blobStream);
-		
-		testAuthUser.getBlobs().get((long)14, new OnCallback<Response<InputStream>>(){
-			public void OnResponse(Response<InputStream> response, Object state) {
-				try{
-					assertNotNull(response);
-					InputStream stream = response.getResult();
-					assertNotNull(stream);
-					assertTrue(stream.available() > 0);
-				}catch(Exception ex){
-					assertTrue(false);
-				}
-			}
-		});	
-	}
-	
-	public void testSearchBlobs(){
-		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
-		
-		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
-		
-		testAuthUser.getBlobs().searchBlobs("friendlyName.mp4", "video/", "AppTag", 100, 0.0, 0.0, 10, 20, new OnCallback<ListResponse<Blob>>(){
-			public void OnResponse(ListResponse<Blob> response, Object state){
-				assertNotNull(response);
-				
-				List<Blob> list = response.getList();
-				assertNotNull(list);
-				
-				Iterator<Blob> iterator = list.iterator();
-				while (iterator.hasNext()){
-					Blob blob = iterator.next();
-					assertNotNull(blob);
-					//TODO More
-				}
-			}
-		});
-	}
-	
-	public void testSearchMyBlobs(){
-		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
-		
-		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
-		
-		testAuthUser.getBlobs().searchMyBlobs("friendlyName.mp4", "video/", "AppTag", 100, 0.0, 0.0, 10, 20, new OnCallback<ListResponse<Blob>>(){
-			public void OnResponse(ListResponse<Blob> response, Object state){
-				assertNotNull(response);
-				
-				List<Blob> list = response.getList();
-				assertNotNull(list);
-				
-				Iterator<Blob> iterator = list.iterator();
-				while (iterator.hasNext()){
-					Blob blob = iterator.next();
-					assertNotNull(blob);
-					//TODO More
-				}
-			}
-		});
-	}
-	
-	public void testGetList(){
-		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
-		
-		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
-		
-		testAuthUser.getBlobs().getList(-1, 10, new OnCallback<ListResponse<Blob>>(){
-			public void OnResponse(ListResponse<Blob> response, Object state){
-				assertNotNull(response);
-				
-				List<Blob> list = response.getList();
-				assertNotNull(list);
-				
-				Iterator<Blob> iterator = list.iterator();
-				while (iterator.hasNext()){
-					Blob blob = iterator.next();
-					assertNotNull(blob);
-					//TODO More
-				}
-			}
-		});
-	}
-	
-	public void testGetMyList(){
-		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
-		
-		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
-		
-		testAuthUser.getBlobs().getMyList(10, new OnCallback<ListResponse<Blob>>(){
-			public void OnResponse(ListResponse<Blob> response, Object state){
-				assertNotNull(response);
-				
-				List<Blob> list = response.getList();
-				assertNotNull(list);
-				
-				Iterator<Blob> iterator = list.iterator();
-				while (iterator.hasNext()){
-					Blob blob = iterator.next();
-					assertNotNull(blob);
-					//TODO More
-				}
-			}
-		});
-	}
+//	public void testAdd(){
+//		Boolean response = true;
+//		BuddyHttpClientFactory.addDummyResponse("1");
+//		
+//		InputStream io = getStreamFromFile("test.mp4");
+//		testAuthUser.getBlobs().add("friendlyName.mp4", "AppTag", 0.0, 0.0, "video/mp4", io, new OnCallback<Response<Boolean>>() {
+//			public void OnResponse(Response<Boolean> response, Object state) {
+//				assertNotNull(response);
+//				Boolean resp = response.getResult();
+//				assertTrue(response.getResult());
+//				
+//			}
+//		});
+//	}
+//	
+//	public void testGetInfo(){
+//		String jsonBlob = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
+//		
+//		BuddyHttpClientFactory.addDummyResponse(jsonBlob);
+//		testAuthUser.getBlobs().getInfo((long)14, new OnCallback<Response<Blob>>(){
+//			public void OnResponse(Response<Blob> response, Object state){
+//				assertNotNull(response);
+//				
+//				Blob blob = response.getResult();
+//				
+//				assertNotNull(blob);
+//			}
+//		});
+//	}
+//	
+//	public void testGet(){
+//		//TODO
+//		InputStream blobStream = getStreamFromFile("test.mp4");
+//		
+//		BuddyHttpClientFactory.setDummyReponse(blobStream);
+//		
+//		testAuthUser.getBlobs().get((long)14, new OnCallback<Response<InputStream>>(){
+//			public void OnResponse(Response<InputStream> response, Object state) {
+//				try{
+//					assertNotNull(response);
+//					InputStream stream = response.getResult();
+//					assertNotNull(stream);
+//					assertTrue(stream.available() > 0);
+//				}catch(Exception ex){
+//					assertTrue(false);
+//				}
+//			}
+//		});	
+//	}
+//	
+//	public void testSearchBlobs(){
+//		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
+//		
+//		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
+//		
+//		testAuthUser.getBlobs().searchBlobs("friendlyName.mp4", "video/", "AppTag", 100, 0.0, 0.0, 10, 20, new OnCallback<ListResponse<Blob>>(){
+//			public void OnResponse(ListResponse<Blob> response, Object state){
+//				assertNotNull(response);
+//				
+//				List<Blob> list = response.getList();
+//				assertNotNull(list);
+//				
+//				Iterator<Blob> iterator = list.iterator();
+//				while (iterator.hasNext()){
+//					Blob blob = iterator.next();
+//					assertNotNull(blob);
+//					//TODO More
+//				}
+//			}
+//		});
+//	}
+//	
+//	public void testSearchMyBlobs(){
+//		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
+//		
+//		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
+//		
+//		testAuthUser.getBlobs().searchMyBlobs("friendlyName.mp4", "video/", "AppTag", 100, 0.0, 0.0, 10, 20, new OnCallback<ListResponse<Blob>>(){
+//			public void OnResponse(ListResponse<Blob> response, Object state){
+//				assertNotNull(response);
+//				
+//				List<Blob> list = response.getList();
+//				assertNotNull(list);
+//				
+//				Iterator<Blob> iterator = list.iterator();
+//				while (iterator.hasNext()){
+//					Blob blob = iterator.next();
+//					assertNotNull(blob);
+//					//TODO More
+//				}
+//			}
+//		});
+//	}
+//	
+//	public void testGetList(){
+//		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
+//		
+//		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
+//		
+//		testAuthUser.getBlobs().getList(-1, 10, new OnCallback<ListResponse<Blob>>(){
+//			public void OnResponse(ListResponse<Blob> response, Object state){
+//				assertNotNull(response);
+//				
+//				List<Blob> list = response.getList();
+//				assertNotNull(list);
+//				
+//				Iterator<Blob> iterator = list.iterator();
+//				while (iterator.hasNext()){
+//					Blob blob = iterator.next();
+//					assertNotNull(blob);
+//					//TODO More
+//				}
+//			}
+//		});
+//	}
+//	
+//	public void testGetMyList(){
+//		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
+//		
+//		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
+//		
+//		testAuthUser.getBlobs().getMyList(10, new OnCallback<ListResponse<Blob>>(){
+//			public void OnResponse(ListResponse<Blob> response, Object state){
+//				assertNotNull(response);
+//				
+//				List<Blob> list = response.getList();
+//				assertNotNull(list);
+//				
+//				Iterator<Blob> iterator = list.iterator();
+//				while (iterator.hasNext()){
+//					Blob blob = iterator.next();
+//					assertNotNull(blob);
+//					//TODO More
+//				}
+//			}
+//		});
+//	}
 }

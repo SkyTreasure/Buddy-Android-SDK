@@ -223,9 +223,9 @@ public class AuthenticatedUser extends User {
     /**
      * Gets an object that can be used for Upload search and management of Blobs for the user.
 	 */
-    public Blobs getBlobs(){
-    	return blobs;
-    }
+//    public Blobs getBlobs(){
+//    	return blobs;
+//    }
         
     
     /**
