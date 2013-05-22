@@ -16,6 +16,7 @@
 
 package com.buddy.sdk.web;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -31,9 +32,14 @@ public class TestHttpURLConnection extends HttpURLConnection {
 	 */
 	
 	private InputStream dummyWebResponse;
+	private String dummyResponse;
 	
 	public void setDummyResponse(InputStream value){
 		this.dummyWebResponse = value;
+	}
+	
+	public void setDummyResponse(String value){
+		this.dummyResponse = value;
 	}
 	
 	protected TestHttpURLConnection(URL url) {
@@ -52,7 +58,12 @@ public class TestHttpURLConnection extends HttpURLConnection {
 
 	@Override
 	public InputStream getInputStream(){
-		return dummyWebResponse;
+		if(dummyWebResponse != null){
+			return dummyWebResponse;
+		}
+		else{
+			return new ByteArrayInputStream(dummyResponse.getBytes());
+		}
 	}
 	
 	@Override

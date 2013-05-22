@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
@@ -46,6 +47,7 @@ import com.buddy.sdk.BuddyCallbackParams;
 import com.buddy.sdk.BuddyClient;
 import com.buddy.sdk.BuddyFile;
 import com.buddy.sdk.Callbacks.OnResponseCallback;
+import com.buddy.sdk.Sounds.SoundQuality;
 import com.buddy.sdk.responses.Response;
 import com.buddy.sdk.utils.Utils;
 
@@ -53,7 +55,6 @@ public class BuddyWebWrapper {
     private static String TAG = "BuddySDK";
     private static String urlType = "https://";
     private static String endpointUrl = "webservice.buddyplatform.com/Service/v1/BuddyService.ashx";
-    
     
     private enum HttpRequestType{HttpGet, HttpPostUrlEncoded, HttpPostMultipartForm}
     private static String BuildUrl(String apiCall, Map<String, Object> params){
@@ -78,12 +79,26 @@ public class BuddyWebWrapper {
     	return url;
     }
     
-    public static void MakePostReturnStream(String apiCall, Map<String, Object> params, final OnResponseCallback callback) throws IOException{
+    private static List<NameValuePair> MapToList(Map<String, Object> params){
+    	List<NameValuePair> pairs = new LinkedList<NameValuePair>();
+    	
+    	Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
+    	while(it.hasNext())
+    	{
+    		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
+    		pairs.add(new BasicNameValuePair(pair.getKey(), pair.getValue().toString()));
+    	}
+    	return pairs;
+    }
+    
+    public static void MakePostReturnStream(String apiCall, Map<String, Object> params, final OnResponseCallback callback){
     	InputStream in = null;
     	int response = -1;
+    	URL url = null;
+    	try{
+    		url = new URL(BuildUrl(apiCall, params));
+    	}catch(MalformedURLException ex){}    
     	
-    	URL url = new URL(BuildUrl(apiCall, params));
-    	        
 		try {
 			HttpURLConnection hcn = BuddyHttpClientFactory.createHttpURLConnection(url);
 		    hcn.setAllowUserInteraction(false);
@@ -93,18 +108,19 @@ public class BuddyWebWrapper {
 		    hcn.connect();
 		
 		    response = hcn.getResponseCode();
+		    //if we're going from http to https it won't redirect automagically, we have to act manually
 		    if (response == HttpURLConnection.HTTP_MOVED_TEMP) {
 		    	String newUrl = hcn.getHeaderField("Location");
 		    	hcn = (HttpURLConnection) new URL(newUrl).openConnection();
 		    	hcn.setRequestMethod("GET");
 		    	hcn.connect();
 		    	in = hcn.getInputStream();
+	    	//otherwise we can just grab the stream
 	    	}else if (response == HttpURLConnection.HTTP_OK){
 	    		in = hcn.getInputStream();
 	    	}
 		}
-		catch (Exception ex) {
-			throw new IOException("Error connecting");            
+		catch (Exception ex) {          
 		}
 		BuddyCallbackParams callbackParams = new BuddyCallbackParams();  
 		callbackParams.responseObj = in;
@@ -150,7 +166,7 @@ public class BuddyWebWrapper {
     	     	 
     	   // Make a connect to the server
     	   URL url = new URL(targetURL);
-    	   conn = (HttpURLConnection) url.openConnection();
+    	   conn = (HttpURLConnection) BuddyHttpClientFactory.createHttpURLConnection(url);
     	   
     	   conn.setDoOutput(true);
     	   conn.setDoInput(true);
@@ -205,8 +221,6 @@ public class BuddyWebWrapper {
     public static void MakePostMultiRequest(String apiCall, Map<String, Object> params,
     		final OnResponseCallback callback){
     	    	
-    	//SimpleMultipartEntity entity = new SimpleMultipartEntity();
-    	
     	String url = BuildUrl(apiCall, params);
     	
     	BuddyFile file = null;
@@ -235,18 +249,12 @@ public class BuddyWebWrapper {
     
     public static void MakePostRequest(String apiCall, Map<String, Object> params, final OnResponseCallback callback)
     {    	
-    	throw new UnsupportedOperationException();
+    	List<NameValuePair> pairs = MapToList(params);
+    	MakePostRequest(apiCall, pairs, null, callback);
     }
     
     public static void MakeGetRequest(String apiCall, Map<String, Object> params, final OnResponseCallback callback){
-    	List<NameValuePair> pairs = new LinkedList<NameValuePair>();
-    	
-    	Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
-    	while(it.hasNext())
-    	{
-    		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
-    		pairs.add(new BasicNameValuePair(pair.getKey(), pair.getValue().toString()));
-    	}
+    	List<NameValuePair> pairs = MapToList(params);
     	MakeRequest(apiCall, pairs, null, callback);
     }
     
@@ -2791,12 +2799,7 @@ public class BuddyWebWrapper {
     	addAuth(params, client, user);
     	params.put("BlobID", blobID);
     	
-    	try {
-			MakePostReturnStream("Blobs_Blob_GetBlob", params, callback);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		MakePostReturnStream("Blobs_Blob_GetBlob", params, callback);
     }
     
     public static void Videos_Video_DeleteVideo(BuddyClient client, AuthenticatedUser user, long videoID, 
@@ -2904,14 +2907,19 @@ public class BuddyWebWrapper {
     	addAuth(params, client, user);
     	params.put("VideoID", videoID);
     	
-    	try {
-			MakePostReturnStream("Videos_Video_GetVideo", params, callback);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	
+		MakePostReturnStream("Videos_Video_GetVideo", params, callback);
     }
     
+    public static void Sound_Sounds_GetSound(BuddyClient client, String soundName, SoundQuality quality, final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	
+    	addAuth(params, client);
+    	params.put("SoundName", soundName);
+    	params.put("Quality", quality.name());
+    	
+    	MakePostReturnStream("Sound_Sounds_GetSound", params, callback);
+    }
     
     private static void addAuth(Map<String, Object> params, BuddyClient client, AuthenticatedUser user){
     	addAuth(params, client);

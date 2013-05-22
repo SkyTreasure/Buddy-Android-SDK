@@ -57,6 +57,7 @@ public class BuddyClient {
     private AppMetadata appMeta = null;
     private GameBoards gameBoards = null;
     private Device device = null;
+    private Sounds sounds = null;
 
     private String applicationVersion = "1.0";
 
@@ -101,6 +102,7 @@ public class BuddyClient {
         this.appMeta = new AppMetadata(this);
         this.gameBoards = new GameBoards(this);
         this.device = new Device(this);
+        this.sounds = new Sounds(this);
 
         this.recordDeviceInfo = autoRecordDeviceInfo;
 
@@ -179,6 +181,13 @@ public class BuddyClient {
         return this.device;
     }
 
+    /**
+     * Gets an object that can be used to retrieve Sounds for the client.
+     */
+    public Sounds getSounds(){
+    	return this.sounds;
+    }
+    
     /**
      * Create a new Buddy user.
      * 

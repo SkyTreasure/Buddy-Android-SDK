@@ -80,7 +80,13 @@ public class BuddyHttpClientFactory {
     public static HttpURLConnection createHttpURLConnection(URL url){
     	if(isUnitTestMode){
     		TestHttpURLConnection conn = new TestHttpURLConnection(url);
-    		conn.setDummyResponse(dummyWebResponse);
+    		if(dummyWebResponse != null){
+    			conn.setDummyResponse(dummyWebResponse);
+    		}
+    		else{
+    			conn.setDummyResponse(dummyOrderedResponses.get(0));
+    			dummyOrderedResponses.remove(0);
+    		}
     		return conn;
     	} else {
     		try {

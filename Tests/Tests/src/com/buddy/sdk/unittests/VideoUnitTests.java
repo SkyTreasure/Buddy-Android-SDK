@@ -19,23 +19,6 @@ public class VideoUnitTests extends BaseUnitTest {
 		createAuthenticatedUser();
 	}
 	
-	public void testAdd(){
-//		//String response = "1";
-//		BuddyHttpClientFactory.addDummyResponse("1");
-//		
-//		InputStream io = getStreamFromFile("test.mp4");
-//		testAuthUser.getVideos().add("friendlyName.mp4", "AppTag", 0.0, 0.0, "video/mp4", io, new OnCallback<Response<String>>() {
-//			public void OnResponse(Response<String> response, Object state) {
-//				assertNotNull(response);
-//				String res = response.getResult();
-//				assertNotNull(res);
-//				int i = Integer.parseInt(res);
-//				assertNotNull(i);
-//				
-//			}
-//		});
-	}
-	
 	public void testGetInfo(){
 		String jsonVideo = readDataFromFile("DataResponses/VideoUnitTest-GetVideo.json");
 		

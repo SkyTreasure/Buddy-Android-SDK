@@ -20,23 +20,6 @@ public class BlobsUnitTests extends BaseUnitTest {
 		createAuthenticatedUser();
 	}
 	
-//	public void testAdd(){
-//		//String response = "1";
-//		BuddyHttpClientFactory.addDummyResponse("1");
-//		
-//		InputStream io = getStreamFromFile("test.mp4");
-//		testAuthUser.getBlobs().add("friendlyName.mp4", "AppTag", 0.0, 0.0, "video/mp4", io, new OnCallback<Response<String>>() {
-//			public void OnResponse(Response<String> response, Object state) {
-//				assertNotNull(response);
-//				String res = response.getResult();
-//				assertNotNull(res);
-//				int i = Integer.parseInt(res);
-//				assertNotNull(i);
-//				
-//			}
-//		});
-//	}
-	
 	public void testGetInfo(){
 		String jsonBlob = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
 		
@@ -53,7 +36,6 @@ public class BlobsUnitTests extends BaseUnitTest {
 	}
 	
 	public void testGet(){
-		//TODO
 		InputStream blobStream = getStreamFromFile("test.mp4");
 		
 		BuddyHttpClientFactory.setDummyReponse(blobStream);
