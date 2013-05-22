@@ -44,16 +44,22 @@ public class Blobs {
 	}
 	
 	public void add(String friendlyName, String appTag, double latitude, double longitude, String contentType, 
-			byte[] blobData, OnCallback<Response<Boolean>> callback){
+			byte[] blobData, OnCallback<Response<String>> callback){
 		if(this.blobDataModel != null){
 			this.blobDataModel.add(friendlyName, appTag, latitude, longitude, contentType, blobData, callback);		
 		}				
 	}
 	
 	public void add(String friendlyName, String appTag, double latitude, double longitude, String contentType,
-			InputStream blobData, OnCallback<Response<Boolean>> callback){
+			InputStream blobData, OnCallback<Response<String>> callback){
 		if(this.blobDataModel != null){
 			this.blobDataModel.add(friendlyName, appTag, latitude, longitude, contentType, blobData, callback);
+		}
+	}
+	
+	public void edit(long blobID, String friendlyName, String appTag, OnCallback<Response<Boolean>> callback){
+		if(this.blobDataModel != null){
+			this.blobDataModel.editInfo(blobID, friendlyName, appTag, callback);
 		}
 	}
 	

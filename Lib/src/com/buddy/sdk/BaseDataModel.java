@@ -97,8 +97,6 @@ class BaseDataModel {
         try {
             result = gson.fromJson(response, classVal);
         } catch (JsonSyntaxException ex) {
-        	String rs = ex.getMessage();
-        	StackTraceElement[] stack = ex.getStackTrace();
         }
         return result;
     }

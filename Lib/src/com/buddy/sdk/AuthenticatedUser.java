@@ -83,6 +83,7 @@ public class AuthenticatedUser extends User {
     private Commerce commerce;
     private Startups startups;
     private Blobs blobs;
+    private Videos videos;
 
     AuthenticatedUser(BuddyClient client, String userToken, UserDataResponse.UserData profile) {
         super(client, Integer.valueOf(profile.userID));
@@ -114,6 +115,7 @@ public class AuthenticatedUser extends User {
         this.startups = new Startups(this.client, this);
 
         this.blobs = new Blobs(this.client, this);
+        this.videos = new Videos(this.client, this);
         
         this.updateProfile(profile);
     }
@@ -221,12 +223,18 @@ public class AuthenticatedUser extends User {
 
         
     /**
-     * Gets an object that can be used for Upload search and management of Blobs for the user.
+     * Gets an object that can be used for upload search and management of Blobs for the user.
 	 */
-//    public Blobs getBlobs(){
-//    	return blobs;
-//    }
+    public Blobs getBlobs(){
+    	return blobs;
+    }
         
+    /**
+     * Gets an object that can be used for upload search and management of Videos for the user.
+     */
+    public Videos getVideos(){
+    	return videos;
+    }
     
     /**
      * Gets the email of the user. Can be an empty string or null.

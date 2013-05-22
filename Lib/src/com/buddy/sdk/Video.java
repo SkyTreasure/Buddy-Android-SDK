@@ -5,7 +5,7 @@
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
  *
- * http://apache.org/licenses/LICENSE-2.0 
+ * http://www.buddy.com/terms-of-service/ 
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
@@ -19,17 +19,17 @@ package com.buddy.sdk;
 import java.io.InputStream;
 import java.util.Date;
 
+import com.buddy.sdk.Callbacks.OnCallback;
+import com.buddy.sdk.json.responses.VideoDataResponse.VideoData;
 import com.buddy.sdk.responses.Response;
 import com.buddy.sdk.utils.Utils;
-import com.buddy.sdk.json.responses.BlobDataResponse.BlobData;
-import com.buddy.sdk.Callbacks.OnCallback;
 
 /**
  * @author RyanB
  *
  */
-public class Blob {
-	private BlobDataModel blobDataModel = null;
+public class Video {
+	private VideoDataModel videoDataModel = null;
 	
 	private long id;
 	private String friendlyName;
@@ -42,10 +42,10 @@ public class Blob {
 	private Date uploadDate;
 	private Date lastTouchDate;
 	
-	Blob(BuddyClient client, AuthenticatedUser user, BlobData data){
-		blobDataModel = new BlobDataModel(client, user);
+	Video(BuddyClient client, AuthenticatedUser user, VideoData data){
+		videoDataModel = new VideoDataModel(client, user);
 		
-		this.id = Long.parseLong(data.blobID);
+		this.id = Long.parseLong(data.videoID);
 		this.friendlyName = data.friendlyName;
 		this.mimeType = data.mimeType;
 		this.fileSize = Integer.parseInt(data.fileSize);
@@ -58,20 +58,20 @@ public class Blob {
 	}
 	
 	public void delete(OnCallback<Response<Boolean>> callback){
-		if(this.blobDataModel != null){
-			this.blobDataModel.delete(this.id, callback);
+		if(this.videoDataModel != null){
+			this.videoDataModel.delete(this.id, callback);
 		}		
 	}
 	
 	public void edit(String friendlyName, String appTag, OnCallback<Response<Boolean>> callback){
-		if(this.blobDataModel != null){
-			this.blobDataModel.editInfo(this.id, friendlyName, appTag, callback);
+		if(this.videoDataModel != null){
+			this.videoDataModel.editInfo(this.id, friendlyName, appTag, callback);
 		}
 	}
 	
 	public void get(OnCallback<Response<InputStream>> callback){
-		if(this.blobDataModel != null){
-			this.blobDataModel.get(id, callback);
+		if(this.videoDataModel != null){
+			this.videoDataModel.get(id, callback);
 		}
 	}
 	

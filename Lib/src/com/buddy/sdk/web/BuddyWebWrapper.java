@@ -16,17 +16,20 @@
 
 package com.buddy.sdk.web;
 
+import java.io.BufferedInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -37,20 +40,21 @@ import android.util.Log;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.SimpleMultipartEntity;
 
 import com.buddy.sdk.AuthenticatedUser;
 import com.buddy.sdk.BuddyCallbackParams;
 import com.buddy.sdk.BuddyClient;
 import com.buddy.sdk.BuddyFile;
 import com.buddy.sdk.Callbacks.OnResponseCallback;
+import com.buddy.sdk.responses.Response;
 import com.buddy.sdk.utils.Utils;
 
 public class BuddyWebWrapper {
     private static String TAG = "BuddySDK";
-    private static String urlType = "https://";
-    private static String endpointUrl = "webservice.buddyplatform.com/Service/v1/BuddyService.ashx";
-
+    private static String urlType = "http://";
+    //private static String endpointUrl = "webservice.buddyplatform.com/Service/v1/BuddyService.ashx";
+    private static String endpointUrl = "ryandevserver.cloudapp.net/Service/v1/BuddyService.ashx";
+    
     private enum HttpRequestType{HttpGet, HttpPostUrlEncoded, HttpPostMultipartForm}
     private static String BuildUrl(String apiCall, Map<String, Object> params){
     	String url = urlType + endpointUrl + "?" + apiCall;
@@ -64,7 +68,11 @@ public class BuddyWebWrapper {
     			//Ignore
     		}
     		else{
-    			url.concat("&" + pair.getKey() + "=" + pair.getValue().toString());
+    			String v = null;
+    			try{
+    				v = URLEncoder.encode(pair.getValue().toString(), "utf-8");
+    			}catch(UnsupportedEncodingException ex){}
+    			url = url.concat("&" + pair.getKey() + "=" + v);
     		}
     	}
     	return url;
@@ -81,10 +89,19 @@ public class BuddyWebWrapper {
 		    hcn.setAllowUserInteraction(false);
 		    hcn.setInstanceFollowRedirects(true);
 		    hcn.setRequestMethod("GET");
+		    hcn.setInstanceFollowRedirects(true);
 		    hcn.connect();
 		
 		    response = hcn.getResponseCode();
-		    if (response == HttpURLConnection.HTTP_OK) { in = hcn.getInputStream(); }
+		    if (response == HttpURLConnection.HTTP_MOVED_TEMP) {
+		    	String newUrl = hcn.getHeaderField("Location");
+		    	hcn = (HttpURLConnection) new URL(newUrl).openConnection();
+		    	hcn.setRequestMethod("GET");
+		    	hcn.connect();
+		    	in = hcn.getInputStream();
+	    	}else if (response == HttpURLConnection.HTTP_OK){
+	    		in = hcn.getInputStream();
+	    	}
 		}
 		catch (Exception ex) {
 			throw new IOException("Error connecting");            
@@ -95,12 +112,105 @@ public class BuddyWebWrapper {
 		callback.OnResponse(callbackParams, null); 
     }
     
+    private static Response<String> sendFileMultipart(String targetURL, InputStream is, String contentType, String field) {
+    	  StringBuffer requestHeader = new StringBuffer();
+    	  StringBuffer requestFooter = new StringBuffer();
+    	  //NetworkResult result = new NetworkResult();
+    	  
+    	  Response<String> result = new Response<String>();
+    	  
+    	  String BOUNDARY = "==================================";
+    	  HttpURLConnection conn = null;
+    	  byte[] buf = new byte[1024];
+    	  int responseCode = -1; // Keeps track of any response codes we might get.
+    	   
+//    	  result.setResponseCode(responseCode);
+//    	  result.setIsSuccesfull(false);
+    	   
+    	  try {
+    	   // These strings are sent in the request body. They provide information about the file being uploaded
+    	   String contentDisposition = "Content-Disposition: form-data; name=\""+field+"\"; filename=\"" + field + "\"";
+    	   contentType = "Content-Type: " + contentType;
+    	 
+    	   // This is the standard format for a multipart request header
+    	   requestHeader.append("--");
+    	   requestHeader.append(BOUNDARY);
+    	   requestHeader.append('\n');
+    	   requestHeader.append(contentDisposition);
+    	   requestHeader.append('\n');
+    	   requestHeader.append(contentType);
+    	   requestHeader.append('\n');
+    	   requestHeader.append('\n');
+    	 
+    	   // This is the standard format for a multipart request footer
+    	   requestFooter.append('\n');
+    	   requestFooter.append("--");
+    	   requestFooter.append(BOUNDARY);
+    	   requestFooter.append("--");
+    	     	 
+    	   // Make a connect to the server
+    	   URL url = new URL(targetURL);
+    	   conn = (HttpURLConnection) url.openConnection();
+    	   
+    	   conn.setDoOutput(true);
+    	   conn.setDoInput(true);
+    	   conn.setUseCaches(false);
+    	   conn.setRequestMethod("POST");
+    	   conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
+    	 
+    	   // Send the body
+    	   DataOutputStream dataOS = new DataOutputStream(conn.getOutputStream());
+    	   dataOS.writeBytes(requestHeader.toString());
+    	   BufferedInputStream b = new BufferedInputStream(is);
+    	   
+    	   try {
+    		int readNum;
+    	    while((readNum = b.read(buf)) != -1) {
+    	     dataOS.write(buf, 0, readNum); //no doubt here is 0
+    	    }
+    	   } catch (IOException ex) {
+    	    throw new Exception(String.format("Error reading file!"));
+    	   }
+    	 
+    	   dataOS.writeBytes(requestFooter.toString());
+    	   dataOS.flush();
+    	   dataOS.close();
+    	 
+    	   // Ensure we got the HTTP 200 response code
+    	   responseCode = conn.getResponseCode();
+    	   
+    	   Scanner s = new Scanner(conn.getInputStream()).useDelimiter("\\A");
+    	   String responseMsg = s.hasNext() ? s.next() : "";
+    	   result.setResult(responseMsg);
+    	 
+    	   if (responseCode != 200) {
+    	    throw new Exception(String.format("Received the response code %d from the URL %s %s", responseCode, url, responseMsg));
+    	   } else {
+    	   }
+    	  }catch (Exception e){
+    	    
+    	   // I am not interested on exactly why this failed, only that it has.
+    	   // This can be extended by specific Exception handling.
+    	    
+    	   result.setErrorMessage(e.getMessage());// try to salvage the response code.. probably -1 at this point.
+    	  } finally {
+    	   if (conn != null) {
+    	    conn.disconnect();
+    	   }
+    	  }
+    	 
+    	  return result;
+    	 }
+    
     public static void MakePostMultiRequest(String apiCall, Map<String, Object> params,
     		final OnResponseCallback callback){
-    	
-    	SimpleMultipartEntity entity = new SimpleMultipartEntity();
+    	    	
+    	//SimpleMultipartEntity entity = new SimpleMultipartEntity();
     	
     	String url = BuildUrl(apiCall, params);
+    	
+    	BuddyFile file = null;
+    	String fileName = null;
     	
     	Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
     	while(it.hasNext())
@@ -108,46 +218,19 @@ public class BuddyWebWrapper {
     		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
     		if(pair.getValue().getClass().equals(BuddyFile.class))
     		{
-    			BuddyFile file = (BuddyFile)pair.getValue();
-    			entity.addPart(pair.getKey(), pair.getKey(), file.Data, file.ContentType, true);
+    			file = (BuddyFile)pair.getValue();
+    			fileName = pair.getKey();
+    		}else{
+    			
     		}
     	}
     	
+    	Response<String> res = sendFileMultipart(url, file.Data, file.ContentType, fileName);
     	
-    	AsyncHttpClient client = BuddyHttpClientFactory.getHttpClient();
-    	client.post(null, url, entity, "multipart/form-data", new AsyncHttpResponseHandler(){
-    		@Override
-            public void onStart() {
-                Log.d(TAG, "onStart");
-            }
-
-            @Override
-            public void onSuccess(String success) {
-                Log.d(TAG + "-POST SUCCESS", success);
-                if (callback != null) {
-                    BuddyCallbackParams callbackParams = null;
-                    Exception exception = Utils.ProcessStandardErrors(success);
-                    if (exception == null) {
-                        callbackParams = new BuddyCallbackParams();
-                        callbackParams.response = success;
-                    } else {
-                        callbackParams = new BuddyCallbackParams(exception, success);
-                    }
-                    callback.OnResponse(callbackParams, null);
-                }
-                Log.d(TAG, "onSuccess");
-            }
-
-            @Override
-            public void onFailure(Throwable e, String response) {
-                if (callback != null) {
-                    BuddyCallbackParams callbackParams = new BuddyCallbackParams(e, response);
-                    callback.OnResponse(callbackParams, null);
-                }
-                Log.d(TAG, "onFailure");
-            }
-    	});
+    	BuddyCallbackParams response = new BuddyCallbackParams();
+    	response.response = res.getResult();
     	
+    	callback.OnResponse(response, null);
     }
     
     public static void MakePostRequest(String apiCall, Map<String, Object> params, final OnResponseCallback callback)
@@ -2669,23 +2752,23 @@ public class BuddyWebWrapper {
     	MakeRequest("Blobs_Blob_SearchMyBlobs", params, HttpRequestType.HttpGet, callback);
     }
     
-    public static void Blobs_Blob_GetList(BuddyClient client, AuthenticatedUser user, long userID, int recordLimit,
+    public static void Blobs_Blob_GetBlobList(BuddyClient client, AuthenticatedUser user, long userID, int recordLimit,
     		final OnResponseCallback callback){
     	Map<String, Object> params = new HashMap<String, Object>();
     	addAuth(params, client, user);
     	params.put("UserID", userID);
     	params.put("RecordLimit", recordLimit);
     	
-    	MakeRequest("Blobs_Blob_GetList", params, HttpRequestType.HttpGet, callback);
+    	MakeRequest("Blobs_Blob_GetBlobList", params, HttpRequestType.HttpGet, callback);
     }
     
-    public static void Blobs_Blob_GetMyList(BuddyClient client, AuthenticatedUser user, int recordLimit,
+    public static void Blobs_Blob_GetMyBlobList(BuddyClient client, AuthenticatedUser user, int recordLimit,
     		final OnResponseCallback callback){
     	Map<String, Object> params = new HashMap<String, Object>();
     	addAuth(params, client, user);
     	params.put("RecordLimit", recordLimit);
     	
-    	MakeRequest("Blobs_Blob_GetMyList", params, HttpRequestType.HttpGet, callback);
+    	MakeRequest("Blobs_Blob_GetMyBlobList", params, HttpRequestType.HttpGet, callback);
     }
     
     public static void Blobs_Blob_EditInfo(BuddyClient client, AuthenticatedUser user, long blobID , String friendlyName, String appTag,
@@ -2716,10 +2799,128 @@ public class BuddyWebWrapper {
 		}
     }
     
+    public static void Videos_Video_DeleteVideo(BuddyClient client, AuthenticatedUser user, long videoID, 
+    		final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("VideoID", videoID);
+    	
+    	MakeRequest("Videos_Video_DeleteVideo", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Videos_Video_AddVideo(BuddyClient client, AuthenticatedUser user, String friendlyName, String appTag, 
+    		double latitude, double longitude, BuddyFile videoData, final OnResponseCallback callback)
+    {
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("FriendlyName", friendlyName);
+    	params.put("AppTag", appTag);
+    	params.put("Latitude", latitude);
+    	params.put("Longitude", longitude);
+    	params.put("videoData", videoData);
+    	
+    	MakeRequest("Videos_Video_AddVideo", params, HttpRequestType.HttpPostMultipartForm, callback);
+    }
+    
+    public static void Videos_Video_GetVideoInfo(BuddyClient client, AuthenticatedUser user, long videoID,
+    		final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("VideoID", videoID);
+    	
+    	MakeRequest("Videos_Video_GetVideoInfo", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Videos_Video_SearchVideos(BuddyClient client, AuthenticatedUser user, String friendlyName, 
+    		String mimeType, String appTag, int searchDistance, double searchLatitude, double searchLongitude, int timeFilter,
+    		int recordLimit, final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("FriendlyName", friendlyName);
+    	params.put("MimeType", mimeType);
+    	params.put("AppTag", appTag);
+    	params.put("SearchDistance", searchDistance);
+    	params.put("SearchLatitude", searchLatitude);
+    	params.put("SearchLongitude", searchLongitude);
+    	params.put("TimeFilter", timeFilter);
+    	params.put("RecordLimit", recordLimit);
+    	
+    	MakeRequest("Videos_Video_SearchVideos", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Videos_Video_SearchMyVideos(BuddyClient client, AuthenticatedUser user, String friendlyName, 
+    		String mimeType, String appTag, int searchDistance, double searchLatitude, double searchLongitude, int timeFilter,
+    		int recordLimit, final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("FriendlyName", friendlyName);
+    	params.put("MimeType", mimeType);
+    	params.put("AppTag", appTag);
+    	params.put("SearchDistance", searchDistance);
+    	params.put("SearchLatitude", searchLatitude);
+    	params.put("SearchLongitude", searchLongitude);
+    	params.put("TimeFilter", timeFilter);
+    	params.put("RecordLimit", recordLimit);
+    	
+    	MakeRequest("Videos_Video_SearchMyVideos", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Videos_Video_GetVideoList(BuddyClient client, AuthenticatedUser user, long userID, int recordLimit,
+    		final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("UserID", userID);
+    	params.put("RecordLimit", recordLimit);
+    	
+    	MakeRequest("Videos_Video_GetVideoList", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Videos_Video_GetMyVideoList(BuddyClient client, AuthenticatedUser user, int recordLimit,
+    		final OnResponseCallback callback){
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	addAuth(params, client, user);
+    	params.put("RecordLimit", recordLimit);
+    	
+    	MakeRequest("Videos_Video_GetMyVideoList", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Videos_Video_EditInfo(BuddyClient client, AuthenticatedUser user, long videoID , String friendlyName, String appTag,
+    		final OnResponseCallback callback)
+    {
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	
+    	addAuth(params, client, user);
+    	params.put("VideoID", videoID);
+    	params.put("FriendlyName", friendlyName);
+    	params.put("AppTag", appTag);
+    	
+    	MakeRequest("Videos_Video_EditInfo", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void Videos_Video_GetVideo(BuddyClient client, AuthenticatedUser user, long videoID, final OnResponseCallback callback)
+    {
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	
+    	addAuth(params, client, user);
+    	params.put("VideoID", videoID);
+    	
+    	try {
+			MakePostReturnStream("Videos_Video_GetVideo", params, callback);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    
     private static void addAuth(Map<String, Object> params, BuddyClient client, AuthenticatedUser user){
+    	addAuth(params, client);
+    	addToken(params, user);
+    }
+    
+    private static void addAuth(Map<String, Object> params, BuddyClient client){
     	params.put("BuddyApplicationName", client.getAppName());
     	params.put("BuddyApplicationPassword", client.getAppPassword());
-    	addToken(params, user);
     }
     
     private static void addToken(Map<String, Object> params, AuthenticatedUser user){

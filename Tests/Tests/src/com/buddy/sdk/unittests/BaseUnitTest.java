@@ -26,6 +26,7 @@ import com.buddy.sdk.BuddyClient;
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.User;
 import com.buddy.sdk.responses.Response;
+import com.buddy.sdk.unittests.scenariotest.ScenarioWrapper;
 import com.buddy.sdk.utils.Constants.UserGender;
 import com.buddy.sdk.utils.Constants.UserStatus;
 import com.buddy.sdk.web.BuddyHttpClientFactory;
@@ -171,8 +172,7 @@ public class BaseUnitTest extends InstrumentationTestCase {
     }
 
     protected InputStream getStreamFromFile(String fileName){
-    	try{
-    		AssetManager m = getInstrumentation().getContext().getAssets();
+    	try{AssetManager m = getInstrumentation().getContext().getAssets();
     		return m.open(fileName);
     	}catch(Exception e){
     		// TODO Auto-generated catch block
@@ -235,5 +235,16 @@ public class BaseUnitTest extends InstrumentationTestCase {
                 });
 
         Log.d(TAG, "Auth User Created");
+    }
+    
+    protected AuthenticatedUser getUser(BuddyClient client) {
+    	Response<AuthenticatedUser> response = ScenarioWrapper.Login_Wrapper(client, testUserName, testUserPassword, null);
+        assertNotNull(response);
+        AuthenticatedUser user = response.getResult();
+        assertNotNull(user);
+        assertEquals(testUserName, user.getName());
+        
+        return user;
+
     }
 }
