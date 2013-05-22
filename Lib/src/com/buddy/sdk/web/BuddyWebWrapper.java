@@ -51,9 +51,9 @@ import com.buddy.sdk.utils.Utils;
 
 public class BuddyWebWrapper {
     private static String TAG = "BuddySDK";
-    private static String urlType = "http://";
-    //private static String endpointUrl = "webservice.buddyplatform.com/Service/v1/BuddyService.ashx";
-    private static String endpointUrl = "ryandevserver.cloudapp.net/Service/v1/BuddyService.ashx";
+    private static String urlType = "https://";
+    private static String endpointUrl = "webservice.buddyplatform.com/Service/v1/BuddyService.ashx";
+    
     
     private enum HttpRequestType{HttpGet, HttpPostUrlEncoded, HttpPostMultipartForm}
     private static String BuildUrl(String apiCall, Map<String, Object> params){
