@@ -22,7 +22,7 @@ import java.io.InputStream;
  *
  */
 public class BuddyFile {
-	public InputStream Data;
+	public InputStream data;
 	
-	public String ContentType;
+	public String contentType;
 }

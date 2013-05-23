@@ -16,7 +16,6 @@
 
 package com.buddy.sdk;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,19 +44,11 @@ class BlobDataModel extends BaseDataModel {
 	}
 	
 	public void add(String friendlyName, String appTag, double latitude, double longitude, 
-			String contentType, byte[] blobData, final OnCallback<Response<String>> callback)
-	{
-		InputStream is = new ByteArrayInputStream(blobData);
-		
-		add(friendlyName, appTag, latitude, longitude, contentType, is, callback);
-	}
-	
-	public void add(String friendlyName, String appTag, double latitude, double longitude, 
 			String contentType, InputStream blobData, final OnCallback<Response<String>> callback)
 	{
 		BuddyFile blobFile = new BuddyFile();
-		blobFile.ContentType = contentType;
-		blobFile.Data = blobData;
+		blobFile.contentType = contentType;
+		blobFile.data = blobData;
 		
 		BuddyWebWrapper.Blobs_Blob_AddBlob(client, authUser, friendlyName, appTag, latitude, longitude, blobFile,
 				new OnResponseCallback(){

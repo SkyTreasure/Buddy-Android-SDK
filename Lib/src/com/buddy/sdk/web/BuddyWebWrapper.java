@@ -128,11 +128,7 @@ public class BuddyWebWrapper {
 		callback.OnResponse(callbackParams, null); 
     }
     
-    private static Response<String> sendFileMultipart(String targetURL, InputStream is, String contentType, String field) {
-    	  StringBuffer requestHeader = new StringBuffer();
-    	  StringBuffer requestFooter = new StringBuffer();
-    	  //NetworkResult result = new NetworkResult();
-    	  
+    private static Response<String> SendFileMultipart(String targetURL, InputStream is, String contentType, String field) {    	  
     	  Response<String> result = new Response<String>();
     	  
     	  String BOUNDARY = "==================================";
@@ -140,30 +136,17 @@ public class BuddyWebWrapper {
     	  byte[] buf = new byte[1024];
     	  int responseCode = -1; // Keeps track of any response codes we might get.
     	   
-//    	  result.setResponseCode(responseCode);
-//    	  result.setIsSuccesfull(false);
-    	   
     	  try {
     	   // These strings are sent in the request body. They provide information about the file being uploaded
     	   String contentDisposition = "Content-Disposition: form-data; name=\""+field+"\"; filename=\"" + field + "\"";
     	   contentType = "Content-Type: " + contentType;
     	 
     	   // This is the standard format for a multipart request header
-    	   requestHeader.append("--");
-    	   requestHeader.append(BOUNDARY);
-    	   requestHeader.append('\n');
-    	   requestHeader.append(contentDisposition);
-    	   requestHeader.append('\n');
-    	   requestHeader.append(contentType);
-    	   requestHeader.append('\n');
-    	   requestHeader.append('\n');
-    	 
+    	   String requestHeader = String.format("--%s\n%s\n%s\n\n", BOUNDARY, contentDisposition, contentType);
+    	   
     	   // This is the standard format for a multipart request footer
-    	   requestFooter.append('\n');
-    	   requestFooter.append("--");
-    	   requestFooter.append(BOUNDARY);
-    	   requestFooter.append("--");
-    	     	 
+    	   String requestFooter = String.format("\n--%s--", BOUNDARY);
+    	       	     	 
     	   // Make a connect to the server
     	   URL url = new URL(targetURL);
     	   conn = (HttpURLConnection) BuddyHttpClientFactory.createHttpURLConnection(url);
@@ -216,7 +199,7 @@ public class BuddyWebWrapper {
     	  }
     	 
     	  return result;
-    	 }
+	}
     
     public static void MakePostMultiRequest(String apiCall, Map<String, Object> params,
     		final OnResponseCallback callback){
@@ -234,12 +217,10 @@ public class BuddyWebWrapper {
     		{
     			file = (BuddyFile)pair.getValue();
     			fileName = pair.getKey();
-    		}else{
-    			
-    		}
+    		}else{}
     	}
     	
-    	Response<String> res = sendFileMultipart(url, file.Data, file.ContentType, fileName);
+    	Response<String> res = SendFileMultipart(url, file.data, file.contentType, fileName);
     	
     	BuddyCallbackParams response = new BuddyCallbackParams();
     	response.response = res.getResult();
@@ -310,6 +291,15 @@ public class BuddyWebWrapper {
     }
 
     public static void MakeRequest(String apiCall, Map<String, Object> params, HttpRequestType type, final OnResponseCallback callback){
+    	Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
+    	while(it.hasNext())
+    	{
+    		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
+    		if(pair.getValue().getClass().equals(BuddyFile.class)){
+    			type = HttpRequestType.HttpPostMultipartForm;
+    		}
+    	}
+    	
     	switch(type)
     	{
     		case HttpGet:

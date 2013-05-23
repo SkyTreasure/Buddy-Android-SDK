@@ -43,13 +43,6 @@ public class Blobs {
 		this.blobDataModel = new BlobDataModel(client, user);
 	}
 	
-	public void add(String friendlyName, String appTag, double latitude, double longitude, String contentType, 
-			byte[] blobData, OnCallback<Response<String>> callback){
-		if(this.blobDataModel != null){
-			this.blobDataModel.add(friendlyName, appTag, latitude, longitude, contentType, blobData, callback);		
-		}				
-	}
-	
 	public void add(String friendlyName, String appTag, double latitude, double longitude, String contentType,
 			InputStream blobData, OnCallback<Response<String>> callback){
 		if(this.blobDataModel != null){

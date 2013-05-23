@@ -55,8 +55,8 @@ class VideoDataModel extends BaseDataModel {
 			String contentType, InputStream videoData, final OnCallback<Response<String>> callback)
 	{
 		BuddyFile videoFile = new BuddyFile();
-		videoFile.ContentType = contentType;
-		videoFile.Data = videoData;
+		videoFile.contentType = contentType;
+		videoFile.data = videoData;
 		
 		BuddyWebWrapper.Videos_Video_AddVideo(client, authUser, friendlyName, appTag, latitude, longitude, videoFile,
 				new OnResponseCallback(){
