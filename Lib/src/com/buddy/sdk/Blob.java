@@ -56,61 +56,107 @@ public class Blob {
 		this.uploadDate = Utils.convertDateString(data.uploadDate);
 		this.lastTouchDate = Utils.convertDateString(data.lastTouchDate);
 	}
-	
+	/**
+	 * Deletes this Blob
+	 * 
+	 * @param callback The callback to call when this method completes.
+	 */
 	public void delete(OnCallback<Response<Boolean>> callback){
 		if(this.blobDataModel != null){
 			this.blobDataModel.delete(this.id, callback);
 		}		
 	}
 	
+	/**
+	 * Edits this Blob
+	 * 
+	 * @param friendlyName The new human readable name of this Blob.
+	 * @param appTag The new metadata to store with this Blob.
+	 * @param callback The callback to call when this method completes.
+	 */
 	public void edit(String friendlyName, String appTag, OnCallback<Response<Boolean>> callback){
 		if(this.blobDataModel != null){
 			this.blobDataModel.editInfo(this.id, friendlyName, appTag, callback);
 		}
 	}
 	
+	/**
+	 * Gets a stream of this Blob.
+	 * 
+	 * @param callback The callback to call when this method completes.
+	 */
 	public void get(OnCallback<Response<InputStream>> callback){
 		if(this.blobDataModel != null){
 			this.blobDataModel.get(id, callback);
 		}
 	}
 	
+	/**
+	 * Gets the ID of this Blob.
+	 */
 	public long getId(){
 		return this.id;
 	}
 	
+	/**
+	 * Gets the FriendlyName of this Blob.
+	 */
 	public String getFriendlyName(){
 		return this.friendlyName;
 	}
 	
+	/**
+	 * Gets the MIMEType of this Blob.
+	 */
 	public String getMimeType(){
 		return this.mimeType;
 	}
 	
+	/**
+	 * Gets the FileSize of this Blob in Bytes.
+	 */
 	public int getFileSize(){
 		return this.fileSize;
 	}
-	
+
+	/**
+	 * Gets the AppTage of this Blob.
+	 */
 	public String getAppTag(){
 		return this.appTag;
 	}
 	
+	/**
+	 * Gets the Owner of this Blob.
+	 */
 	public long getOwner(){
 		return this.owner;
 	}
 	
+	/**
+	 * Gets the Latitude of this Blob.
+	 */
 	public double getLatitude(){
 		return this.latitude;
 	} 
 	
+	/**
+	 * Gets the Longitude of this Blob.
+	 */
 	public double getLongtidue(){
 		return this.longitude;
 	}
 	
+	/**
+	 * Gets the UploadDate of this Blob.
+	 */
 	public Date getUploadDate(){
 		return this.uploadDate;
 	}
 	
+	/**
+	 * Gets the last time this Blob was Edited or uploaded.
+	 */
 	public Date getLastTouchDate(){
 		return this.lastTouchDate;
 	}

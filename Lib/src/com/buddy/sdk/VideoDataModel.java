@@ -44,14 +44,6 @@ class VideoDataModel extends BaseDataModel {
 	}
 	
 	public void add(String friendlyName, String appTag, double latitude, double longitude, 
-			String contentType, byte[] videoData, final OnCallback<Response<String>> callback)
-	{
-		InputStream is = new ByteArrayInputStream(videoData);
-		
-		add(friendlyName, appTag, latitude, longitude, contentType, is, callback);
-	}
-	
-	public void add(String friendlyName, String appTag, double latitude, double longitude, 
 			String contentType, InputStream videoData, final OnCallback<Response<String>> callback)
 	{
 		BuddyFile videoFile = new BuddyFile();
