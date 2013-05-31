@@ -22,8 +22,14 @@ import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.responses.Response;
 
 /**
- * @author RyanB
- *
+ * Represents a class that can be used to retrieve Sounds.
+ * <p>
+ * 
+ * <pre>
+ * 
+ *    {@code BuddyClient client = new BuddyClient("APPNAME", "APPPASS");}
+ *    {@code client.getSounds();}
+ * </pre>
  */
 public class Sounds {
 	private SoundDataModel soundDataModel = null;
@@ -42,6 +48,13 @@ public class Sounds {
 		this.soundDataModel = new SoundDataModel(client);
 	}
 	
+	/**
+	 * Returns a stream of the requested Sound
+	 * 
+	 * @param soundName The name of the sound to be retrieved. Can be found in the Sound section of the Developer Portal.
+	 * @param quality The quality of the sound to be retrieved. Options are Low, Medium and High.
+	 * @param callback The callback to call when this method completes.
+	 */
 	public void get(String soundName, SoundQuality quality, final OnCallback<Response<InputStream>> callback){
 		if(this.soundDataModel != null){
 			this.soundDataModel.get(soundName, quality, callback);
