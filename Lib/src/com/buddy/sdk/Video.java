@@ -41,6 +41,7 @@ public class Video {
 	private double longitude;
 	private Date uploadDate;
 	private Date lastTouchDate;
+	private String videoUrl;
 	
 	Video(BuddyClient client, AuthenticatedUser user, VideoData data){
 		videoDataModel = new VideoDataModel(client, user);
@@ -55,6 +56,7 @@ public class Video {
 		this.longitude = Double.parseDouble(data.longitude);
 		this.uploadDate = Utils.convertDateString(data.uploadDate);
 		this.lastTouchDate = Utils.convertDateString(data.lastTouchDate);
+		this.videoUrl = data.videoUrl;
 	}
 	
 	public void delete(OnCallback<Response<Boolean>> callback){
@@ -113,5 +115,9 @@ public class Video {
 	
 	public Date getLastTouchDate(){
 		return this.lastTouchDate;
+	}
+	
+	public String getVideoUrl(){
+		return this.videoUrl;
 	}
 }

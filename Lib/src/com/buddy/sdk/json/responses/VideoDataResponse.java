@@ -49,5 +49,7 @@ public class VideoDataResponse {
 		public String uploadDate;
 		@SerializedName("lastTouchDate")
 		public String lastTouchDate;
+		@SerializedName("videoUrl")
+		public String videoUrl;
 	}
 }
