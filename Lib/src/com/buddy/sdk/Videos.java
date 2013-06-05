@@ -105,14 +105,7 @@ public class Videos {
 	/**
 	 * Get a list of the Videos matching your given search criteria.
 	 * 
-	 * @param friendlyName A string to search the friendlyName field by.
-	 * @param mimeType A string to search the mimeType field by.
-	 * @param appTag A string to search the appTag field by.
-	 * @param searchDistance The distance around the given point to search.
-	 * @param searchLatitude The latitude around which to search.
-	 * @param searchLongitude The longitude around which to search.
-	 * @param timeFilter The number of days in the past to search.
-	 * @param recordLimit The maximum amount of values to return.
+	 * @param videoID The ID of the video to retrieve
 	 * @param callback The callback to call when this method completes.
 	 */
 	public void get(long videoID, OnCallback<Response<InputStream>> callback){
