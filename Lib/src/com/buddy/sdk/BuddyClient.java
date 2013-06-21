@@ -21,6 +21,7 @@ import android.os.Build;
 
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.Callbacks.OnResponseCallback;
+import com.buddy.sdk.json.responses.SocialLoginResponse.SocialLogin;
 import com.buddy.sdk.responses.ListResponse;
 import com.buddy.sdk.responses.Response;
 import com.buddy.sdk.utils.Constants.UserGender;
@@ -248,6 +249,32 @@ public class BuddyClient {
                 null, callback);
     }
 
+    public void socialLogin(String providerName, String providerUserId, String accessToken, final OnCallback<Response<AuthenticatedUser>> callback)
+    {
+    	if(providerName == null || providerName.isEmpty())
+    		throw new IllegalArgumentException("providerName can't be null or empty");
+    	if(providerUserId == null || providerUserId.isEmpty())
+    		throw new IllegalArgumentException("providerUserId can't be null or empty");
+    	if(accessToken == null || accessToken.isEmpty())
+    		throw new IllegalArgumentException("accessName can't be null or empty");
+    	
+    	this.socialLogin(providerName, providerUserId, accessToken, new OnResponseCallback() {
+    		public void OnResponse(BuddyCallbackParams response, Object state){
+    			if(response.completed){
+    				SocialLogin login = (SocialLogin)response.responseObj;
+    				login(login.UserToken, state, callback);
+    			} else {
+    				if(response.exception != null)
+    				{
+    					Response<AuthenticatedUser> userResponse = new Response<AuthenticatedUser>();
+    					userResponse.setThrowable(response.exception);
+    					callback.OnResponse(userResponse, state);
+    				}
+    			}
+    		}    		
+    	});
+    }
+    
     /**
      * Login an existing user with their username and password.
      * 
@@ -452,6 +479,13 @@ public class BuddyClient {
         }
     }
 
+    private void socialLogin(String providerName, String providerUserId, String accessToken, final OnResponseCallback callback)
+    {
+    	if(this.userDataModel != null){
+    		this.userDataModel.socialLogin(providerName, providerUserId, accessToken, callback);
+    	}
+    }
+    
     private void createUser(String userName, String userPassword, UserGender userGender,
             Integer userAge, String userEmail, UserStatus statusId, Boolean fuzzlocation,
             Boolean celebModeEnabled, String applicationTag, Object state,
