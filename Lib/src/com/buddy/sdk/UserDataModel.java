@@ -25,6 +25,7 @@ import com.buddy.sdk.Callbacks.OnResponseCallback;
 import com.buddy.sdk.exceptions.BuddyServiceException;
 import com.buddy.sdk.exceptions.ServiceUnknownErrorException;
 import com.buddy.sdk.json.responses.PictureDataResponse;
+import com.buddy.sdk.json.responses.SocialLoginResponse;
 import com.buddy.sdk.json.responses.UserLocationHistoryDataResponse;
 import com.buddy.sdk.json.responses.UserDataResponse;
 import com.buddy.sdk.json.responses.UserLocationHistoryDataResponse.LocationHistoryData;
@@ -49,6 +50,31 @@ class UserDataModel extends BaseDataModel {
         this.authUser = user;
     }
 
+    public void socialLogin(String providerName, String providerUserId, String accessToken,
+    		final OnResponseCallback callback)
+    {
+    	BuddyWebWrapper.UserAccount_Profile_SocialLogin(this.client, providerName, providerUserId, accessToken, new OnResponseCallback(){
+    		@Override
+    		public void OnResponse(BuddyCallbackParams response, Object state){
+    			if(response != null){
+    				if(response.completed){
+    					SocialLoginResponse data = getJson(response.response, SocialLoginResponse.class);
+    					if(data != null && data.data.size() > 0){
+    						SocialLoginResponse.SocialLogin ids = data.data.get(0);
+    						response.responseObj = (Object) ids;
+    					} else {
+    						response = new BuddyCallbackParams(new Throwable(response.response), response.response);
+    					}
+    				}
+    			} else {
+    				response = new BuddyCallbackParams(new ServiceUnknownErrorException(),
+    						null);
+    			}
+    			callback.OnResponse(response, state);
+    		}
+    	});    	
+    }
+    
     public void createUser(String userName, String userPassword, UserGender userGender,
             Integer userAge, String userEmail, UserStatus statusId, Boolean fuzzlocation,
             Boolean celebModeEnabled, String applicationTag, Object state,

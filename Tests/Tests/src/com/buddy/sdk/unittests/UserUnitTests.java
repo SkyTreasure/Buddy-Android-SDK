@@ -164,6 +164,28 @@ public class UserUnitTests extends BaseUnitTest {
 
     }
 
+    public void testSocialLogin() {
+    	String jsonValueSocial = readDataFromFile("DataResponses/SocialLogin.json");
+        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
+        String jsonDeviceReportingResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    	
+    	BuddyHttpClientFactory.addDummyResponse(jsonValueSocial);
+    	BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
+    	BuddyHttpClientFactory.addDummyResponse(jsonDeviceReportingResponse);
+    
+    	testClient.socialLogin("Facebook", "123456", "AccessToken", new OnCallback<Response<AuthenticatedUser>>(){
+    		public void OnResponse(Response<AuthenticatedUser> response, Object state){
+    			assertNotNull(response);
+    			
+    			AuthenticatedUser user = response.getResult();
+    			
+    			assertNotNull(user);
+    			
+    		}
+    		
+    	});
+    }
+    
     public void testUserLoginBadUserName() {
         String jsonValueUser = readDataFromFile("DataResponses/GenericBadUserNameErrorResponse.json");
 

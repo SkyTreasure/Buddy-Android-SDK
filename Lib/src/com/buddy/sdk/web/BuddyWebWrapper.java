@@ -471,6 +471,20 @@ public class BuddyWebWrapper {
         MakeRequest("UserAccount_Profile_CheckUserName", params, state, callback);
     }
 
+    public static void UserAccount_Profile_SocialLogin(BuddyClient client,
+    		String ProviderName, String ProviderUserId, String AccessToken,
+    		final OnResponseCallback callback)
+    {
+		Map<String, Object> params = new HashMap<String, Object>();
+    	
+    	addAuth(params, client);
+    	params.put("ProviderName", ProviderName);
+    	params.put("ProviderUserID", ProviderUserId);
+    	params.put("AccessToken", AccessToken);
+    	
+    	MakeRequest("UserAccount_Profile_SocialLogin", params, HttpRequestType.HttpGet, callback);    	
+    }
+    
     public static void UserAccount_Profile_Create(String BuddyApplicationName,
             String BuddyApplicationPassword, String NewUserName, String UserSuppliedPassword,
             String NewUserGender, Integer UserAge, String NewUserEmail, Integer StatusID,
