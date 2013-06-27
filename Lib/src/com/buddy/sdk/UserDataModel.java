@@ -461,6 +461,36 @@ class UserDataModel extends BaseDataModel {
                 });
     }
 
+    public void findUser(String userNameToFetch, final OnCallback<Response<User>> callback){
+    	BuddyWebWrapper.UserAccount_Profile_GetFromUserName(client.getAppName(), client.getAppPassword(), authUser.getToken(), 
+    			userNameToFetch, null, new OnResponseCallback(){
+    		@Override
+    		public void OnResponse(BuddyCallbackParams response, Object state) {
+    			Response<User> userResponse = new Response<User>();
+    			if(response != null){
+    				if(response.completed){
+    					User user = null;
+    					UserDataResponse data = getJson(response.response,
+    							UserDataResponse.class);
+    					if(data != null &&  data.data.size() > 0) {
+                            UserDataResponse.UserData profile = data.data.get(0);
+                            user = new User(client, profile);
+                            userResponse.setResult(user);
+                        } else {
+                            userResponse.setThrowable(new BuddyServiceException(
+                                    response.response));
+                        }
+                    } else {
+                        userResponse.setThrowable(response.exception);
+                    }
+                } else {
+                    userResponse.setThrowable(new ServiceUnknownErrorException());
+                }
+                callback.OnResponse(userResponse, state);
+    		}	
+    	});  	
+    }
+    
     public void findUser(int userId, Object state, final OnCallback<Response<User>> callback) {
         
         BuddyWebWrapper.UserAccount_Profile_GetFromUserID(client.getAppName(),
