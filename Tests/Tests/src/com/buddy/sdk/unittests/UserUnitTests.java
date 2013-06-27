@@ -379,6 +379,22 @@ public class UserUnitTests extends BaseUnitTest {
                 assertEquals("Test User 1", user.getName());
             }
         });
-
+    }
+    
+    public void testFindUserUserName(){
+    	createAuthenticatedUser();
+    	
+        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
+        
+        BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
+                        
+        testAuthUser.findUser("FalseUserName", new OnCallback<Response<User>>() {
+        	public void OnResponse(Response<User> response, Object state) {
+        		assertNotNull(response);
+        		User user = response.getResult();
+        		assertNotNull(user);
+        		assertEquals("Test User 1", user.getName());
+        	}        	
+        });
     }
 }

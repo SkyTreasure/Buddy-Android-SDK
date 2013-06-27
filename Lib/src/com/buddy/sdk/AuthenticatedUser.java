@@ -468,6 +468,21 @@ public class AuthenticatedUser extends User {
     }
 
     /**
+     * Returns the user account associated with the specified UserName.
+     * 
+     * @param the UserName of the user to return, can't be null or empty.
+     * @param callback The async callback to call on success or error.
+     */
+    public void findUser(String userNameToFetch, final OnCallback<Response<User>> callback) {
+    	if(userNameToFetch == null || userNameToFetch.isEmpty())
+    		throw new IllegalArgumentException("UserNameToFetch can't be null or empty.");
+    	
+    	if (this.userDataModel != null){
+    		this.userDataModel.findUser(userNameToFetch, callback);
+    	}
+    }
+    
+    /**
      * Returns the user account associated with the specified user id.
      * 
      * @param userId The ID of the user, must be bigger than 0.
