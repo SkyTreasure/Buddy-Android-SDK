@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Test;
+
 import com.buddy.sdk.Video;
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.responses.ListResponse;
@@ -19,8 +21,8 @@ public class VideoUnitTests extends BaseUnitTest {
 		createAuthenticatedUser();
 	}
 	
-	public void testGetInfo(){
-		String jsonVideo = readDataFromFile("DataResponses/VideoUnitTest-GetVideo.json");
+	@Test public void testGetInfo(){
+		String jsonVideo = readDataFromFileAsString("DataResponses/VideoUnitTest-GetVideo.json");
 		
 		BuddyHttpClientFactory.addDummyResponse(jsonVideo);
 		testAuthUser.getVideos().getInfo((long)14, new OnCallback<Response<Video>>(){
@@ -34,7 +36,7 @@ public class VideoUnitTests extends BaseUnitTest {
 		});
 	}
 	
-	public void testGet(){
+	@Test public void testGet(){
 		//TODO
 		InputStream videoStream = getStreamFromFile("test.mp4");
 		
@@ -54,8 +56,8 @@ public class VideoUnitTests extends BaseUnitTest {
 		});	
 	}
 	
-	public void testSearchVideos(){
-		String jsonVideoList = readDataFromFile("DataResponses/VideoUnitTest-GetVideo.json");
+	@Test public void testSearchVideos(){
+		String jsonVideoList = readDataFromFileAsString("DataResponses/VideoUnitTest-GetVideo.json");
 		
 		BuddyHttpClientFactory.addDummyResponse(jsonVideoList);
 		
@@ -76,8 +78,8 @@ public class VideoUnitTests extends BaseUnitTest {
 		});
 	}
 	
-	public void testSearchMyVideos(){
-		String jsonVideoList = readDataFromFile("DataResponses/VideoUnitTest-GetVideo.json");
+	@Test public void testSearchMyVideos(){
+		String jsonVideoList = readDataFromFileAsString("DataResponses/VideoUnitTest-GetVideo.json");
 		
 		BuddyHttpClientFactory.addDummyResponse(jsonVideoList);
 		
@@ -98,8 +100,8 @@ public class VideoUnitTests extends BaseUnitTest {
 		});
 	}
 	
-	public void testGetList(){
-		String jsonVideoList = readDataFromFile("DataResponses/VideoUnitTest-GetVideo.json");
+	@Test public void testGetList(){
+		String jsonVideoList = readDataFromFileAsString("DataResponses/VideoUnitTest-GetVideo.json");
 		
 		BuddyHttpClientFactory.addDummyResponse(jsonVideoList);
 		
@@ -120,8 +122,8 @@ public class VideoUnitTests extends BaseUnitTest {
 		});
 	}
 	
-	public void testGetMyList(){
-		String jsonVideoList = readDataFromFile("DataResponses/VideoUnitTest-GetVideo.json");
+	@Test public void testGetMyList(){
+		String jsonVideoList = readDataFromFileAsString("DataResponses/VideoUnitTest-GetVideo.json");
 		
 		BuddyHttpClientFactory.addDummyResponse(jsonVideoList);
 		

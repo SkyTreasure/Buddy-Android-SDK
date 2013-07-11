@@ -3,6 +3,8 @@ package com.buddy.sdk.unittests;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import com.buddy.sdk.ApplicationStatistics;
 import com.buddy.sdk.BuddyClient;
 import com.buddy.sdk.Callbacks.OnCallback;
@@ -11,14 +13,14 @@ import com.buddy.sdk.responses.ListResponse;
 import com.buddy.sdk.web.BuddyHttpClientFactory;
 
 public class ApplicationUnitTests extends BaseUnitTest {
-    public void testGetUserEmails() {
-        String jsonValue = readDataFromFile("DataResponses/ApplicationUnitTests-GetUserEmails.json");
+    @Test public void testGetUserEmails() {
+        String jsonValue = readDataFromFileAsString("DataResponses/ApplicationUnitTests-GetUserEmails.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValue);
 
         BuddyHttpClientFactory.setUnitTestMode(true);
 
-        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getInstrumentation().getContext(), "0.1", true);
+        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getUnitTestContext(), "0.1", true);
 
         client.getUserEmails(testFirstRow, testLastRow, null,
                 new OnCallback<ListResponse<String>>() {
@@ -34,14 +36,14 @@ public class ApplicationUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGetUserProfiles() {
-        String jsonValue = readDataFromFile("DataResponses/ApplicationUnitTests-GetUserProfiles.json");
+    @Test public void testGetUserProfiles() {
+        String jsonValue = readDataFromFileAsString("DataResponses/ApplicationUnitTests-GetUserProfiles.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValue);
 
         BuddyHttpClientFactory.setUnitTestMode(true);
 
-        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getInstrumentation().getContext(), "0.1", true);
+        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getUnitTestContext(), "0.1", true);
 
         client.getUserProfiles(testFirstRow, testLastRow, null,
                 new OnCallback<ListResponse<User>>() {
@@ -56,14 +58,14 @@ public class ApplicationUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGetApplicationStatistics() {
-        String jsonValue = readDataFromFile("DataResponses/ApplicationUnitTests-GetAppStats.json");
+    @Test public void testGetApplicationStatistics() {
+        String jsonValue = readDataFromFileAsString("DataResponses/ApplicationUnitTests-GetAppStats.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValue);
 
         BuddyHttpClientFactory.setUnitTestMode(true);
 
-        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getInstrumentation().getContext(), "0.1", true);
+        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getUnitTestContext(), "0.1", true);
 
         client.getApplicationStatistics(null,
                 new OnCallback<ListResponse<ApplicationStatistics>>() {

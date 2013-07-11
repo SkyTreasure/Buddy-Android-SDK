@@ -3,6 +3,8 @@ package com.buddy.sdk.unittests;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.junit.Test;
+
 import com.buddy.sdk.Sounds.SoundQuality;
 import com.buddy.sdk.responses.Response;
 import com.buddy.sdk.web.BuddyHttpClientFactory;
@@ -17,7 +19,7 @@ public class SoundUnitTest extends BaseUnitTest {
 		createAuthenticatedUser();
 	}
 	
-	public void testGetSound(){
+	@Test public void testGetSound(){
 		InputStream soundStream = getStreamFromFile("test.mp4");
 		
 		BuddyHttpClientFactory.setDummyReponse(soundStream);

@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Test;
+
 import com.buddy.sdk.Blob;
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.responses.ListResponse;
@@ -20,8 +22,8 @@ public class BlobsUnitTests extends BaseUnitTest {
 		createAuthenticatedUser();
 	}
 	
-	public void testGetInfo(){
-		String jsonBlob = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
+	@Test public void testGetInfo(){
+		String jsonBlob = readDataFromFileAsString("DataResponses/BlobUnitTest-GetBlob.json");
 		
 		BuddyHttpClientFactory.addDummyResponse(jsonBlob);
 		testAuthUser.getBlobs().getInfo((long)14, new OnCallback<Response<Blob>>(){
@@ -35,7 +37,7 @@ public class BlobsUnitTests extends BaseUnitTest {
 		});
 	}
 	
-	public void testGet(){
+	@Test public void testGet(){
 		InputStream blobStream = getStreamFromFile("test.mp4");
 		
 		BuddyHttpClientFactory.setDummyReponse(blobStream);
@@ -54,8 +56,8 @@ public class BlobsUnitTests extends BaseUnitTest {
 		});	
 	}
 	
-	public void testSearchBlobs(){
-		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
+	@Test public void testSearchBlobs(){
+		String jsonBlobList = readDataFromFileAsString("DataResponses/BlobUnitTest-GetBlob.json");
 		
 		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
 		
@@ -76,8 +78,8 @@ public class BlobsUnitTests extends BaseUnitTest {
 		});
 	}
 	
-	public void testSearchMyBlobs(){
-		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
+	@Test public void testSearchMyBlobs(){
+		String jsonBlobList = readDataFromFileAsString("DataResponses/BlobUnitTest-GetBlob.json");
 		
 		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
 		
@@ -98,8 +100,8 @@ public class BlobsUnitTests extends BaseUnitTest {
 		});
 	}
 	
-	public void testGetList(){
-		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
+	@Test public void testGetList(){
+		String jsonBlobList = readDataFromFileAsString("DataResponses/BlobUnitTest-GetBlob.json");
 		
 		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
 		
@@ -120,8 +122,8 @@ public class BlobsUnitTests extends BaseUnitTest {
 		});
 	}
 	
-	public void testGetMyList(){
-		String jsonBlobList = readDataFromFile("DataResponses/BlobUnitTest-GetBlob.json");
+	@Test public void testGetMyList(){
+		String jsonBlobList = readDataFromFileAsString("DataResponses/BlobUnitTest-GetBlob.json");
 		
 		BuddyHttpClientFactory.addDummyResponse(jsonBlobList);
 		

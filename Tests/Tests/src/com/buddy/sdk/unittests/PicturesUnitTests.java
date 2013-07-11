@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import android.graphics.drawable.Drawable;
+import org.junit.Test;
 
 import com.buddy.sdk.PhotoAlbumPublic;
 import com.buddy.sdk.Callbacks.OnCallback;
@@ -28,27 +28,24 @@ import com.buddy.sdk.PicturePublic;
 
 import com.buddy.sdk.responses.Response;
 
-import com.buddy.sdk.unittests.utils.Utils;
 import com.buddy.sdk.utils.Constants;
 import com.buddy.sdk.web.BuddyHttpClientFactory;
 import com.buddy.sdk.PhotoAlbum;
 import com.buddy.sdk.Picture;
 
-import com.buddy.sdk.unittests.R;
-
 public class PicturesUnitTests extends BaseUnitTest {
     private static int testAlbumId = 2196998;
 
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
 
         createAuthenticatedUser();
     }
 
-    public void testPhotoAlbumCreate() {
-        String jsonResponse = readDataFromFile("DataResponses/PictureUnitTests-CreateAlbum.json");
-        String jsonGetResponse = readDataFromFile("DataResponses/PictureUnitTests-GetAlbum.json");
+    @Test public void testPhotoAlbumCreate() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-CreateAlbum.json");
+        String jsonGetResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAlbum.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonGetResponse);
 
@@ -62,9 +59,9 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPhotoAlbumDelete() {
-        String jsonResponse = readDataFromFile("DataResponses/PictureUnitTests-GetAlbum.json");
-        String jsonDeleteResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testPhotoAlbumDelete() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAlbum.json");
+        String jsonDeleteResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonDeleteResponse);
 
@@ -88,8 +85,8 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPhotoAlbumGet() {
-        String jsonResponse = readDataFromFile("DataResponses/PictureUnitTests-GetAlbum.json");
+    @Test public void testPhotoAlbumGet() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAlbum.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getPhotoAlbums().get(testAlbumId, null,
@@ -110,9 +107,9 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPhotoAlbumGetByName() {
-        String jsonAlbumList = readDataFromFile("DataResponses/PictureUnitTests-GetAlbumList.json");
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-GetAlbumPhotos.json");
+    @Test public void testPhotoAlbumGetByName() {
+        String jsonAlbumList = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAlbumList.json");
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAlbumPhotos.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonAlbumList);
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
@@ -132,10 +129,10 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPhotoAddWithWatermark() {
-        String jsonResponse = readDataFromFile("DataResponses/PictureUnitTests-GetAlbum.json");
-        String jsonAddResponse = readDataFromFile("DataResponses/PictureUnitTests-AddPhoto.json");
-        String jsonGetResponse = readDataFromFile("DataResponses/PictureUnitTests-GetPhoto.json");
+    @Test public void testPhotoAddWithWatermark() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAlbum.json");
+        String jsonAddResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-AddPhoto.json");
+        String jsonGetResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetPhoto.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonAddResponse);
@@ -149,9 +146,8 @@ public class PicturesUnitTests extends BaseUnitTest {
                         assertNotNull(response);
 
                         PhotoAlbum album = response.getResult();
-                        Drawable image = getInstrumentation().getTargetContext().getResources()
-                                .getDrawable(R.drawable.ic_launcher);
-                        testImageBytes = Utils.getEncodedImageBytes(image);
+
+                        testImageBytes = readDataFromFileAsStringAsBytes("res/drawable-hdpi/ic_launcher.png");
 
                         // Need to create our Picture class
                         album.addPictureWithWatermark(testImageBytes, testPhotoComment,
@@ -172,10 +168,10 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPhotoAdd() {
-        String jsonResponse = readDataFromFile("DataResponses/PictureUnitTests-GetAlbum.json");
-        String jsonAddResponse = readDataFromFile("DataResponses/PictureUnitTests-AddPhoto.json");
-        String jsonGetResponse = readDataFromFile("DataResponses/PictureUnitTests-GetPhoto.json");
+    @Test public void testPhotoAdd() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAlbum.json");
+        String jsonAddResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-AddPhoto.json");
+        String jsonGetResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetPhoto.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonAddResponse);
@@ -189,9 +185,8 @@ public class PicturesUnitTests extends BaseUnitTest {
                         assertNotNull(response);
 
                         PhotoAlbum album = response.getResult();
-                        Drawable image = getInstrumentation().getTargetContext().getResources()
-                                .getDrawable(R.drawable.ic_launcher);
-                        testImageBytes = Utils.getEncodedImageBytes(image);
+
+                        testImageBytes = readDataFromFileAsStringAsBytes("res/drawable-hdpi/ic_launcher.png");
 
                         // Need to create our Picture class
                         album.addPicture(testImageBytes, testPhotoComment, testLatitude,
@@ -211,9 +206,9 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPhotoAddIncorrectEscape() {
-        String jsonResponse = readDataFromFile("DataResponses/PictureUnitTests-GetAlbum.json");
-        String jsonAddResponse = readDataFromFile("DataResponses/GenericHTTP400Response.json");
+    @Test public void testPhotoAddIncorrectEscape() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAlbum.json");
+        String jsonAddResponse = readDataFromFileAsString("DataResponses/GenericHTTP400Response.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonAddResponse);
@@ -226,9 +221,8 @@ public class PicturesUnitTests extends BaseUnitTest {
                         assertNotNull(response);
 
                         PhotoAlbum album = response.getResult();
-                        Drawable image = getInstrumentation().getTargetContext().getResources()
-                                .getDrawable(R.drawable.ic_launcher);
-                        testImageBytes = Utils.getEncodedImageBytes(image);
+
+                        testImageBytes = readDataFromFileAsStringAsBytes("res/drawable-hdpi/ic_launcher.png");
 
                         // Need to create our Picture class
                         album.addPicture(testImageBytes, testPhotoComment, testLatitude,
@@ -247,9 +241,9 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPhotoAddIncorrectPhotoAlbumId() {
-        String jsonResponse = readDataFromFile("DataResponses/PictureUnitTests-GetAlbum.json");
-        String jsonAddResponse = readDataFromFile("DataResponses/PictureUnitTests-BadAlbumId.json");
+    @Test public void testPhotoAddIncorrectPhotoAlbumId() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAlbum.json");
+        String jsonAddResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-BadAlbumId.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonAddResponse);
@@ -262,9 +256,8 @@ public class PicturesUnitTests extends BaseUnitTest {
                         assertNotNull(response);
 
                         PhotoAlbum album = response.getResult();
-                        Drawable image = getInstrumentation().getTargetContext().getResources()
-                                .getDrawable(R.drawable.ic_launcher);
-                        testImageBytes = Utils.getEncodedImageBytes(image);
+
+                        testImageBytes = readDataFromFileAsStringAsBytes("res/drawable-hdpi/ic_launcher.png");
 
                         // Need to create our Picture class
                         album.addPicture(testImageBytes, testPhotoComment, testLatitude,
@@ -283,9 +276,9 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPhotoSetAppTag() {
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-GetAllPhotos.json");
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testPhotoSetAppTag() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAllPhotos.json");
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
@@ -320,8 +313,8 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPhotoAlbumGetAllPictures() {
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-GetAllPhotos.json");
+    @Test public void testPhotoAlbumGetAllPictures() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAllPhotos.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
 
@@ -347,8 +340,8 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPhotoAlbumGetAllPicturesNoAlbums() {
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-BadAlbumId.json");
+    @Test public void testPhotoAlbumGetAllPicturesNoAlbums() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-BadAlbumId.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
 
@@ -364,8 +357,8 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPhotoAlbumGetAllPicturesNoResults() {
-        String jsonPhotoList = readDataFromFile("DataResponses/GenericEmptyResponse.json");
+    @Test public void testPhotoAlbumGetAllPicturesNoResults() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/GenericEmptyResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
 
@@ -381,9 +374,9 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testAlbumDelete() {
-        String jsonResponse = readDataFromFile("DataResponses/PictureUnitTests-GetAlbum.json");
-        String jsonDeleteResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testAlbumDelete() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAlbum.json");
+        String jsonDeleteResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonDeleteResponse);
 
@@ -407,8 +400,8 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testSearchForAlbums() {
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-SearchAlbum.json");
+    @Test public void testSearchForAlbums() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-SearchAlbum.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
 
@@ -436,9 +429,9 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPicturesGetFilterList() {
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-GetAllPhotos.json");
-        String jsonResponse = readDataFromFile("DataResponses/PictureUnitTests-GetFilters.json");
+    @Test public void testPicturesGetFilterList() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAllPhotos.json");
+        String jsonResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetFilters.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
@@ -476,10 +469,10 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPicturesApplyFilter() {
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-GetAllPhotos.json");
-        String jsonResponse = readDataFromFile("DataResponses/PictureUnitTests-ApplyFilter.json");
-        String jsonGetResponse = readDataFromFile("DataResponses/PictureUnitTests-GetPhoto.json");
+    @Test public void testPicturesApplyFilter() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAllPhotos.json");
+        String jsonResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-ApplyFilter.json");
+        String jsonGetResponse = readDataFromFileAsString("DataResponses/PictureUnitTests-GetPhoto.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
@@ -515,9 +508,9 @@ public class PicturesUnitTests extends BaseUnitTest {
                 });
     }
     
-    public void testPhotoDelete() {
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-GetAllPhotos.json");
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testPhotoDelete() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAllPhotos.json");
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);

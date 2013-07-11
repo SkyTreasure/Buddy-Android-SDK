@@ -18,6 +18,8 @@ package com.buddy.sdk.unittests;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import com.buddy.sdk.AuthenticatedUser;
 import com.buddy.sdk.BuddyClient;
 import com.buddy.sdk.Callbacks.OnCallback;
@@ -34,15 +36,15 @@ public class UserUnitTests extends BaseUnitTest {
     private static String testToken = "UT-0d499bf5-a408-4021-a477-8e2080373729";
 
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
 
-        testClient = new BuddyClient(applicationName, applicationPassword, this.getInstrumentation().getContext(), "0.1", true);
+        testClient = new BuddyClient(applicationName, applicationPassword, this.getUnitTestContext(), "0.1", true);
     }
 
-    public void testCreateUser() {
-        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testCreateUser() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
+        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(testToken);
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
@@ -62,9 +64,9 @@ public class UserUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testCreateUserOverload() {
-        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testCreateUserOverload() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
+        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(testToken);
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
@@ -82,13 +84,11 @@ public class UserUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testCreateUserAlreadyExists() {
-        String jsonValueUser = readDataFromFile("DataResponses/UserUnitTests-UserExists.json");
-        String jsonDeviceReportingResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testCreateUserAlreadyExists() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/UserUnitTests-UserExists.json");
 
         BuddyHttpClientFactory.addDummyResponse(testToken);
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
-        BuddyHttpClientFactory.addDummyResponse(jsonDeviceReportingResponse);
 
         testClient.createUser(testCreateUserName, testCreateUserPassword, testCreateUserGender,
                 testCreateUserAge, testCreateUserEmail, testCreateUserStatusId,
@@ -104,8 +104,8 @@ public class UserUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testCreateUserIncorrectAppName() {
-        String jsonValueUser = readDataFromFile("DataResponses/GenericWrongSocketErrorResponse.json");
+    @Test public void testCreateUserIncorrectAppName() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/GenericWrongSocketErrorResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -123,8 +123,8 @@ public class UserUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testCreateUserIncorrectAppPassword() {
-        String jsonValueUser = readDataFromFile("DataResponses/GenericWrongSocketErrorResponse.json");
+    @Test public void testCreateUserIncorrectAppPassword() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/GenericWrongSocketErrorResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -142,9 +142,9 @@ public class UserUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testUserLogin() {
-        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testUserLogin() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
+        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(testToken);
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
@@ -164,10 +164,10 @@ public class UserUnitTests extends BaseUnitTest {
 
     }
 
-    public void testSocialLogin() {
-    	String jsonValueSocial = readDataFromFile("DataResponses/SocialLogin.json");
-        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testSocialLogin() {
+    	String jsonValueSocial = readDataFromFileAsString("DataResponses/SocialLogin.json");
+        String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
+        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
     	
     	BuddyHttpClientFactory.addDummyResponse(jsonValueSocial);
     	BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
@@ -185,9 +185,9 @@ public class UserUnitTests extends BaseUnitTest {
     		
     	});
     }
-    
-    public void testUserLoginBadUserName() {
-        String jsonValueUser = readDataFromFile("DataResponses/GenericBadUserNameErrorResponse.json");
+
+    @Test public void testUserLoginBadUserName() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/GenericBadUserNameErrorResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -203,9 +203,9 @@ public class UserUnitTests extends BaseUnitTest {
 
     }
 
-    public void testUserGetFromToken() {
-        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testUserGetFromToken() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
+        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
         BuddyHttpClientFactory.addDummyResponse(jsonDeviceReportingResponse);
@@ -223,7 +223,7 @@ public class UserUnitTests extends BaseUnitTest {
 
     }
 
-    public void testUserLoginBadToken() {
+    @Test public void testUserLoginBadToken() {
         try {
             testClient.login(null, null, new OnCallback<Response<AuthenticatedUser>>() {
                 public void OnResponse(Response<AuthenticatedUser> response, Object state) {
@@ -236,8 +236,8 @@ public class UserUnitTests extends BaseUnitTest {
         }
     }
 
-    public void testCheckUserNameAlreadyExists() {
-        String jsonValueUser = readDataFromFile("DataResponses/UserUnitTests-UsernameExists.json");
+    @Test public void testCheckUserNameAlreadyExists() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/UserUnitTests-UsernameExists.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -249,8 +249,8 @@ public class UserUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testCheckUserNameDoesNotExists() {
-        String jsonValueUser = readDataFromFile("DataResponses/UserUnitTests-UsernameAvailable.json");
+    @Test public void testCheckUserNameDoesNotExists() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/UserUnitTests-UsernameAvailable.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -262,8 +262,8 @@ public class UserUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testCheckUserEmailAlreadyExists() {
-        String jsonValueUser = readDataFromFile("DataResponses/UserUnitTests-EmailExists.json");
+    @Test public void testCheckUserEmailAlreadyExists() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/UserUnitTests-EmailExists.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -275,8 +275,8 @@ public class UserUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testCheckUserEmailDoesNotExist() {
-        String jsonValueUser = readDataFromFile("DataResponses/UserUnitTests-EmailAvailable.json");
+    @Test public void testCheckUserEmailDoesNotExist() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/UserUnitTests-EmailAvailable.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -288,10 +288,10 @@ public class UserUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testDeleteUser() {
+    @Test public void testDeleteUser() {
         createAuthenticatedUser();
 
-        String jsonValueUser = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+        String jsonValueUser = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -305,10 +305,10 @@ public class UserUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testCheckIn() {
+    @Test public void testCheckIn() {
         createAuthenticatedUser();
 
-        String jsonValueUser = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+        String jsonValueUser = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -323,10 +323,10 @@ public class UserUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testUpdateUser() {
+    @Test public void testUpdateUser() {
         createAuthenticatedUser();
 
-        String jsonValueUser = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+        String jsonValueUser = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -342,10 +342,10 @@ public class UserUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGetCheckIns() {
+    @Test public void testGetCheckIns() {
         createAuthenticatedUser();
 
-        String jsonValueUser = readDataFromFile("DataResponses/UserUnitTests-GetCheckinResponse.json");
+        String jsonValueUser = readDataFromFileAsString("DataResponses/UserUnitTests-GetCheckinResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -364,10 +364,10 @@ public class UserUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGetUserFromId() {
+    @Test public void testGetUserFromId() {
         createAuthenticatedUser();
 
-        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
+        String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
 
@@ -379,12 +379,13 @@ public class UserUnitTests extends BaseUnitTest {
                 assertEquals("Test User 1", user.getName());
             }
         });
+
     }
-    
-    public void testFindUserUserName(){
+
+    @Test public void testFindUserUserName(){
     	createAuthenticatedUser();
     	
-        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
+        String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
         
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
                         

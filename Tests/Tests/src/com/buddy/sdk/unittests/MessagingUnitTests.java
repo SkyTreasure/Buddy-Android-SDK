@@ -2,6 +2,9 @@
 package com.buddy.sdk.unittests;
 
 import java.util.List;
+
+import org.junit.Test;
+
 import android.util.SparseBooleanArray;
 
 import com.buddy.sdk.GroupMessage;
@@ -15,12 +18,12 @@ import com.buddy.sdk.web.BuddyHttpClientFactory;
 
 public class MessagingUnitTests extends BaseUnitTest {
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         createAuthenticatedUserAnd2ndUser();
     }
 
-    public void testGetSentMessages() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-GetSent.json");
+    @Test public void testGetSentMessages() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-GetSent.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getMessages().getSent(Constants.MinDate, null,
@@ -38,8 +41,8 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGetMessages() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-GetSent.json");
+    @Test public void testGetMessages() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-GetSent.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getMessages().getReceived(Constants.MinDate, null,
@@ -57,8 +60,8 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testSendMessage() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testSendMessage() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getMessages().send(testUser, "Test Message", "", null,
@@ -71,9 +74,9 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGetGroupMessages() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-GetAllGroups.json");
-        String jsonSuccess = readDataFromFile("DataResponses/MessageUnitTests-GetGroupMessage.json");
+    @Test public void testGetGroupMessages() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-GetAllGroups.json");
+        String jsonSuccess = readDataFromFileAsString("DataResponses/MessageUnitTests-GetGroupMessage.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonSuccess);
 
@@ -105,9 +108,9 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testSendGroupMessage() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-GetAllGroups.json");
-        String jsonSuccess = readDataFromFile("DataResponses/MessageUnitTests-SendGroupMessage.json");
+    @Test public void testSendGroupMessage() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-GetAllGroups.json");
+        String jsonSuccess = readDataFromFileAsString("DataResponses/MessageUnitTests-SendGroupMessage.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonSuccess);
 
@@ -136,9 +139,9 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testRemoveUser() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-GetAllGroups.json");
-        String jsonSuccess = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testRemoveUser() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-GetAllGroups.json");
+        String jsonSuccess = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonSuccess);
 
@@ -163,9 +166,9 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testJoinGroup() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-GetAllGroups.json");
-        String jsonSuccess = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testJoinGroup() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-GetAllGroups.json");
+        String jsonSuccess = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonSuccess);
 
@@ -190,8 +193,8 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGetMyList() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-GetAllGroups.json");
+    @Test public void testGetMyList() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-GetAllGroups.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getMessages().getMessageGroups()
@@ -209,8 +212,8 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGetAllGroups() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-GetAllGroups.json");
+    @Test public void testGetAllGroups() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-GetAllGroups.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getMessages().getMessageGroups()
@@ -228,9 +231,9 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testDepartGroup() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-GetAllGroups.json");
-        String jsonSuccess = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testDepartGroup() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-GetAllGroups.json");
+        String jsonSuccess = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonSuccess);
 
@@ -255,9 +258,9 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testAddMember() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-GetAllGroups.json");
-        String jsonSuccess = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testAddMember() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-GetAllGroups.json");
+        String jsonSuccess = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonSuccess);
 
@@ -282,9 +285,9 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testDeleteGroup() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-GetAllGroups.json");
-        String jsonSuccess = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testDeleteGroup() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-GetAllGroups.json");
+        String jsonSuccess = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonSuccess);
 
@@ -309,8 +312,8 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testCreateGroup() {
-        String jsonResponse = readDataFromFile("DataResponses/MessageUnitTests-CreateGroup.json");
+    @Test public void testCreateGroup() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/MessageUnitTests-CreateGroup.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getMessages().getMessageGroups()
@@ -325,8 +328,8 @@ public class MessagingUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testCheckForGroup() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testCheckForGroup() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getMessages().getMessageGroups()

@@ -2,6 +2,8 @@ package com.buddy.sdk.unittests;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.MetroArea;
 import com.buddy.sdk.Startup;
@@ -11,14 +13,14 @@ import com.buddy.sdk.web.BuddyHttpClientFactory;
 
 public class StartupUnitTests extends BaseUnitTest {
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
 
         createAuthenticatedUser();
     }
 
-    public void testStartupGetMetroAreaList() {
-        String jsonResponse = readDataFromFile("DataResponses/StartupUnitTests-GetMetroAreaList.json");
+    @Test public void testStartupGetMetroAreaList() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/StartupUnitTests-GetMetroAreaList.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         Startups startup = testAuthUser.getStartups();
@@ -43,8 +45,8 @@ public class StartupUnitTests extends BaseUnitTest {
     	
     }
     
-    public void testStartupGetFromMetroArea() {
-        String jsonResponse = readDataFromFile("DataResponses/StartupUnitTests-GetFromMetroList.json");
+    @Test public void testStartupGetFromMetroArea() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/StartupUnitTests-GetFromMetroList.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         Startups startup = testAuthUser.getStartups();
@@ -66,8 +68,8 @@ public class StartupUnitTests extends BaseUnitTest {
     	
     }
     
-    public void testStartupFind() {
-        String jsonResponse = readDataFromFile("DataResponses/StartupUnitTests-FindList.json");
+    @Test public void testStartupFind() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/StartupUnitTests-FindList.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         Startups startup = testAuthUser.getStartups();

@@ -18,6 +18,8 @@ package com.buddy.sdk.unittests;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Test;
+
 import com.buddy.sdk.AppMetadata;
 import com.buddy.sdk.BuddyClient;
 import com.buddy.sdk.Callbacks.OnCallback;
@@ -36,17 +38,17 @@ public class AppMetadataUnitTests extends BaseUnitTest {
     private static AppMetadata testClientMeta = null;
 
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
 
         BuddyHttpClientFactory.setUnitTestMode(true);
         
-        testClient = new BuddyClient(applicationName, applicationPassword, this.getInstrumentation().getContext(), "0.1", true);
+        testClient = new BuddyClient(applicationName, applicationPassword, this.getUnitTestContext(), "0.1", true);
         testClientMeta = testClient.getAppMeta();
     }
 
-    public void testSet() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testSet() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testClientMeta.set(testKey, testValue, 0.0, 0.0, "", null,
@@ -59,8 +61,8 @@ public class AppMetadataUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGet() {
-        String jsonResponse = readDataFromFile("DataResponses/AppMetadataUnitTests-Get.json");
+    @Test public void testGet() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/AppMetadataUnitTests-Get.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testClientMeta.get(testKey, null, new OnCallback<Response<MetadataItem>>() {
@@ -74,8 +76,8 @@ public class AppMetadataUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testSum() {
-        String jsonResponse = readDataFromFile("DataResponses/AppMetadataUnitTests-Sum.json");
+    @Test public void testSum() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/AppMetadataUnitTests-Sum.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testClientMeta.sum(testKey, -1, 0.0, 0.0, -1, "", null,
@@ -84,14 +86,14 @@ public class AppMetadataUnitTests extends BaseUnitTest {
                         assertNotNull(response);
                         MetadataSum item = response.getResult();
 
-                        assertEquals(46.0, item.getTotal());
+                        assertEquals(46.0, item.getTotal(), 0);
                     }
 
                 });
     }
 
-    public void testBatchSum() {
-        String jsonResponse = readDataFromFile("DataResponses/AppMetadataUnitTests-BatchSum.json");
+    @Test public void testBatchSum() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/AppMetadataUnitTests-BatchSum.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testClientMeta.batchSum(testKeyList, "-1;", 0.0, 0.0, -1, "", null,
@@ -102,14 +104,14 @@ public class AppMetadataUnitTests extends BaseUnitTest {
                         assertNotNull(list);
 
                         MetadataSum sum = list.get(0);
-                        assertEquals(46.0, sum.getTotal());
+                        assertEquals(46.0, sum.getTotal(), 0);
                     }
 
                 });
     }
 
-    public void testGetAll() {
-        String jsonResponse = readDataFromFile("DataResponses/AppMetadataUnitTests-Search.json");
+    @Test public void testGetAll() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/AppMetadataUnitTests-Search.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testClientMeta.getAll(null, new OnCallback<Response<Map<String, MetadataItem>>>() {
@@ -124,8 +126,8 @@ public class AppMetadataUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testFindData() {
-        String jsonResponse = readDataFromFile("DataResponses/AppMetadataUnitTests-Search.json");
+    @Test public void testFindData() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/AppMetadataUnitTests-Search.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testClientMeta.find(40075000, 0.0, 0.0, 10, "", "", -1, 0, 100, false, true, false, null,
@@ -142,8 +144,8 @@ public class AppMetadataUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testFindNearby() {
-        String jsonResponse = readDataFromFile("DataResponses/AppMetadataUnitTests-Search.json");
+    @Test public void testFindNearby() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/AppMetadataUnitTests-Search.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testClientMeta.find(1000, 0.0, 0.0, 10, "", "", -1, 0, 100, false, true, false, null,
@@ -160,8 +162,8 @@ public class AppMetadataUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testDelete() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testDelete() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testClientMeta.delete(testKey, null, new OnCallback<Response<Boolean>>() {
@@ -173,8 +175,8 @@ public class AppMetadataUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testDeleteAll() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testDeleteAll() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testClientMeta.deleteAll(null, new OnCallback<Response<Boolean>>() {

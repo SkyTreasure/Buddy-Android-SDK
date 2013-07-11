@@ -2,6 +2,9 @@
 package com.buddy.sdk.unittests;
 
 import java.util.List;
+
+import org.junit.Test;
+
 import android.util.SparseArray;
 
 import com.buddy.sdk.Callbacks.OnCallback;
@@ -12,14 +15,14 @@ import com.buddy.sdk.web.BuddyHttpClientFactory;
 
 public class GeoLocationUnitTests extends BaseUnitTest {
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
 
         createAuthenticatedUser();
     }
 
-    public void testLocationCategoryGetList() {
-        String jsonResponse = readDataFromFile("DataResponses/GeoLocationUnitTests-GetCategories.json");
+    @Test public void testLocationCategoryGetList() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GeoLocationUnitTests-GetCategories.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getPlaces().getCategories(null,
@@ -37,8 +40,8 @@ public class GeoLocationUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testLocationGetFromId() {
-        String jsonResponse = readDataFromFile("DataResponses/GeoLocationUnitTests-LocationGet.json");
+    @Test public void testLocationGetFromId() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GeoLocationUnitTests-LocationGet.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getPlaces().get(46254905, 0, 0, null, new OnCallback<Response<Place>>() {
@@ -51,8 +54,8 @@ public class GeoLocationUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testLocationSearch() {
-        String jsonResponse = readDataFromFile("DataResponses/GeoLocationUnitTests-LocationGet.json");
+    @Test public void testLocationSearch() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GeoLocationUnitTests-LocationGet.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getPlaces().find(100, 0, 0, 10, "", 870, null,

@@ -4,6 +4,8 @@ package com.buddy.sdk.unittests;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Test;
+
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.GamePlayer;
 import com.buddy.sdk.GameScore;
@@ -16,14 +18,14 @@ import com.buddy.sdk.web.BuddyHttpClientFactory;
 public class GameUnitTests extends BaseUnitTest {
 
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
 
         createAuthenticatedUser();
     }
 
-    public void testGameScoresAdd() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testGameScoresAdd() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGameScores().add(testScoreValue, testScoreBoardName, testScoreRank,
@@ -37,8 +39,8 @@ public class GameUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGameScoresGetScoresUser() {
-        String jsonResponse = readDataFromFile("DataResponses/GameUnitTests-UserScores.json");
+    @Test public void testGameScoresGetScoresUser() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GameUnitTests-UserScores.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGameScores().getAll(testRecordLimit, null,
@@ -55,8 +57,8 @@ public class GameUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGameScoresGetBoardHighScores() {
-        String jsonResponse = readDataFromFile("DataResponses/GameUnitTests-BoardHighScores.json");
+    @Test public void testGameScoresGetBoardHighScores() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GameUnitTests-BoardHighScores.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testClient.getGameBoards().getHighScores(testScoreBoardName, testRecordLimit, null,
@@ -73,8 +75,8 @@ public class GameUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGameSearchScores() {
-        String jsonResponse = readDataFromFile("DataResponses/GameUnitTests-SearchScores.json");
+    @Test public void testGameSearchScores() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GameUnitTests-SearchScores.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testClient.getGameBoards().findScores(testAuthUser, testGameSearchDistance,
@@ -92,8 +94,8 @@ public class GameUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGameScoresDeleteAllScores() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testGameScoresDeleteAllScores() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGameScores().deleteAll(null, new OnCallback<Response<Boolean>>() {
@@ -106,8 +108,8 @@ public class GameUnitTests extends BaseUnitTest {
     }
 
     // Game states
-    public void testGameStateAdd() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testGameStateAdd() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGameStates().add(testStateKey, testStateValue, "", null,
@@ -120,8 +122,8 @@ public class GameUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGameStateRemove() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testGameStateRemove() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGameStates().remove(testStateKey, null,
@@ -134,8 +136,8 @@ public class GameUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGameStateGet() {
-        String jsonResponse = readDataFromFile("DataResponses/GameUnitTests-GetState.json");
+    @Test public void testGameStateGet() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GameUnitTests-GetState.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGameStates().get(testStateKey, null, new OnCallback<Response<GameState>>() {
@@ -150,8 +152,8 @@ public class GameUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testGameStateGetAll() {
-        String jsonResponse = readDataFromFile("DataResponses/GameUnitTests-GetState.json");
+    @Test public void testGameStateGetAll() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GameUnitTests-GetState.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGameStates().getAll(null,
@@ -168,8 +170,8 @@ public class GameUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGameStateUpdate() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testGameStateUpdate() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGameStates().update(testStateKey, testStateValue, "", null,
@@ -183,8 +185,8 @@ public class GameUnitTests extends BaseUnitTest {
     }
 
     // Game Players
-    public void testGamePlayerAdd() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testGamePlayerAdd() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGamePlayers().add(testPlayerName, testPlayerBoard, testPlayerRank,
@@ -197,8 +199,8 @@ public class GameUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGamePlayerUpdate() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testGamePlayerUpdate() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGamePlayers().update(testPlayerName, testPlayerBoard, "", testGameLatitude,
@@ -211,8 +213,8 @@ public class GameUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testGamePlayerDelete() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testGamePlayerDelete() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGamePlayers().delete(null, new OnCallback<Response<Boolean>>() {
@@ -224,8 +226,8 @@ public class GameUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testGamePlayerGetInfo() {
-        String jsonResponse = readDataFromFile("DataResponses/GameUnitTests-PlayerInfo.json");
+    @Test public void testGamePlayerGetInfo() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GameUnitTests-PlayerInfo.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGamePlayers().getInfo(null, new OnCallback<Response<GamePlayer>>() {
@@ -241,8 +243,8 @@ public class GameUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testGamePlayerSearch() {
-        String jsonResponse = readDataFromFile("DataResponses/GameUnitTests-SearchPlayers.json");
+    @Test public void testGamePlayerSearch() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GameUnitTests-SearchPlayers.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getGamePlayers().find(testGameSearchDistance, testGameLatitude,

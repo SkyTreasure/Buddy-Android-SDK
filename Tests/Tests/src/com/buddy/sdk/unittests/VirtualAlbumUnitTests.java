@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.junit.Test;
+
 import com.buddy.sdk.PhotoAlbum;
 import com.buddy.sdk.Picture;
 import com.buddy.sdk.Callbacks.OnCallback;
@@ -18,16 +20,16 @@ import com.buddy.sdk.web.BuddyHttpClientFactory;
 
 public class VirtualAlbumUnitTests extends BaseUnitTest {
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
 
         createAuthenticatedUser();
     }
 
-    public void testVirtualAlbumCreate() {
-        String jsonCreateResponse = readDataFromFile("DataResponses/VirtualAlbumUnitTests-CreateAlbum.json");
-        String jsonAlbumInfo = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
-        String jsonPhotoList = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
+    @Test public void testVirtualAlbumCreate() {
+        String jsonCreateResponse = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-CreateAlbum.json");
+        String jsonAlbumInfo = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonCreateResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonAlbumInfo);
@@ -44,9 +46,9 @@ public class VirtualAlbumUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testVirtualAlbumGetAlbumInformation() {
-        String jsonAlbumInfo = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
-        String jsonPhotoList = readDataFromFile("DataResponses/VirtualAlbumUnitTests-MyAlbum.json");
+    @Test public void testVirtualAlbumGetAlbumInformation() {
+        String jsonAlbumInfo = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-MyAlbum.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonAlbumInfo);
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
@@ -61,8 +63,8 @@ public class VirtualAlbumUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testVirtualAlbumGetEmptyAlbumInformation() {
-        String jsonAlbumInfo = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbumInfo.json");
+    @Test public void testVirtualAlbumGetEmptyAlbumInformation() {
+        String jsonAlbumInfo = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbumInfo.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonAlbumInfo);
 
@@ -76,8 +78,8 @@ public class VirtualAlbumUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testVirtualAlbumMyAlbums() {
-        String jsonPhotoList = readDataFromFile("DataResponses/VirtualAlbumUnitTests-MyAlbum.json");
+    @Test public void testVirtualAlbumMyAlbums() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-MyAlbum.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
 
@@ -95,11 +97,11 @@ public class VirtualAlbumUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testVirtualAlbumPhotoAdd() {
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-GetAllPhotos.json");
-        String jsonAlbumList = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
-        String jsonEmptyAlbum = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
-        String jsonAddPhoto = readDataFromFile("DataResponses/VirtualAlbumUnitTests-AddPhoto.json");
+    @Test public void testVirtualAlbumPhotoAdd() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAllPhotos.json");
+        String jsonAlbumList = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
+        String jsonEmptyAlbum = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
+        String jsonAddPhoto = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-AddPhoto.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
         BuddyHttpClientFactory.addDummyResponse(jsonAlbumList);
@@ -146,11 +148,11 @@ public class VirtualAlbumUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testVirtualAlbumPhotoAddBatch() {
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-GetAllPhotos.json");
-        String jsonAlbumList = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
-        String jsonEmptyAlbum = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
-        String jsonBatchPhoto = readDataFromFile("DataResponses/VirtualAlbumUnitTests-AddBatchPhoto.json");
+    @Test public void testVirtualAlbumPhotoAddBatch() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAllPhotos.json");
+        String jsonAlbumList = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
+        String jsonEmptyAlbum = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
+        String jsonBatchPhoto = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-AddBatchPhoto.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
         BuddyHttpClientFactory.addDummyResponse(jsonAlbumList);
@@ -201,10 +203,10 @@ public class VirtualAlbumUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testVirtualAlbumDelete() {
-        String jsonAlbum = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
-        String jsonPhotoList = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
-        String jsonSuccess = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testVirtualAlbumDelete() {
+        String jsonAlbum = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
+        String jsonSuccess = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonAlbum);
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
@@ -225,11 +227,11 @@ public class VirtualAlbumUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testVirtualAlbumPhotoRemove() {
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-GetAllPhotos.json");
-        String jsonAlbumList = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
-        String jsonEmptyAlbum = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
-        String jsonSuccess = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testVirtualAlbumPhotoRemove() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAllPhotos.json");
+        String jsonAlbumList = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
+        String jsonEmptyAlbum = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
+        String jsonSuccess = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
         BuddyHttpClientFactory.addDummyResponse(jsonAlbumList);
@@ -276,11 +278,11 @@ public class VirtualAlbumUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testVirtualAlbumPhotoUpdate() {
-        String jsonPhotoList = readDataFromFile("DataResponses/PictureUnitTests-GetAllPhotos.json");
-        String jsonAlbumList = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
-        String jsonEmptyAlbum = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
-        String jsonSuccess = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testVirtualAlbumPhotoUpdate() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/PictureUnitTests-GetAllPhotos.json");
+        String jsonAlbumList = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
+        String jsonEmptyAlbum = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
+        String jsonSuccess = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
         BuddyHttpClientFactory.addDummyResponse(jsonAlbumList);
@@ -327,10 +329,10 @@ public class VirtualAlbumUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testVirtualAlbumUpdate() {
-        String jsonPhotoList = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
-        String jsonEmptyAlbum = readDataFromFile("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
-        String jsonSuccess = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testVirtualAlbumUpdate() {
+        String jsonPhotoList = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetAlbumInfo.json");
+        String jsonEmptyAlbum = readDataFromFileAsString("DataResponses/VirtualAlbumUnitTests-GetEmptyAlbum.json");
+        String jsonSuccess = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonPhotoList);
         BuddyHttpClientFactory.addDummyResponse(jsonEmptyAlbum);

@@ -19,6 +19,8 @@ package com.buddy.sdk.unittests;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Test;
+
 import com.buddy.sdk.RegisteredDeviceAndroid;
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.responses.ListResponse;
@@ -28,14 +30,14 @@ import com.buddy.sdk.web.BuddyHttpClientFactory;
 
 public class PushNotificationUnitTests extends BaseUnitTest {
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
 
         createAuthenticatedUser();
     }
 
-    public void testPushNotificationRegisterDevice() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testPushNotificationRegisterDevice() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getPushNotifications().registerDevice(testRegistrationId, testGroupName, null,
@@ -48,8 +50,8 @@ public class PushNotificationUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPushNotificationRemoveDevice() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testPushNotificationRemoveDevice() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getPushNotifications().unregisterDevice(null, new OnCallback<Response<Boolean>>() {
@@ -61,8 +63,8 @@ public class PushNotificationUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testPushNotificationSendRawMessage() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testPushNotificationSendRawMessage() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getPushNotifications().sendRawMessage("Test Message", testAuthUser.getId(), Constants.MinDate, "", null,
@@ -75,8 +77,8 @@ public class PushNotificationUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPushNotificationGetGroupNames() {
-        String jsonResponse = readDataFromFile("DataResponses/PushNotificationUnitTests-GetGroups.json");
+    @Test public void testPushNotificationGetGroupNames() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/PushNotificationUnitTests-GetGroups.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getPushNotifications().getGroups(null,
@@ -94,8 +96,8 @@ public class PushNotificationUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testPushNotificationGetRegisteredDevices() {
-        String jsonResponse = readDataFromFile("DataResponses/PushNotificationUnitTests-GetDevices.json");
+    @Test public void testPushNotificationGetRegisteredDevices() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/PushNotificationUnitTests-GetDevices.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getPushNotifications().getRegisteredDevices("Test Group", 1, 1, null,

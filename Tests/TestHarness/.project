@@ -3,6 +3,7 @@
 	<name>BuddyUnitTestHarness</name>
 	<comment></comment>
 	<projects>
+		<project>BuddySDK</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

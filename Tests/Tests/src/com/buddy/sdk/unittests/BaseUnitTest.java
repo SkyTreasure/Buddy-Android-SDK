@@ -16,9 +16,6 @@
 
 package com.buddy.sdk.unittests;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import com.buddy.sdk.AuthenticatedUser;
@@ -26,15 +23,22 @@ import com.buddy.sdk.BuddyClient;
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.User;
 import com.buddy.sdk.responses.Response;
+import com.buddy.sdk.unittests.utils.*;
 import com.buddy.sdk.utils.Constants.UserGender;
 import com.buddy.sdk.utils.Constants.UserStatus;
 import com.buddy.sdk.web.BuddyHttpClientFactory;
 
-import android.content.res.AssetManager;
-import android.test.InstrumentationTestCase;
+import android.content.Context;
 import android.util.Log;
 
-public class BaseUnitTest extends InstrumentationTestCase {
+import org.apache.commons.io.IOUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+@RunWith(RobolectricTestRunner.class)
+public abstract class BaseUnitTest extends InstrumentationTestCase {
     protected final String TAG = "BuddySDK Unit Tests";
     protected final int SIGNAL_TIMEOUT = 60;
 
@@ -129,13 +133,30 @@ public class BaseUnitTest extends InstrumentationTestCase {
     // Game state
     protected String testStateKey = "Test Key";
     protected String testStateValue = "Test State Value";
+    
+    @Before
+	public void junit4setUp() throws Exception
+	{
+    	this.setUp();
+	}
+    
+	protected void setUp() throws Exception
+	{
+	}
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @After
+	public void junit4tearDown() throws Exception
+	{
+    	this.tearDown();
+	}
+    
+    protected void tearDown() throws Exception
+	{
     }
 
-    protected void tearDown() throws Exception {
-        super.tearDown();
+    protected Context getUnitTestContext()
+    {
+       	return new BuddyMockContext(null);
     }
 
     protected void checkResults() {
@@ -144,24 +165,11 @@ public class BaseUnitTest extends InstrumentationTestCase {
             fail(testFailMessage);
         }
     }
-
-    protected static String readInputStreamAsString(InputStream in) throws IOException {
-        BufferedInputStream bis = new BufferedInputStream(in);
-        ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        int result = bis.read();
-        while (result != -1) {
-            byte b = (byte) result;
-            buf.write(b);
-            result = bis.read();
-        }
-        return buf.toString();
-    }
-
-    protected String readDataFromFile(String fileName) {
+    
+    protected String readDataFromFileAsString(String fileName) {
         try {
-            AssetManager m = getInstrumentation().getContext().getAssets();
-            InputStream is = m.open(fileName);
-            String data = readInputStreamAsString(is);
+            InputStream is = getStreamFromFile(fileName);
+            String data = InstrumentationTestCaseHelper.readInputStreamAsString(is);
             return data;
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -170,20 +178,21 @@ public class BaseUnitTest extends InstrumentationTestCase {
         }
     }
 
-    protected InputStream getStreamFromFile(String fileName){
-    	try{AssetManager m = getInstrumentation().getContext().getAssets();
-    		return m.open(fileName);
-    	}catch(Exception e){
-    		// TODO Auto-generated catch block
+    protected byte[] readDataFromFileAsStringAsBytes(String fileName) {
+        try {
+            InputStream is = getStreamFromFile(fileName);
+            return IOUtils.toByteArray(is);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
-    	}
+        }
     }
     
     protected void createAuthenticatedUser() {
         String jsonValue = testToken;
-        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+        String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
+        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValue);
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
@@ -191,7 +200,7 @@ public class BaseUnitTest extends InstrumentationTestCase {
 
         BuddyHttpClientFactory.setUnitTestMode(true);
 
-        testClient = new BuddyClient(applicationName, applicationPassword, this.getInstrumentation().getContext());
+        testClient = new BuddyClient(applicationName, applicationPassword, this.getUnitTestContext());
 
         testClient.login(testUserName, testUserPassword, null,
                 new OnCallback<Response<AuthenticatedUser>>() {
@@ -206,9 +215,9 @@ public class BaseUnitTest extends InstrumentationTestCase {
 
     protected void createAuthenticatedUserAnd2ndUser() {
         String jsonValue = testToken;
-        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
-        String json2ndUser = readDataFromFile("DataResponses/valid2ndUserResponse.json");
+        String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
+        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
+        String json2ndUser = readDataFromFileAsString("DataResponses/valid2ndUserResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValue);
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
@@ -217,7 +226,7 @@ public class BaseUnitTest extends InstrumentationTestCase {
 
         BuddyHttpClientFactory.setUnitTestMode(true);
 
-        testClient = new BuddyClient(applicationName, applicationPassword, this.getInstrumentation().getContext(), "0.1", true);
+        testClient = new BuddyClient(applicationName, applicationPassword, this.getUnitTestContext(), "0.1", true);
 
         testClient.login(testUserName, testUserPassword, null,
                 new OnCallback<Response<AuthenticatedUser>>() {
@@ -235,4 +244,4 @@ public class BaseUnitTest extends InstrumentationTestCase {
 
         Log.d(TAG, "Auth User Created");
     }
- }
+}

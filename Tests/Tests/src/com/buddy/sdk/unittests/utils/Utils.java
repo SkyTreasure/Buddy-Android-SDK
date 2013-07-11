@@ -1,4 +1,3 @@
-
 package com.buddy.sdk.unittests.utils;
 
 import java.io.ByteArrayOutputStream;
