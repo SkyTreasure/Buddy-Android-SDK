@@ -16,11 +16,11 @@
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
     <path id="JUnit 4.libraryclasspath">
-        <pathelement location="../../../../Program Files/ADT/eclipse/plugins/org.junit_4.10.0.v4_10_0_v20120426-0900/junit.jar"/>
-        <pathelement location="../../../../Program Files/ADT/eclipse/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
+        <pathelement location="${env.ADT_HOME}/eclipse/plugins/org.junit_4.10.0.v4_10_0_v20120426-0900/junit.jar"/>
+        <pathelement location="${env.ADT_HOME}/eclipse/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
     </path>
     <path id="Android 4.2.2.libraryclasspath">
-        <pathelement location="../../../../Program Files/ADT/sdk/platforms/android-17/android.jar"/>
+        <pathelement location="${env.ADT_HOME}/sdk/platforms/android-17/android.jar"/>
     </path>
     <path id="Android Private Libraries.libraryclasspath">
         <pathelement location="../../Lib/libs/gson-2.2.2.jar"/>
