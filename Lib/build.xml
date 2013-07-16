@@ -34,8 +34,8 @@
 		<mkdir dir="output" />
 
 		<copy todir="output">
-			<fileset dir="../BuddySDK/bin" includes="*.jar" />
-			<fileset dir="../BuddySDK/libs" includes="*.jar" />
+			<fileset dir="../lib/bin" includes="*.jar" />
+			<fileset dir="../lib/libs" includes="*.jar" />
 		</copy>
 
 		<rename src="output\classes.jar" dest="output\buddysdk.jar" />
