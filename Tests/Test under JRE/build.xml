@@ -8,7 +8,6 @@
     <property name="BuddySDKTests.location" value="../Tests"/>
     <property name="src.link" value="../Tests/src"/>
     <property name="assets.link" value="../Tests/assets"/>
-    <property name="gen.link" value="../Tests/gen"/>
     <property name="workspace_loc:BuddySDK" value="../../Lib"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="BuddySDK.location" value="../../Lib"/>
@@ -56,11 +55,6 @@
             </fileset>
         </copy>
         <copy includeemptydirs="false" todir="bin">
-            <fileset dir="${gen.link}">
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-        <copy includeemptydirs="false" todir="bin">
             <fileset dir="junit3Src">
                 <exclude name="**/*.java"/>
             </fileset>
@@ -74,41 +68,23 @@
     </target>
     <target depends="build-subprojects,build-project" name="build"/>
     <target name="build-subprojects">
-        <ant antfile="build.xml" dir="${BuddySDK.location}" inheritAll="false" target="build-project">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
+        <ant antfile="build.xml" dir="${BuddySDK.location}" inheritAll="false" target="build-project"/>
     </target>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="${src.link}"/>
             <src path="${assets.link}"/>
-            <src path="${gen.link}"/>
             <src path="junit3Src"/>
             <classpath refid="Test under JRE.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
-        <copy todir="${ant.library.dir}">
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </copy>
-        <unzip dest="${ant.library.dir}">
-            <patternset includes="jdtCompilerAdapter.jar"/>
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </unzip>
-    </target>
-    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
-        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-        <antcall target="build"/>
-    </target>
     <target name="Test under JRE">
         <mkdir dir="${junit.output.dir}"/>
-        <junit dir="${workspace_loc:BuddySDK}" fork="yes" printsummary="withOutAndErr" haltonerror="on">
+        <junit dir="${workspace_loc:BuddySDK}" fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <!--<test name="com.buddy.sdk.unittests.AnalyticsUnitTests" todir="${junit.output.dir}"/>
+            <test name="com.buddy.sdk.unittests.AnalyticsUnitTests" todir="${junit.output.dir}"/>
             <test name="com.buddy.sdk.unittests.AppMetadataUnitTests" todir="${junit.output.dir}"/>
             <test name="com.buddy.sdk.unittests.ApplicationUnitTests" todir="${junit.output.dir}"/>
             <test name="com.buddy.sdk.unittests.BlobsUnitTests" todir="${junit.output.dir}"/>
@@ -125,11 +101,11 @@
             <test name="com.buddy.sdk.unittests.ServiceUnitTests" todir="${junit.output.dir}"/>
             <test name="com.buddy.sdk.unittests.SoundUnitTest" todir="${junit.output.dir}"/>
             <test name="com.buddy.sdk.unittests.StartupUnitTests" todir="${junit.output.dir}"/>
-            <test name="com.buddy.sdk.unittests.UserMetadataUnitTests" todir="${junit.output.dir}"/>-->
+            <test name="com.buddy.sdk.unittests.UserMetadataUnitTests" todir="${junit.output.dir}"/>
             <test name="com.buddy.sdk.unittests.UserUnitTests" todir="${junit.output.dir}"/>
-            <!--<test name="com.buddy.sdk.unittests.VideoUnitTests" todir="${junit.output.dir}"/>
+            <test name="com.buddy.sdk.unittests.VideoUnitTests" todir="${junit.output.dir}"/>
             <test name="com.buddy.sdk.unittests.VirtualAlbumUnitTests" todir="${junit.output.dir}"/>
-            <test name="com.buddy.sdk.unittests.WebWrapperTests" todir="${junit.output.dir}"/>-->
+            <test name="com.buddy.sdk.unittests.WebWrapperTests" todir="${junit.output.dir}"/>
             <classpath refid="Test under JRE.classpath"/>
         </junit>
     </target>
