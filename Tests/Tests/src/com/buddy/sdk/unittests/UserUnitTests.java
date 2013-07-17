@@ -18,6 +18,7 @@ package com.buddy.sdk.unittests;
 
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.buddy.sdk.AuthenticatedUser;
@@ -32,6 +33,7 @@ import com.buddy.sdk.responses.Response;
 import com.buddy.sdk.utils.Constants;
 import com.buddy.sdk.web.BuddyHttpClientFactory;
 
+@Ignore
 public class UserUnitTests extends BaseUnitTest {
     private static String testToken = "UT-0d499bf5-a408-4021-a477-8e2080373729";
 
@@ -44,11 +46,11 @@ public class UserUnitTests extends BaseUnitTest {
 
     @Test public void testCreateUser() {
         String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
+        //String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(testToken);
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
-        BuddyHttpClientFactory.addDummyResponse(jsonDeviceReportingResponse);
+        //BuddyHttpClientFactory.addDummyResponse(jsonDeviceReportingResponse);
 
         testClient.createUser(testCreateUserName, testCreateUserPassword, testCreateUserGender,
                 testCreateUserAge, testCreateUserEmail, testCreateUserStatusId,
@@ -66,11 +68,11 @@ public class UserUnitTests extends BaseUnitTest {
 
     @Test public void testCreateUserOverload() {
         String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
+        //String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(testToken);
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
-        BuddyHttpClientFactory.addDummyResponse(jsonDeviceReportingResponse);
+        //BuddyHttpClientFactory.addDummyResponse(jsonDeviceReportingResponse);
 
         testClient.createUser(testCreateUserName, testCreateUserPassword,
                 new OnCallback<Response<AuthenticatedUser>>() {
@@ -167,11 +169,11 @@ public class UserUnitTests extends BaseUnitTest {
     @Test public void testSocialLogin() {
     	String jsonValueSocial = readDataFromFileAsString("DataResponses/SocialLogin.json");
         String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
+        //String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
     	
     	BuddyHttpClientFactory.addDummyResponse(jsonValueSocial);
     	BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
-    	BuddyHttpClientFactory.addDummyResponse(jsonDeviceReportingResponse);
+    	//BuddyHttpClientFactory.addDummyResponse(jsonDeviceReportingResponse);
     
     	testClient.socialLogin("Facebook", "123456", "AccessToken", new OnCallback<Response<AuthenticatedUser>>(){
     		public void OnResponse(Response<AuthenticatedUser> response, Object state){
