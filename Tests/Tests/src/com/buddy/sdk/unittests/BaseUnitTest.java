@@ -194,7 +194,9 @@ public abstract class BaseUnitTest extends InstrumentationTestCase {
         String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
         String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
-        BuddyHttpClientFactory.addDummyResponse(jsonValue);
+    	BuddyHttpClientFactory.resetDummyOrderedResponses();
+
+    	BuddyHttpClientFactory.addDummyResponse(jsonValue);
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
         BuddyHttpClientFactory.addDummyResponse(jsonDeviceReportingResponse);
 

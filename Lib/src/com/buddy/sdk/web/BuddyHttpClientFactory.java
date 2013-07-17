@@ -35,7 +35,12 @@ public class BuddyHttpClientFactory {
 
     private static InputStream dummyWebResponse;
 	
-	public static void setDummyReponse(InputStream value){
+	
+    public static void resetDummyOrderedResponses() {
+    	dummyOrderedResponses = new ArrayList<String>();
+    }
+
+ 	public static void setDummyReponse(InputStream value){
 		dummyWebResponse = value;
 	}
     
