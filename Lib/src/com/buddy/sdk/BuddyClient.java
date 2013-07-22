@@ -189,6 +189,30 @@ public class BuddyClient {
     	return this.sounds;
     }
     
+    public void requestPasswordReset(String userName, final OnCallback<Response<Boolean>> callback)
+    {
+    	if(userName == null || userName.isEmpty())
+    		throw new IllegalArgumentException("userName can't be null or empty.");
+    
+    	if(this.userDataModel != null){
+    		this.userDataModel.requestPasswordReset(userName, callback);
+    	}
+    }
+    
+    public void resetPassword(String userName, String resetCode, String newPassword,
+    		final OnCallback<Response<Boolean>> callback){
+    	if(userName == null || userName.isEmpty())
+    		throw new IllegalArgumentException("userName can't be null or empty.");
+    	if(resetCode == null || resetCode.isEmpty())
+    		throw new IllegalArgumentException("resetCode can't be null or empty.");
+    	if(newPassword == null || newPassword.isEmpty())
+    		throw new IllegalArgumentException("newPassword can't be null or empty.");
+    		
+    	if(this.userDataModel != null){
+    		this.userDataModel.resetPassword(userName, resetCode, newPassword, callback);
+    	}
+    }
+    
     /**
      * Create a new Buddy user.
      * 

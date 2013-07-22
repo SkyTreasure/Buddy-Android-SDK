@@ -199,6 +199,51 @@ class UserDataModel extends BaseDataModel {
                 });
     }
 
+    public void requestPasswordReset(String userName, final OnCallback<Response<Boolean>> callback) {
+    	BuddyWebWrapper.UserAccount_Profile_RequestPasswordReset(client,
+    			userName, new OnResponseCallback() {
+    		
+    		@Override
+    		public void OnResponse(BuddyCallbackParams response, Object state) {
+    			Response<Boolean> booleanResponse = new Response<Boolean>();
+    			if(response != null) {
+    				if(response.completed){
+    					booleanResponse.setResult(response.response.equals("1"));
+    				} else {
+    					booleanResponse.setThrowable(response.exception);
+    				}
+    			} else {
+    				booleanResponse.setThrowable(new ServiceUnknownErrorException());
+    			}
+    			callback.OnResponse(booleanResponse, null);
+    		}
+    	});
+    	
+    	
+    }
+    
+    public void resetPassword(String userName, String resetCode, String newPassword,
+    		final OnCallback<Response<Boolean>> callback){
+    	BuddyWebWrapper.UserAccount_Profile_ResetPassword(client, userName, resetCode, newPassword,
+    			new OnResponseCallback() {
+    		
+    		@Override
+    		public void OnResponse(BuddyCallbackParams response, Object state){
+    			Response<Boolean> booleanResponse = new Response<Boolean>();
+    			if(response != null){
+    				if(response.completed){
+    					booleanResponse.setResult(response.response.equals("1"));
+    				} else {
+    					booleanResponse.setThrowable(response.exception);
+    				}
+    			} else {
+    				booleanResponse.setThrowable(new ServiceUnknownErrorException());
+    			}
+    			callback.OnResponse(booleanResponse, null);
+    		}
+    	});    	
+    }
+    
     public void checkIfUserNameExists(String userName, Object state,
             final OnCallback<Response<Boolean>> callback) {
         

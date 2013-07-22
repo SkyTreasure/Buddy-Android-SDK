@@ -42,9 +42,38 @@ public class UserUnitTests extends BaseUnitTest {
         testClient = new BuddyClient(applicationName, applicationPassword, this.getUnitTestContext(), "0.1", true);
     }
 
-    @Test public void testCreateUser() {
-        String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
+
+    public void testRequestPasswordReset() {
+    	String jsonValueRequest = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    	
+    	BuddyHttpClientFactory.addDummyResponse(jsonValueRequest);
+    	
+    	testClient.requestPasswordReset(testCreateUserName, new OnCallback<Response<Boolean>>() {
+    		public void OnResponse(Response<Boolean> response, Object state) {
+    			assertNotNull(response);
+    			
+				assertTrue(response.getResult());
+    		}
+    	});
+    }
+    
+    public void testResetPassword() {
+    	String jsonValueRequest = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    	
+    	BuddyHttpClientFactory.addDummyResponse(jsonValueRequest);
+    	
+    	testClient.resetPassword(testCreateUserName, "sdfds", "NewPassword", new OnCallback<Response<Boolean>>() {
+    		public void OnResponse(Response<Boolean> response, Object state) {
+    			assertNotNull(response);
+    		
+    			assertTrue(response.getResult());
+    		}
+    	});
+    }
+    
+    public void testCreateUser() {
+        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
+        String jsonDeviceReportingResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(testToken);
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);

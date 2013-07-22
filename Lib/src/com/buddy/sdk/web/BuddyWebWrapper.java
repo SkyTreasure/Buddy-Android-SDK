@@ -2925,6 +2925,29 @@ public class BuddyWebWrapper {
     	MakePostReturnStream("Sound_Sounds_GetSound", params, callback);
     }
     
+    public static void UserAccount_Profile_RequestPasswordReset(BuddyClient client, String userName, final OnResponseCallback callback)
+    {
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	
+    	addAuth(params, client);
+    	params.put("UserName", userName);
+    	
+    	MakeRequest("UserAccount_Profile_RequestPasswordReset", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void UserAccount_Profile_ResetPassword(BuddyClient client, String userName, String resetCode, String newPassword,
+    		final OnResponseCallback callback)
+    {
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	
+    	addAuth(params, client);
+    	params.put("UserName", userName);
+    	params.put("ResetCode", resetCode);
+    	params.put("NewPassword", newPassword);
+    	
+    	MakeRequest("UserAccount_Profile_ResetPassword", params, HttpRequestType.HttpGet, callback);
+    }
+    
     private static void addAuth(Map<String, Object> params, BuddyClient client, AuthenticatedUser user){
     	addAuth(params, client);
     	addToken(params, user);
