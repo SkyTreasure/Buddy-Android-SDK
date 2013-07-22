@@ -32,7 +32,7 @@ import com.buddy.sdk.responses.Response;
 import com.buddy.sdk.utils.Constants;
 import com.buddy.sdk.web.BuddyHttpClientFactory;
 
-public class UserUnitTests extends BaseUnitTest {
+	public class UserUnitTests extends BaseUnitTest {
     private static String testToken = "UT-0d499bf5-a408-4021-a477-8e2080373729";
 
     @Override
@@ -43,8 +43,8 @@ public class UserUnitTests extends BaseUnitTest {
     }
 
 
-    public void testRequestPasswordReset() {
-    	String jsonValueRequest = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testRequestPasswordReset() {
+    	String jsonValueRequest = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
     	
     	BuddyHttpClientFactory.addDummyResponse(jsonValueRequest);
     	
@@ -57,8 +57,8 @@ public class UserUnitTests extends BaseUnitTest {
     	});
     }
     
-    public void testResetPassword() {
-    	String jsonValueRequest = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testResetPassword() {
+    	String jsonValueRequest = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
     	
     	BuddyHttpClientFactory.addDummyResponse(jsonValueRequest);
     	
@@ -71,9 +71,9 @@ public class UserUnitTests extends BaseUnitTest {
     	});
     }
     
-    public void testCreateUser() {
-        String jsonValueUser = readDataFromFile("DataResponses/validUserResponse.json");
-        String jsonDeviceReportingResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testCreateUser() {
+        String jsonValueUser = readDataFromFileAsString("DataResponses/validUserResponse.json");
+        String jsonDeviceReportingResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
 
         BuddyHttpClientFactory.addDummyResponse(testToken);
         BuddyHttpClientFactory.addDummyResponse(jsonValueUser);
