@@ -67,7 +67,7 @@ public class Constants {
             "GroupNameCannotBeEmpty", "GroupSecurityCanOnlyBy0or1", "GroupAlreadyExists",
             "GroupChatIDEmpty", "GroupChatNotFound", "GroupOwnerSecurityError",
             "ApplicationAPICallDisabledByDeveloper", "FileLargerThanMaxSize", "NoEmailSetForUser", 
-            "PasswordResetEmailNotConfigured", "PasswordResetCodeInvalid");
+            "PasswordResetNotConfigured", "PasswordResetInvalidResetCode", "PasswordResetTooManyRequests");
 
     public static List<String> getErrorList() {
         return validErrors;
