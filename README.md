@@ -22,6 +22,14 @@ For developers the Buddy Platform offers turnkey support for features like the f
 * *Commerce* - Offer items for in-app purchase via Facebook Commerce.
 * *And more* - Checkout the rest of the offering at [buddy.com/developers](http://buddy.com/developers/).
 
+## Getting Started
+
+1. Import the Buddy-Android-SDK/src directory into your Eclipse workspace
+2. Build the BuddySDK project
+3. Under the bin folder, you'll find buddysdk.jar
+4. Create a new Android project
+5. Drag buddysdk.jar and gson-2.2.2.jar into the "libs" folder of your Android project.
+6. Try the code below!
 
 ## How It works
 
@@ -37,8 +45,8 @@ Below is some code showing the creation of a user, then uploading a profile phot
     BuddyClient buddyClient = new BuddyClient(API_LOGIN, API_PASSWORD, this.getApplicationContext());
 
     // login the user
-    buddyClient.login(sUsername, sUserPassword, null, new Callbacks.OnCallback>() {
-      public void OnResponse(Response response, Object state) {
+    buddyClient.login(sUsername, sUserPassword, null, new OnCallback<Response<AuthenticatedUser>>() {
+      public void OnResponse(Response<AuthenticatedUser> response, Object state) {
             AuthenticatedUser user = response.getResult();
             byte[] photoBytes = GetSomePhotoBytes();
 
