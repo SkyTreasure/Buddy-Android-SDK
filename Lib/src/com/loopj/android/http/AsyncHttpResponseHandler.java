@@ -108,6 +108,16 @@ public class AsyncHttpResponseHandler {
      */
     public void onSuccess(String content) {}
 
+    
+    /**
+     * Fired when a request returns successfully, override to handle in your own code
+     * @param content the HTTP response from the server
+     */
+    public boolean onSuccess(HttpResponse content) {
+    	return false;    	
+    }
+    
+    
     /**
      * Fired when a request returns successfully, override to handle in your own code
      * @param statusCode the status code of the response
@@ -219,6 +229,12 @@ public class AsyncHttpResponseHandler {
     // Interface to AsyncHttpRequest
     void sendResponseMessage(HttpResponse response) {
         StatusLine status = response.getStatusLine();
+        
+        if(status.getStatusCode() < 300 && onSuccess(response))
+        {        	
+        	return;
+        }
+        
         String responseBody = null;
         try {
             HttpEntity entity = null;
