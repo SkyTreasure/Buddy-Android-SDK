@@ -74,7 +74,6 @@ public class BuddyWebWrapper {
      		if (value instanceof BuddyFile)
      		{
      			BuddyFile file = (BuddyFile)value;
-     			
      			requestParams.put(key, file.data, "blobfile", file.contentType);
      		}else{
      			requestParams.put(key, value.toString());
@@ -88,33 +87,13 @@ public class BuddyWebWrapper {
              }
              
              @Override
-             public boolean onSuccess(HttpResponse content)
-             {
-            	 Header contentType = content.getEntity().getContentType();
-            	 
-            	 String mimeType = contentType.getValue().split(";")[0].trim();
-            	 
-            	 if(mimeType.equals("text/plain") || mimeType.equals("application/json"))
-            	 {
-            		 return false;            		 
-            	 }
-            	 
-            	 InputStream stream = null;
-				try {
-					stream = content.getEntity().getContent();
-				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            	 
+             public boolean onSuccess(InputStream content)
+             {           	 
             	 Log.d(TAG + "-POST SUCCESS", "Stream");
                  if (callback != null) {
                      BuddyCallbackParams callbackParams = null;
                      callbackParams = new BuddyCallbackParams();
-                     callbackParams.responseObj = stream;
+                     callbackParams.responseObj = content;
 
                      callback.OnResponse(callbackParams, null);
                  }
