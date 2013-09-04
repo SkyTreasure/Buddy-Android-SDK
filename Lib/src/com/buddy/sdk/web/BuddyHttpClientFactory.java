@@ -73,6 +73,7 @@ public class BuddyHttpClientFactory {
     private static AsyncHttpClient createHttpClient() {
         if (isUnitTestMode) {
             client = new TestHttpClient();
+            ((TestHttpClient)client).setDummyResponse(dummyWebResponse);
         } else {
             client = new AsyncHttpClient();
             
