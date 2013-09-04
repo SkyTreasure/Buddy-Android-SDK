@@ -33,7 +33,7 @@ public class BuddyHttpClientFactory {
 
     private static ArrayList<String> dummyOrderedResponses = new ArrayList<String>();
 
-    private static InputStream dummyWebResponse;
+    private static InputStream dummyWebResponse = null;
 	
 	
     public static void resetDummyOrderedResponses() {
@@ -74,6 +74,7 @@ public class BuddyHttpClientFactory {
         if (isUnitTestMode) {
             client = new TestHttpClient();
             ((TestHttpClient)client).setDummyResponse(dummyWebResponse);
+            dummyWebResponse = null;
         } else {
             client = new AsyncHttpClient();
             
