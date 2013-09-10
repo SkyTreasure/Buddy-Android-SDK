@@ -16,31 +16,24 @@
 
 package com.buddy.sdk.web;
 
-import java.io.BufferedInputStream;
-import java.io.DataOutputStream;
+
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.util.Log;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import com.buddy.sdk.AuthenticatedUser;
 import com.buddy.sdk.BuddyCallbackParams;
@@ -48,8 +41,10 @@ import com.buddy.sdk.BuddyClient;
 import com.buddy.sdk.BuddyFile;
 import com.buddy.sdk.Callbacks.OnResponseCallback;
 import com.buddy.sdk.Sounds.SoundQuality;
-import com.buddy.sdk.responses.Response;
 import com.buddy.sdk.utils.Utils;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 public class BuddyWebWrapper {
     private static String TAG = "BuddySDK";
@@ -57,305 +52,109 @@ public class BuddyWebWrapper {
     private static String endpointUrl = "webservice.buddyplatform.com/Service/v1/BuddyService.ashx";
     
     private enum HttpRequestType{HttpGet, HttpPostUrlEncoded, HttpPostMultipartForm}
-    private static String BuildUrl(String apiCall, Map<String, Object> params){
-    	String url = urlType + endpointUrl + "?" + apiCall;
-    	
-    	Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
-    	while(it.hasNext())
-    	{
-    		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
-    		if(pair.getValue().getClass().equals(BuddyFile.class))
-    		{
-    			//Ignore
-    		}
-    		else{
-    			String v = null;
-    			try{
-    				v = URLEncoder.encode(pair.getValue().toString(), "utf-8");
-    			}catch(UnsupportedEncodingException ex){}
-    			url = url.concat("&" + pair.getKey() + "=" + v);
-    		}
-    	}
-    	return url;
+   
+    public static void MakePostRequest(String apiCall, List<NameValuePair> params, Object state, final OnResponseCallback callback){
+    	  MakeRequest(apiCall, params, HttpRequestType.HttpPostMultipartForm, callback);
     }
-    
-    private static List<NameValuePair> MapToList(Map<String, Object> params){
-    	List<NameValuePair> pairs = new LinkedList<NameValuePair>();
-    	
-    	Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
-    	while(it.hasNext())
-    	{
-    		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
-    		pairs.add(new BasicNameValuePair(pair.getKey(), pair.getValue().toString()));
-    	}
-    	return pairs;
-    }
-    
-    public static void MakePostReturnStream(String apiCall, Map<String, Object> params, final OnResponseCallback callback){
-    	InputStream in = null;
-    	int response = -1;
-    	URL url = null;
-    	try{
-    		url = new URL(BuildUrl(apiCall, params));
-    	}catch(MalformedURLException ex){}    
-    	
-		try {
-			HttpURLConnection hcn = BuddyHttpClientFactory.createHttpURLConnection(url);
-		    hcn.setAllowUserInteraction(false);
-		    hcn.setInstanceFollowRedirects(true);
-		    hcn.setRequestMethod("GET");
-		    hcn.setInstanceFollowRedirects(true);
-		    hcn.connect();
-		
-		    response = hcn.getResponseCode();
-		    //if we're going from http to https it won't redirect automagically, we have to act manually
-		    if (response == HttpURLConnection.HTTP_MOVED_TEMP) {
-		    	String newUrl = hcn.getHeaderField("Location");
-		    	hcn = (HttpURLConnection) new URL(newUrl).openConnection();
-		    	hcn.setRequestMethod("GET");
-		    	hcn.connect();
-		    	in = hcn.getInputStream();
-	    	//otherwise we can just grab the stream
-	    	}else if (response == HttpURLConnection.HTTP_OK){
-	    		in = hcn.getInputStream();
-	    	}
-		}
-		catch (Exception ex) {          
-		}
-		BuddyCallbackParams callbackParams = new BuddyCallbackParams();  
-		callbackParams.responseObj = in;
-		    
-		callback.OnResponse(callbackParams, null); 
-    }
-    
-    private static Response<String> SendFileMultipart(String targetURL, InputStream is, String contentType, String field) {    	  
-    	  Response<String> result = new Response<String>();
-    	  
-    	  String BOUNDARY = "==================================";
-    	  HttpURLConnection conn = null;
-    	  byte[] buf = new byte[1024];
-    	  int responseCode = -1; // Keeps track of any response codes we might get.
-    	   
-    	  try {
-    	   // These strings are sent in the request body. They provide information about the file being uploaded
-    	   String contentDisposition = "Content-Disposition: form-data; name=\""+field+"\"; filename=\"" + field + "\"";
-    	   contentType = "Content-Type: " + contentType;
-    	 
-    	   // This is the standard format for a multipart request header
-    	   String requestHeader = String.format("--%s\n%s\n%s\n\n", BOUNDARY, contentDisposition, contentType);
-    	   
-    	   // This is the standard format for a multipart request footer
-    	   String requestFooter = String.format("\n--%s--", BOUNDARY);
-    	       	     	 
-    	   // Make a connect to the server
-    	   URL url = new URL(targetURL);
-    	   conn = (HttpURLConnection) BuddyHttpClientFactory.createHttpURLConnection(url);
-    	   
-    	   conn.setDoOutput(true);
-    	   conn.setDoInput(true);
-    	   conn.setUseCaches(false);
-    	   conn.setRequestMethod("POST");
-    	   conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + BOUNDARY);
-    	 
-    	   // Send the body
-    	   DataOutputStream dataOS = new DataOutputStream(conn.getOutputStream());
-    	   dataOS.writeBytes(requestHeader.toString());
-    	   BufferedInputStream b = new BufferedInputStream(is);
-    	   
-    	   try {
-    		int readNum;
-    	    while((readNum = b.read(buf)) != -1) {
-    	     dataOS.write(buf, 0, readNum); //no doubt here is 0
-    	    }
-    	   } catch (IOException ex) {
-    	    throw new Exception(String.format("Error reading file!"));
-    	   }
-    	 
-    	   dataOS.writeBytes(requestFooter.toString());
-    	   dataOS.flush();
-    	   dataOS.close();
-    	 
-    	   // Ensure we got the HTTP 200 response code
-    	   responseCode = conn.getResponseCode();
-    	   
-    	   Scanner s = new Scanner(conn.getInputStream()).useDelimiter("\\A");
-    	   String responseMsg = s.hasNext() ? s.next() : "";
-    	   result.setResult(responseMsg);
-    	 
-    	   if (responseCode != 200) {
-    	    throw new Exception(String.format("Received the response code %d from the URL %s %s", responseCode, url, responseMsg));
-    	   } else {
-    	   }
-    	  }catch (Exception e){
-    	    
-    	   // I am not interested on exactly why this failed, only that it has.
-    	   // This can be extended by specific Exception handling.
-    	    
-    	   result.setErrorMessage(e.getMessage());// try to salvage the response code.. probably -1 at this point.
-    	  } finally {
-    	   if (conn != null) {
-    	    conn.disconnect();
-    	   }
-    	  }
-    	 
-    	  return result;
-	}
-    
-    public static void MakePostMultiRequest(String apiCall, Map<String, Object> params,
-    		final OnResponseCallback callback){
-    	    	
-    	String url = BuildUrl(apiCall, params);
-    	
-    	BuddyFile file = null;
-    	String fileName = null;
-    	
-    	Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
-    	while(it.hasNext())
-    	{
-    		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
-    		if(pair.getValue().getClass().equals(BuddyFile.class))
-    		{
-    			file = (BuddyFile)pair.getValue();
-    			fileName = pair.getKey();
-    		}else{}
-    	}
-    	
-    	Response<String> res = SendFileMultipart(url, file.data, file.contentType, fileName);
-    	
-    	BuddyCallbackParams response = new BuddyCallbackParams();
-    	response.response = res.getResult();
-    	
-    	callback.OnResponse(response, null);
-    }
-    
-    public static void MakePostRequest(String apiCall, Map<String, Object> params, final OnResponseCallback callback)
-    {    	
-    	List<NameValuePair> pairs = MapToList(params);
-    	MakePostRequest(apiCall, pairs, null, callback);
-    }
-    
-    public static void MakeGetRequest(String apiCall, Map<String, Object> params, final OnResponseCallback callback){
-    	List<NameValuePair> pairs = MapToList(params);
-    	MakeRequest(apiCall, pairs, null, callback);
-    }
-    
-    public static void MakePostRequest(String apiCall, List<NameValuePair> params,
-            final Object state, final OnResponseCallback callback) {
-        UrlEncodedFormEntity entity = null;
-        try {
-            entity = new UrlEncodedFormEntity(params);
-        } catch (UnsupportedEncodingException e1) {
-            BuddyCallbackParams callbackParams = new BuddyCallbackParams(e1, "");
-            callback.OnResponse(callbackParams, state);
-        }
-
-        String url = urlType + endpointUrl + "?" + apiCall;
-
-        AsyncHttpClient client = BuddyHttpClientFactory.getHttpClient();
-
-        client.post(null, url, entity, "application/x-www-form-urlencoded",
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onStart() {
-                        Log.d(TAG, "onStart");
-                    }
-
-                    @Override
-                    public void onSuccess(String success) {
-                        Log.d(TAG + "-POST SUCCESS", success);
-                        if (callback != null) {
-                            BuddyCallbackParams callbackParams = null;
-                            Exception exception = Utils.ProcessStandardErrors(success);
-                            if (exception == null) {
-                                callbackParams = new BuddyCallbackParams();
-                                callbackParams.response = success;
-                            } else {
-                                callbackParams = new BuddyCallbackParams(exception, success);
-                            }
-                            callback.OnResponse(callbackParams, state);
-                        }
-                        Log.d(TAG, "onSuccess");
-                    }
-
-                    @Override
-                    public void onFailure(Throwable e, String response) {
-                        if (callback != null) {
-                            BuddyCallbackParams callbackParams = new BuddyCallbackParams(e,
-                                    response);
-                            callback.OnResponse(callbackParams, state);
-                        }
-                        Log.d(TAG, "onFailure");
-                    }
-
-                });
-    }
-
     public static void MakeRequest(String apiCall, Map<String, Object> params, HttpRequestType type, final OnResponseCallback callback){
-    	Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
-    	while(it.hasNext())
-    	{
-    		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
-    		if(pair.getValue().getClass().equals(BuddyFile.class)){
-    			type = HttpRequestType.HttpPostMultipartForm;
-    		}
-    	}
+    	
+    	 String url = urlType + endpointUrl + "?" + apiCall;
+    	 
+    	 RequestParams requestParams = new RequestParams();
+    	 
+    	 
+    	 Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
+     	 while(it.hasNext())
+     	 {
+     		Map.Entry<String, Object> pair = (Map.Entry<String, Object>)it.next();
+     		Object value = pair.getValue();
+     		String key = pair.getKey();
+     		if (value==null) continue;
+     		
+     		if (value instanceof BuddyFile)
+     		{
+     			BuddyFile file = (BuddyFile)value;
+     			requestParams.put(key, file.data, "blobfile", file.contentType);
+     		}else{
+     			requestParams.put(key, value.toString());
+     		}
+     	 }
+
+     	 AsyncHttpResponseHandler handler =  new AsyncHttpResponseHandler() {
+             @Override
+             public void onStart() {
+                 Log.d(TAG, "onStart");
+             }
+             
+             @Override
+             public boolean onSuccess(InputStream content)
+             {           	 
+            	 Log.d(TAG + "-POST SUCCESS", "Stream");
+                 if (callback != null) {
+                     BuddyCallbackParams callbackParams = null;
+                     callbackParams = new BuddyCallbackParams();
+                     callbackParams.responseObj = content;
+
+                     callback.OnResponse(callbackParams, null);
+                 }
+                 Log.d(TAG, "onSuccess");
+            	 return true;
+             }
+             
+             @Override
+             public void onSuccess(String success) {
+                 Log.d(TAG + "-POST SUCCESS", success);
+                 if (callback != null) {
+                     BuddyCallbackParams callbackParams = null;
+                     Exception exception = Utils.ProcessStandardErrors(success);
+                     if (exception == null) {
+                         callbackParams = new BuddyCallbackParams();
+                         callbackParams.response = success;
+                     } else {
+                         callbackParams = new BuddyCallbackParams(exception, success);
+                     }
+                     callback.OnResponse(callbackParams, null);
+                 }
+                 Log.d(TAG, "onSuccess");
+             }
+
+             @Override
+             public void onFailure(Throwable e, String response) {
+                 if (callback != null) {
+                     BuddyCallbackParams callbackParams = new BuddyCallbackParams(e,
+                             response);
+                     callback.OnResponse(callbackParams, null);
+                 }
+                 Log.d(TAG, "onFailure");
+             }
+
+         };
+         
+         AsyncHttpClient client = BuddyHttpClientFactory.getHttpClient();
+         
+         
     	
     	switch(type)
     	{
     		case HttpGet:
-    			MakeGetRequest(apiCall, params, callback);
+    			client.get(null,  url, requestParams, handler);
     			break;
     		case HttpPostUrlEncoded:
-    			MakePostRequest(apiCall, params, callback);
-    			break;
     		case HttpPostMultipartForm:
-    			MakePostMultiRequest(apiCall, params, callback);
+    			client.post(null,  url, requestParams, handler);
+    			break;
     	}
     }
     
     public static void MakeRequest(String apiCall, List<NameValuePair> params, final Object state,
             final OnResponseCallback callback) {
-        RequestParams reqParams = new RequestParams();
+        Map<String,Object> map = new HashMap<String,Object>();
+        
         for (NameValuePair pair : params) {
-            reqParams.put(pair.getName(), pair.getValue());
+            map.put(pair.getName(), pair.getValue());
         }
-        String url = urlType + endpointUrl + "?" + apiCall;
-
-        AsyncHttpClient client = BuddyHttpClientFactory.getHttpClient();
-
-        client.get(null, url, reqParams, new AsyncHttpResponseHandler() {
-            @Override
-            public void onStart() {
-                Log.d(TAG, "onStart");
-            }
-
-            @Override
-            public void onSuccess(String success) {
-                Log.d(TAG + "-POST SUCCESS", success);
-                if (callback != null) {
-                    BuddyCallbackParams callbackParams = null;
-                    Exception exception = Utils.ProcessStandardErrors(success);
-                    if (exception == null) {
-                        callbackParams = new BuddyCallbackParams();
-                        callbackParams.response = success;
-                    } else {
-                        callbackParams = new BuddyCallbackParams(exception, success);
-                    }
-                    callback.OnResponse(callbackParams, state);
-                }
-                Log.d(TAG, "onSuccess");
-            }
-
-            @Override
-            public void onFailure(Throwable e, String response) {
-                if (callback != null) {
-                    BuddyCallbackParams callbackParams = new BuddyCallbackParams(e, response);
-                    callback.OnResponse(callbackParams, state);
-                }
-                Log.d(TAG, "onFailure");
-            }
-
-        });
+       
+        MakeRequest(apiCall, map,HttpRequestType.HttpPostMultipartForm, callback);
     }
 
     public static void UserAccount_Defines_GetStatusValues(String BuddyApplicationName,
@@ -2803,7 +2602,7 @@ public class BuddyWebWrapper {
     	addAuth(params, client, user);
     	params.put("BlobID", blobID);
     	
-		MakePostReturnStream("Blobs_Blob_GetBlob", params, callback);
+		MakeRequest("Blobs_Blob_GetBlob", params, HttpRequestType.HttpGet, callback);
     }
     
     public static void Videos_Video_DeleteVideo(BuddyClient client, AuthenticatedUser user, long videoID, 
@@ -2912,7 +2711,7 @@ public class BuddyWebWrapper {
     	params.put("VideoID", videoID);
     	
     	
-		MakePostReturnStream("Videos_Video_GetVideo", params, callback);
+		MakeRequest("Videos_Video_GetVideo", params, HttpRequestType.HttpGet, callback);
     }
     
     public static void Sound_Sounds_GetSound(BuddyClient client, String soundName, SoundQuality quality, final OnResponseCallback callback){
@@ -2922,7 +2721,30 @@ public class BuddyWebWrapper {
     	params.put("SoundName", soundName);
     	params.put("Quality", quality.name());
     	
-    	MakePostReturnStream("Sound_Sounds_GetSound", params, callback);
+    	MakeRequest("Sound_Sounds_GetSound", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void UserAccount_Profile_RequestPasswordReset(BuddyClient client, String userName, final OnResponseCallback callback)
+    {
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	
+    	addAuth(params, client);
+    	params.put("UserName", userName);
+    	
+    	MakeRequest("UserAccount_Profile_RequestPasswordReset", params, HttpRequestType.HttpGet, callback);
+    }
+    
+    public static void UserAccount_Profile_ResetPassword(BuddyClient client, String userName, String resetCode, String newPassword,
+    		final OnResponseCallback callback)
+    {
+    	Map<String, Object> params = new HashMap<String, Object>();
+    	
+    	addAuth(params, client);
+    	params.put("UserName", userName);
+    	params.put("ResetCode", resetCode);
+    	params.put("NewPassword", newPassword);
+    	
+    	MakeRequest("UserAccount_Profile_ResetPassword", params, HttpRequestType.HttpGet, callback);
     }
     
     private static void addAuth(Map<String, Object> params, BuddyClient client, AuthenticatedUser user){

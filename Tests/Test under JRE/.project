@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>Test under JRE</name>
+	<comment></comment>
+	<projects>
+		<project>BuddySDK</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>assets</name>
+			<type>2</type>
+			<locationURI>BUDDYSDK_TESTS/assets</locationURI>
+		</link>
+		<link>
+			<name>gen</name>
+			<type>2</type>
+			<locationURI>BUDDYSDK_TESTS/gen</locationURI>
+		</link>
+		<link>
+			<name>src</name>
+			<type>2</type>
+			<locationURI>BUDDYSDK_TESTS/src</locationURI>
+		</link>
+	</linkedResources>
+	<variableList>
+		<variable>
+			<name>BUDDYSDK_TESTS</name>
+			<value>$%7BPARENT-1-PROJECT_LOC%7D/Tests</value>
+		</variable>
+	</variableList>
+</projectDescription>

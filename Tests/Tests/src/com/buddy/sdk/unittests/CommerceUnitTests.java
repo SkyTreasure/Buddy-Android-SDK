@@ -2,6 +2,8 @@ package com.buddy.sdk.unittests;
 
 import java.util.List;
 
+import org.junit.Test;
+
 import com.buddy.sdk.Receipt;
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.StoreItem;
@@ -11,14 +13,14 @@ import com.buddy.sdk.web.BuddyHttpClientFactory;
 
 public class CommerceUnitTests extends BaseUnitTest {
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
 
         createAuthenticatedUser();
     }
 
-    public void testReceiptSave() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testReceiptSave() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getCommerce().saveReceipt("1.23", 4, 5, "TestStoreName",
@@ -30,8 +32,8 @@ public class CommerceUnitTests extends BaseUnitTest {
                 });
     }
     
-    public void testReceiptGetReceiptsForUser() {
-        String jsonResponse = readDataFromFile("DataResponses/CommerceUnitTests-GetReceipt.json");
+    @Test public void testReceiptGetReceiptsForUser() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/CommerceUnitTests-GetReceipt.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getCommerce().getReceiptsForUser(null, null, new OnCallback<ListResponse<Receipt>>() {
@@ -46,8 +48,8 @@ public class CommerceUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testReceiptGetReceiptsForUserAndTransactionId() {
-        String jsonResponse = readDataFromFile("DataResponses/CommerceUnitTests-GetReceiptWithTransactionID.json");
+    @Test public void testReceiptGetReceiptsForUserAndTransactionId() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/CommerceUnitTests-GetReceiptWithTransactionID.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         String customTransactionID = "42";
@@ -64,8 +66,8 @@ public class CommerceUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testStoreGetAllItems() {
-        String jsonResponse = readDataFromFile("DataResponses/CommerceUnitTests-GetAllItems.json");
+    @Test public void testStoreGetAllItems() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/CommerceUnitTests-GetAllItems.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getCommerce().getAllStoreItems(null, new OnCallback<ListResponse<StoreItem>>() {
@@ -81,8 +83,8 @@ public class CommerceUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testStoreGetActiveItems() {
-        String jsonResponse = readDataFromFile("DataResponses/CommerceUnitTests-GetActiveItems.json");
+    @Test public void testStoreGetActiveItems() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/CommerceUnitTests-GetActiveItems.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getCommerce().getActiveStoreItems(null, new OnCallback<ListResponse<StoreItem>>() {
@@ -98,8 +100,8 @@ public class CommerceUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testStoreGetFreeItems() {
-        String jsonResponse = readDataFromFile("DataResponses/CommerceUnitTests-GetFreeItems.json");
+    @Test public void testStoreGetFreeItems() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/CommerceUnitTests-GetFreeItems.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getCommerce().getFreeStoreItems(null, new OnCallback<ListResponse<StoreItem>>() {

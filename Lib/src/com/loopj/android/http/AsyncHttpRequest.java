@@ -19,15 +19,23 @@
 package com.loopj.android.http;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ConnectException;
+import java.net.HttpURLConnection;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.net.URI;
+import java.net.URL;
 import java.net.UnknownHostException;
 
+import javax.net.ssl.SSLHandshakeException;
+
 import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolException;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.impl.client.DefaultRedirectHandler;
 import org.apache.http.protocol.HttpContext;
 
 class AsyncHttpRequest implements Runnable {
@@ -37,12 +45,25 @@ class AsyncHttpRequest implements Runnable {
     private final AsyncHttpResponseHandler responseHandler;
     private boolean isBinaryRequest;
     private int executionCount;
-
+    private String redirectURL;
+    
     public AsyncHttpRequest(AbstractHttpClient client, HttpContext context, HttpUriRequest request, AsyncHttpResponseHandler responseHandler) {
         this.client = client;
         this.context = context;
         this.request = request;
         this.responseHandler = responseHandler;
+        
+        this.client.setRedirectHandler(new DefaultRedirectHandler(){
+        	@Override
+        	public URI getLocationURI(HttpResponse response,
+                    HttpContext context) throws ProtocolException {
+			
+				//Capture the Location header here
+				redirectURL = response.getHeaders("Location")[0].getValue();
+				
+				return super.getLocationURI(response,context);
+			}
+        });
         if(responseHandler instanceof BinaryHttpResponseHandler) {
             this.isBinaryRequest = true;
         }
@@ -73,7 +94,35 @@ class AsyncHttpRequest implements Runnable {
 
     private void makeRequest() throws IOException {
         if(!Thread.currentThread().isInterrupted()) {
-            HttpResponse response = client.execute(request, context);
+        	HttpResponse response = null;
+        	try{
+        		response = client.execute(request, context);
+        	}
+        	catch(SSLHandshakeException e)
+        	{
+        		//There is some bug which causes the redirect to s3 to throw an SSLHandshakeException.
+        		//Our solution for now is to find the URL we tried to redirect to and manually call it.
+        		if(this.redirectURL != null)
+        		{
+        				URL uri = new URL(this.redirectURL);
+        				
+            			HttpURLConnection connection = (HttpURLConnection)uri.openConnection();
+            			
+    					connection.setRequestMethod("GET");
+        		                  
+        		        try {
+        					connection.connect();
+        				} catch (IOException ex) {
+        					// TODO Auto-generated catch block
+        				}
+        				
+        		        try {
+        					InputStream stream = connection.getInputStream();
+        					responseHandler.onSuccess(stream);
+        				} catch (IOException ex) {
+        				}
+        		}
+        	}
             if(!Thread.currentThread().isInterrupted()) {
                 if(responseHandler != null) {
                     responseHandler.sendResponseMessage(response);

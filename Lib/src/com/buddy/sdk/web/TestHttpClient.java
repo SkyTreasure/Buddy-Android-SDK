@@ -17,6 +17,8 @@
 package com.buddy.sdk.web;
 
 
+import java.io.InputStream;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -30,9 +32,15 @@ import com.loopj.android.http.RequestParams;
 
 public class TestHttpClient extends AsyncHttpClient {
     private String dummyWebResponse;
+    private InputStream dummyStream;
 
     public void setDummyResponse(String value) {
         this.dummyWebResponse = value;
+    }
+    
+    public void setDummyResponse(InputStream stream)
+    {
+    	this.dummyStream = stream;    	
     }
 
     public void post(Context context, String url, HttpEntity entity, String contentType,
@@ -48,8 +56,15 @@ public class TestHttpClient extends AsyncHttpClient {
     private void sendRequest(DefaultHttpClient client, HttpContext httpContext,
             HttpUriRequest uriRequest, String contentType,
             AsyncHttpResponseHandler responseHandler, Context context) {
-        responseHandler.onSuccess(dummyWebResponse);
-        dummyWebResponse = "";
+    	if(dummyStream != null)
+    	{
+    		responseHandler.onSuccess(dummyStream);
+    		dummyStream = null;
+    	}else
+    	{
+            responseHandler.onSuccess(dummyWebResponse);
+            dummyWebResponse = "";
+    	}
     }
 }
 

@@ -2,6 +2,9 @@
 package com.buddy.sdk.unittests;
 
 import java.util.List;
+
+import org.junit.Test;
+
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.User;
 import com.buddy.sdk.responses.ListResponse;
@@ -11,12 +14,12 @@ import com.buddy.sdk.web.BuddyHttpClientFactory;
 
 public class FriendsUnitTests extends BaseUnitTest {
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         createAuthenticatedUserAnd2ndUser();
     }
 
-    public void testFriendsRequestAccept() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testFriendsRequestAccept() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getFriends().getRequests()
@@ -29,8 +32,8 @@ public class FriendsUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testFriendsRequestAdd() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testFriendsRequestAdd() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getFriends().getRequests()
@@ -43,8 +46,8 @@ public class FriendsUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testFriendsRequestDeny() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testFriendsRequestDeny() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getFriends().getRequests()
@@ -57,8 +60,8 @@ public class FriendsUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testFriendsRequestGet() {
-        String jsonResponse = readDataFromFile("DataResponses/FriendsUnitTests-GetAllRequests.json");
+    @Test public void testFriendsRequestGet() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/FriendsUnitTests-GetAllRequests.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getFriends().getRequests()
@@ -76,8 +79,8 @@ public class FriendsUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testFriendsGetList() {
-        String jsonResponse = readDataFromFile("DataResponses/FriendsUnitTests-GetAllFriends.json");
+    @Test public void testFriendsGetList() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/FriendsUnitTests-GetAllFriends.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getFriends().getAll(Constants.MinDate, null,
@@ -95,8 +98,8 @@ public class FriendsUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testFriendsRemove() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testFriendsRemove() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getFriends().remove(testUser, null, new OnCallback<Response<Boolean>>() {

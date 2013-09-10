@@ -1,6 +1,8 @@
 
 package com.buddy.sdk.unittests;
 
+import org.junit.Test;
+
 import com.buddy.sdk.BuddyCallbackParams;
 import com.buddy.sdk.Callbacks.OnResponseCallback;
 import com.buddy.sdk.web.BuddyHttpClientFactory;
@@ -9,7 +11,7 @@ import com.buddy.sdk.web.BuddyWebWrapper;
 public class WebWrapperTests extends BaseUnitTest {
     private String responseValue = "";
 
-    public void testUserAccount_Defines_GetStatusValues() {
+    @Test public void testUserAccount_Defines_GetStatusValues() {
         String jsonValue = "{\"data\":[{\"statusID\":\"1\",\"statusTag\":\"Single\"},{\"statusID\":\"2\",\"statusTag\":\"Dating\"}]}";
         BuddyHttpClientFactory.setUnitTestMode(true);
         BuddyHttpClientFactory.addDummyResponse(jsonValue);

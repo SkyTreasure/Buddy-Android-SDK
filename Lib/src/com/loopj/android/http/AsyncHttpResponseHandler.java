@@ -29,6 +29,7 @@ import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Used to intercept and handle the responses from requests made using 
@@ -108,6 +109,16 @@ public class AsyncHttpResponseHandler {
      */
     public void onSuccess(String content) {}
 
+    
+    /**
+     * Fired when a request returns successfully, override to handle in your own code
+     * @param content the HTTP response from the server
+     */
+    public boolean onSuccess(InputStream content) {
+    	return false;    	
+    }
+    
+    
     /**
      * Fired when a request returns successfully, override to handle in your own code
      * @param statusCode the status code of the response
@@ -219,6 +230,7 @@ public class AsyncHttpResponseHandler {
     // Interface to AsyncHttpRequest
     void sendResponseMessage(HttpResponse response) {
         StatusLine status = response.getStatusLine();
+        
         String responseBody = null;
         try {
             HttpEntity entity = null;

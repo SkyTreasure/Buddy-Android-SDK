@@ -16,6 +16,9 @@
 package com.buddy.sdk.unittests;
 
 import java.util.List;
+
+import org.junit.Test;
+
 import com.buddy.sdk.Identity;
 import com.buddy.sdk.IdentityItem;
 import com.buddy.sdk.Callbacks.OnCallback;
@@ -27,14 +30,14 @@ import com.buddy.sdk.web.BuddyHttpClientFactory;
 
 public class IdentityUnitTests extends BaseUnitTest {
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
 
         createAuthenticatedUser();
     }
 
-    public void testGetIdentityValues() {
-        String jsonResponse = readDataFromFile("DataResponses/IdentityUnitTests-GetAll.json");
+    @Test public void testGetIdentityValues() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/IdentityUnitTests-GetAll.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         Identity identity = testAuthUser.getIdentityValues();
@@ -56,8 +59,8 @@ public class IdentityUnitTests extends BaseUnitTest {
 
     }
 
-    public void testSearchIdentityValue() {
-        String jsonResponse = readDataFromFile("DataResponses/IdentityUnitTests-CheckValues.json");
+    @Test public void testSearchIdentityValue() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/IdentityUnitTests-CheckValues.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         Identity identity = testAuthUser.getIdentityValues();
@@ -80,8 +83,8 @@ public class IdentityUnitTests extends BaseUnitTest {
                 });
     }
 
-    public void testAddIdentityValue() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testAddIdentityValue() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         Identity identity = testAuthUser.getIdentityValues();
@@ -97,8 +100,8 @@ public class IdentityUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testRemoveIdentityValue() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testRemoveIdentityValue() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         Identity identity = testAuthUser.getIdentityValues();

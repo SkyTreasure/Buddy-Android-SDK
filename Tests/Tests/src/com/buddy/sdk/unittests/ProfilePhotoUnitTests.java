@@ -15,32 +15,29 @@
 
 package com.buddy.sdk.unittests;
 
-import android.graphics.drawable.Drawable;
+import org.junit.Test;
 
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.PicturePublic;
 import com.buddy.sdk.responses.Response;
 
 import com.buddy.sdk.responses.ListResponse;
-import com.buddy.sdk.unittests.utils.Utils;
 import com.buddy.sdk.web.BuddyHttpClientFactory;
 
 public class ProfilePhotoUnitTests extends BaseUnitTest {
     @Override
-    protected void setUp() throws Exception {
+	public void setUp() throws Exception {
         super.setUp();
 
         createAuthenticatedUser();
     }
 
-    public void testAddProfilePhoto() {
-        String jsonResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testAddProfilePhoto() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         // Need to encode an image
-        Drawable image = getInstrumentation().getTargetContext().getResources()
-                .getDrawable(R.drawable.ic_launcher);
-        byte[] byteData = Utils.getEncodedImageBytes(image);
+        byte[] byteData = readDataFromFileAsStringAsBytes("res/drawable-hdpi/ic_launcher.png");
 
         testAuthUser.addProfilePhoto(byteData, "", null, new OnCallback<Response<Boolean>>() {
             public void OnResponse(Response<Boolean> response, Object state) {
@@ -51,8 +48,8 @@ public class ProfilePhotoUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testGetAllProfilePhotos() {
-        String jsonResponse = readDataFromFile("DataResponses/ProfilePhotoUnitTests-GetAllProfilePhotos.json");
+    @Test public void testGetAllProfilePhotos() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/ProfilePhotoUnitTests-GetAllProfilePhotos.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
 
         testAuthUser.getProfilePhotos(null, new OnCallback<ListResponse<PicturePublic>>() {
@@ -71,9 +68,9 @@ public class ProfilePhotoUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testDeleteProfilePhoto() {
-        String jsonResponse = readDataFromFile("DataResponses/ProfilePhotoUnitTests-GetAllProfilePhotos.json");
-        String jsonAddResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testDeleteProfilePhoto() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/ProfilePhotoUnitTests-GetAllProfilePhotos.json");
+        String jsonAddResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonAddResponse);
 
@@ -98,9 +95,9 @@ public class ProfilePhotoUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testSetProfilePhoto() {
-        String jsonResponse = readDataFromFile("DataResponses/ProfilePhotoUnitTests-GetAllProfilePhotos.json");
-        String jsonAddResponse = readDataFromFile("DataResponses/GenericSuccessResponse.json");
+    @Test public void testSetProfilePhoto() {
+        String jsonResponse = readDataFromFileAsString("DataResponses/ProfilePhotoUnitTests-GetAllProfilePhotos.json");
+        String jsonAddResponse = readDataFromFileAsString("DataResponses/GenericSuccessResponse.json");
         BuddyHttpClientFactory.addDummyResponse(jsonResponse);
         BuddyHttpClientFactory.addDummyResponse(jsonAddResponse);
 

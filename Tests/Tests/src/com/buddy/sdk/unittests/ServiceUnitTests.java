@@ -18,6 +18,8 @@ package com.buddy.sdk.unittests;
 
 import java.util.Date;
 
+import org.junit.Test;
+
 import com.buddy.sdk.BuddyClient;
 import com.buddy.sdk.Callbacks.OnCallback;
 import com.buddy.sdk.responses.Response;
@@ -26,14 +28,14 @@ import com.buddy.sdk.utils.Utils;
 import com.buddy.sdk.web.BuddyHttpClientFactory;
 
 public class ServiceUnitTests extends BaseUnitTest {
-    public void testServiceGetDateTime() {
-        String jsonValue = readDataFromFile("DataResponses/ServiceUnitTests-GetDate.json");
+    @Test public void testServiceGetDateTime() {
+        String jsonValue = readDataFromFileAsString("DataResponses/ServiceUnitTests-GetDate.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValue);
 
         BuddyHttpClientFactory.setUnitTestMode(true);
 
-        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getInstrumentation().getContext(), "0.1", true);
+        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getUnitTestContext(), "0.1", true);
 
         client.getServiceTime(null, new OnCallback<Response<Date>>() {
             public void OnResponse(Response<Date> response, Object state) {
@@ -43,14 +45,14 @@ public class ServiceUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testServiceGetPing() {
-        String jsonValue = readDataFromFile("DataResponses/ServiceUnitTests-GetPing.json");
+    @Test public void testServiceGetPing() {
+        String jsonValue = readDataFromFileAsString("DataResponses/ServiceUnitTests-GetPing.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValue);
 
         BuddyHttpClientFactory.setUnitTestMode(true);
 
-        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getInstrumentation().getContext(), "0.1", true);
+        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getUnitTestContext(), "0.1", true);
 
         client.ping(null, new OnCallback<Response<String>>() {
             public void OnResponse(Response<String> response, Object state) {
@@ -60,14 +62,14 @@ public class ServiceUnitTests extends BaseUnitTest {
         });
     }
 
-    public void testServiceGetVersion() {
-        String jsonValue = readDataFromFile("DataResponses/ServiceUnitTests-GetVersion.json");
+    @Test public void testServiceGetVersion() {
+        String jsonValue = readDataFromFileAsString("DataResponses/ServiceUnitTests-GetVersion.json");
 
         BuddyHttpClientFactory.addDummyResponse(jsonValue);
 
         BuddyHttpClientFactory.setUnitTestMode(true);
 
-        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getInstrumentation().getContext(), "0.1", true);
+        BuddyClient client = new BuddyClient(applicationName, applicationPassword, this.getUnitTestContext(), "0.1", true);
 
         client.getServiceVersion(null, new OnCallback<Response<String>>() {
             public void OnResponse(Response<String> response, Object state) {

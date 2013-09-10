@@ -30,4 +30,11 @@
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>test</name>
+			<type>2</type>
+			<location>C:/src/Buddy-Android-SDK/Tests/Tests/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>
